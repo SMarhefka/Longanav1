@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "human.h"
 
+// this is the default constructor
 human::human()
 {
+	cout << "this is a human\n";
 }
 
 human::~human()
 {
 }
 
-void human::playTest()
+void human::playMove()
 {
-	cout << "I'm here!\n";
+	cout << "I'm human|playMove()!!\n";
 }

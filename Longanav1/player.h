@@ -14,7 +14,6 @@ public:
 	
 	// This is only a test at this point
 	// This function should take in a player's hand
-	virtual void playTest();
-
+	virtual void playMove();
 };
 

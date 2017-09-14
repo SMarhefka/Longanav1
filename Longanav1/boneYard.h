@@ -28,7 +28,7 @@ public:
 	// checks to see if the boneYard is empty
 	bool isEmpty();
 
-	// deals tiles to a player
+	// deals tiles to the player hand
 	void dealTile(playerHand &tileToDeal);
 
 	// remove a tile
