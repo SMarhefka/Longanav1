@@ -4,6 +4,8 @@
 // default constructor
 boneYard::boneYard()
 {
+	createBoneYard();
+	shuffleBoneYard();
 }
 
 // default destructor
@@ -58,12 +60,14 @@ bool boneYard::isEmpty()
 
 // function passes in a the hand object
 // (aka the players hand)
-void boneYard::dealTile(playerHand &tileToDeal)
+dominoTile boneYard::dealTile()
 {
-	// 
-	tileToDeal.addTile(unusedDominos.back());
+	// add a tile to the players hand.
+	dominoTile currentTile = unusedDominos.back();
 	// removes the tile from the boneyard
 	unusedDominos.pop_back();
+	// return tile
+	return currentTile;
 }
 
 // removes a tile from the boneYard

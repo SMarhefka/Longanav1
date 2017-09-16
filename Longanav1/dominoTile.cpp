@@ -70,3 +70,10 @@ void dominoTile::reverseTile()
 	// finally set the right-hand side to the temporary variable
 	this->rightSide = tempPip;
 }
+
+int dominoTile::tileSum()
+{
+	int sumPips;
+	sumPips = leftSide + rightSide;
+	return sumPips;
+}

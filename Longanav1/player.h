@@ -1,5 +1,4 @@
 #pragma once
-#include "playerHand.h"
 #include <iostream>
 
 using namespace std;
@@ -12,8 +11,11 @@ public:
 	// default destuctor
 	~player();
 	
+	// this function will place a tile onto the board
+	virtual void addToBoard();
+
+	virtual void addToHand();
 	// This is only a test at this point
 	// This function should take in a player's hand
 	virtual void playMove();
 };
-

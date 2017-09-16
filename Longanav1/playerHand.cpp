@@ -11,8 +11,12 @@ playerHand::~playerHand()
 {
 }
 
-void playerHand::addTile(dominoTile tileToAdd)
+void playerHand::addTile()
+//void playerHand::addTile(dominoTile tileToAdd)
 {
+	dominoTile tileToAdd;
+	boneYard newBoneYard;
+	tileToAdd = newBoneYard.dealTile();
 	playerTiles.push_back(tileToAdd);
 }
 
@@ -25,6 +29,11 @@ void playerHand::removeTile(dominoTile tileToRemove)
 	//{
 	//}
 
+}
+
+bool playerHand::isEmpty()
+{
+	return playerTiles.size() == 0;
 }
 
 void playerHand::printHand()

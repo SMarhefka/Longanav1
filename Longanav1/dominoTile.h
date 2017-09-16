@@ -18,6 +18,7 @@ public:
 	int getLeftSide();
 	// this will return the right-side of the tile
 	int getRightSide();
+
 	// this will return the actual tile
 	dominoTile getTile();
 
@@ -27,9 +28,16 @@ public:
 	// this will return weather or not the tile is double
 	bool isDouble();
 
-	void printTile();
-	
+	// this will reverse the tile
 	void reverseTile();
+
+	// this will count the total of the tile
+	// this will be important when summing up the
+	// tiles at the end of a round.
+	int tileSum();
+
+	// this function will display the tile to the console
+	void printTile();
 
 private:
 	int leftSide;

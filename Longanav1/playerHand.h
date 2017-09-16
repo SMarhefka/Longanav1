@@ -2,7 +2,9 @@
 // default libraries
 #include <vector>
 // user defined libraries
+#include "round.h"
 #include "dominoTile.h"
+
 
 class playerHand
 {
@@ -12,12 +14,14 @@ public:
 	// constructor with the player hand
 	// default destructor
 	~playerHand();
+
 	// add dominoTile to the user hand
-	void addTile(dominoTile tileToAdd);
-	// check to see if the hand is empty
-	bool isEmpty();
+	void addTile();
+	// void addTile(dominoTile tileToAdd);
 	// remove dominoTile
 	void removeTile(dominoTile tileToRemove);
+	// check to see if the hand is empty
+	bool isEmpty();
 	// print hand
 	void printHand();
 

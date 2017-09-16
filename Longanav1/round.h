@@ -1,7 +1,9 @@
 #pragma once
-#include "player.h"
+//#include "player.h"
 #include "human.h"
 #include "computer.h"
+#include "boneYard.h"
+#include "playerHand.h"
 
 class round
 {
@@ -17,14 +19,19 @@ public:
 	// function to create players
 	void createPlayers();
 
+	// creates the boneYard
+	boneYard newBoneYard = boneYard();
+	// gets the first player
+	unsigned short getFirstPlayer(int listSize);
+
 	// deal 8 tiles to each of the players
 	void initializeHand(player * currentPlayer);
 
 	// function to start the round
-	void playMove(player * currentPlayer);
+	// void playMove(player * currentPlayer, string optional = "unknown");
+
+	
 
 private:
-	vector<player*> gamePlayers;
-	//player * humanPlayer;
-	//player * comPlayer;
+	vector< player*> playerList;
 };

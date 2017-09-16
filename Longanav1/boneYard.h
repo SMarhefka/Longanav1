@@ -1,6 +1,5 @@
 #pragma once
 #include "dominoTile.h"
-#include "playerHand.h"
 #include <vector>
 #include <memory>
 //this library contains a function called random_shuffle
@@ -29,7 +28,7 @@ public:
 	bool isEmpty();
 
 	// deals tiles to the player hand
-	void dealTile(playerHand &tileToDeal);
+	dominoTile dealTile();
 
 	// remove a tile
 	void removeTile();
