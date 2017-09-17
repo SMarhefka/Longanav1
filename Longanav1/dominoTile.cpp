@@ -40,7 +40,7 @@ dominoTile dominoTile::getTile()
 	return tempDomino;
 }
 
-// setter function
+// setter function created for testing purposes
 void dominoTile::setTile(int leftSide, int rightSide)
 {
 	this->leftSide = leftSide;

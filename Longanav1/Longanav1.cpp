@@ -14,19 +14,6 @@ int main()
 	tournament newTournament;
 	newTournament.beginTournament();
 
-	// playerHand currentPlayer;
-	// dominoTile newTile;
-
-	//currentPlayer.addTile(newTile);
-	//for (int i = 0; i <= 4; i++)
-	//{
-		//currentPlayer.addTile(newTile);
-	//}
-	//currentPlayer.printHand();
-	
-	//newTile.setTile(5, 5);
-
-
 	system("pause");
 
 	return 0;

@@ -9,9 +9,11 @@ public:
 
 	void beginTournament();
 
-	void setName();
+	// function to create players
+	void createPlayers();
 
 	void printScore();
+
 	// provide the user with game options.  These include starting a new game or loading
 	// in a previous game
 	// void gameOptions();
@@ -23,6 +25,8 @@ public:
 	// void loadGameFromFile();
 private:
 	int tournamentScore;
+	vector<player *> playerList;
+	// create a new gameRound
+	// gameRound newRound;
 	string playerName;
-	gameRound newRound;
 };

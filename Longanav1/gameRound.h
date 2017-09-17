@@ -12,14 +12,17 @@ public:
 	// default destructor
 	~gameRound();
 
-	//void setPlayerName(string inString);
-
 	void setUpRound();
 
-	// function to create players
-	void createPlayers();
+	// function to set the name of the player
+	void setPlayerVec(vector<player*> inPlayers);
 
-	//void createPlayerHands(unsigned short nextPlayerIndex);
+	// function to create players
+	// void createPlayers();
+
+	// distrubute 8 tiles to each player
+	void distributeTiles();
+
 
 	// this function will implement the entire gameRound
 	void playRound();
@@ -27,13 +30,10 @@ public:
 	// gets the first player
 	unsigned short getFirstPlayer(int listSize);
 
-	// deal 8 tiles to each of the players
-
-	// function to start the gameRound
-	// void playMove(player * currentPlayer, string optional = "unknown");
+	//bool roundOver();
 
 private:
-	vector<player *> playerList;
+	vector<player*> gamePlayers;
 	// create a new boneYard
 	boneYard newBoneYard;
 };

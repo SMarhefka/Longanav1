@@ -12,7 +12,7 @@ public:
 	human();
 	// creates a constructor for human class with the arguement
 	// of a player name
-	human(string name);
+	human(string inName);
 
 	~human();
 
@@ -24,7 +24,8 @@ public:
 	playerHand* getHand();
 
 private:
-	string humanName;
-	playerHand humanHand;
+	// string humanName;
+	// playerHand humanHand;
+	// int score;
 };
 

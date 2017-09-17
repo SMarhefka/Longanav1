@@ -15,12 +15,13 @@ public:
 	~playerHand();
 
 	// add dominoTile to the user hand
-
 	void addTile(dominoTile tileToAdd);
-	// remove dominoTile
+
+	// remove dominoTile from the user hand
 	void removeTile(dominoTile tileToRemove);
+	
 	// 
-	vector<dominoTile> getPlayerTiles();
+	dominoTile getTilesAt(int place);
 
 	// check to see if the hand is empty
 	bool isEmpty();

@@ -29,14 +29,14 @@ void playerHand::removeTile(dominoTile tileToRemove)
 	// check for the reverse verson of the 
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
-		cout << "item: " << &item << "\n";
+		cout << "item: " << item->getLeftSide() << "\n";
 	}
 
 }
 
-vector<dominoTile> playerHand::getPlayerTiles()
+dominoTile playerHand::getTilesAt(int place)
 {
-	return playerTiles;
+	return playerTiles.at(place);
 }
 
 bool playerHand::isEmpty()

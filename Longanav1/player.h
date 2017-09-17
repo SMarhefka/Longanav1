@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "playerHand.h"
+#include "boneyard.h"
 
 using namespace std;
 
@@ -21,7 +22,9 @@ public:
 	virtual void playMove();
 
 	virtual playerHand* getHand();
-private:
+
+protected:
 	playerHand currentHand;
 	string playerType;
+	int score;
 };

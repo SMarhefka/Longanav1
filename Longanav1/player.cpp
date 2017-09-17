@@ -23,14 +23,13 @@ void player::addToBoard()
 
 void player::addToHand()
 {
-	cout << "I am at player::addToHand\n";	
+	cout << "I'm playing as: " << playerType << " and I am in player player::addToHand() function\n";
 }
 
 void player::playMove()
 {
 	cout << "I'm playing as: " << playerType << " and I am in player player::playMove() function\n";
 	// cout << "I'm in player playMove()\n";
-	//addToHand(compTile);	
 }
 
 playerHand* player::getHand()
