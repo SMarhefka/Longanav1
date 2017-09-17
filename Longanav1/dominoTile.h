@@ -33,7 +33,7 @@ public:
 
 	// this will count the total of the tile
 	// this will be important when summing up the
-	// tiles at the end of a round.
+	// tiles at the end of a gameRound.
 	int tileSum();
 
 	// this function will display the tile to the console

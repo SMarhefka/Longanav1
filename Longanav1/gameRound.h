@@ -1,37 +1,39 @@
 #pragma once
-//#include "player.h"
 #include "human.h"
 #include "computer.h"
 #include "boneYard.h"
-#include "playerHand.h"
 
-class round
+class gameRound
 {
 public:
 	// default constructor
-	round();
+	gameRound();
+	
 	// default destructor
-	~round();
+	~gameRound();
 
-	// this function will implement the entire round
-	void playRound();
+	//void setPlayerName(string inString);
+
+	void setUpRound();
 
 	// function to create players
 	void createPlayers();
 
-	// creates the boneYard
-	boneYard newBoneYard = boneYard();
+	//void createPlayerHands(unsigned short nextPlayerIndex);
+
+	// this function will implement the entire gameRound
+	void playRound();
+
 	// gets the first player
 	unsigned short getFirstPlayer(int listSize);
 
 	// deal 8 tiles to each of the players
-	void initializeHand(player * currentPlayer);
 
-	// function to start the round
+	// function to start the gameRound
 	// void playMove(player * currentPlayer, string optional = "unknown");
 
-	
-
 private:
-	vector< player*> playerList;
+	vector<player *> playerList;
+	// create a new boneYard
+	boneYard newBoneYard;
 };

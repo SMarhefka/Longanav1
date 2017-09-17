@@ -43,5 +43,5 @@ private:
 	// need a shared point to avoid object slicing
 	// this shared pointer will also be useful when polymorphism
 	// needs to be implemented.
-	vector<dominoTile> unusedDominos;
+	vector<dominoTile *> unusedDominos;
 };

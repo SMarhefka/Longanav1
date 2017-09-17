@@ -8,5 +8,7 @@ public:
 	computer();
 	// default destructor
 	~computer();
+private:
+	// playerHand computerHand;
 };
 

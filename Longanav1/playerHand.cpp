@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "playerHand.h"
+#include "gameRound.h"
+#include <string>
 
 // default constructor
 playerHand::playerHand()
 {
+	//playerTiles.clear();
 }
 
 // default destructor
@@ -11,24 +14,29 @@ playerHand::~playerHand()
 {
 }
 
-void playerHand::addTile()
-//void playerHand::addTile(dominoTile tileToAdd)
+//void playerHand::addTile()
+void playerHand::addTile(dominoTile tileToAdd)
 {
-	dominoTile tileToAdd;
-	boneYard newBoneYard;
-	tileToAdd = newBoneYard.dealTile();
+	// pushes back that tile to the end of the vector playerTiles
 	playerTiles.push_back(tileToAdd);
 }
 
+// this function will be used when a player places their tile on the board
 void playerHand::removeTile(dominoTile tileToRemove)
 {
 	// go through the vector and find the tile that
 	// is going to be deleted.  I also need to check
 	// check for the reverse verson of the 
-	//for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
-	//{
-	//}
+	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	{
+		cout << "item: " << &item << "\n";
+	}
 
+}
+
+vector<dominoTile> playerHand::getPlayerTiles()
+{
+	return playerTiles;
 }
 
 bool playerHand::isEmpty()
@@ -49,4 +57,5 @@ void playerHand::printHand()
 		cout << "\n";
 		}*/
 	}
+	cout << "\n";
 }

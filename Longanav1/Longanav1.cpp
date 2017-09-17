@@ -2,7 +2,8 @@
 
 #include "stdafx.h"
 //#include "testCases.h"
-#include "round.h"
+//#include "gameRound.h"
+#include "tournament.h"
 
 int main()
 {
@@ -10,14 +11,18 @@ int main()
 	//newTest.testBoneYard();
 	//newTest.testDomino();
 
-	class round newRound;
-	newRound.playRound();
+	tournament newTournament;
+	newTournament.beginTournament();
 
-	playerHand currentPlayer;
-	dominoTile newTile;
+	// playerHand currentPlayer;
+	// dominoTile newTile;
+
 	//currentPlayer.addTile(newTile);
-	currentPlayer.addTile();
-	currentPlayer.printHand();
+	//for (int i = 0; i <= 4; i++)
+	//{
+		//currentPlayer.addTile(newTile);
+	//}
+	//currentPlayer.printHand();
 	
 	//newTile.setTile(5, 5);
 

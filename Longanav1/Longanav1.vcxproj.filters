@@ -54,7 +54,7 @@
     <ClInclude Include="layoutView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="round.h">
+    <ClInclude Include="gameRound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <ClCompile Include="layoutView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="round.cpp">
+    <ClCompile Include="gameRound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

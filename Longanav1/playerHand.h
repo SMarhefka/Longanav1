@@ -2,9 +2,8 @@
 // default libraries
 #include <vector>
 // user defined libraries
-#include "round.h"
 #include "dominoTile.h"
-
+//#include "boneYard.h"
 
 class playerHand
 {
@@ -16,10 +15,13 @@ public:
 	~playerHand();
 
 	// add dominoTile to the user hand
-	void addTile();
-	// void addTile(dominoTile tileToAdd);
+
+	void addTile(dominoTile tileToAdd);
 	// remove dominoTile
 	void removeTile(dominoTile tileToRemove);
+	// 
+	vector<dominoTile> getPlayerTiles();
+
 	// check to see if the hand is empty
 	bool isEmpty();
 	// print hand

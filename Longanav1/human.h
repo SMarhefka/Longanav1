@@ -20,7 +20,11 @@ public:
 	// player class
 	void playMove();
 
+	// this is a getter function
+	playerHand* getHand();
+
 private:
 	string humanName;
+	playerHand humanHand;
 };
 

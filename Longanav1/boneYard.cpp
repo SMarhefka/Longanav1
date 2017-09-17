@@ -4,6 +4,8 @@
 // default constructor
 boneYard::boneYard()
 {
+	// printing for testing reasons
+	cout << "I am creating a new instance of boneYard\n";
 	createBoneYard();
 	shuffleBoneYard();
 }
@@ -29,9 +31,10 @@ void boneYard::createBoneYard()
 	{
 		for (int j = i; j <= 6; j++) 
 		{
+			dominoTile * newTile = new dominoTile(i, j);
 			// placed for testing purposes
 			// cout << "Domino: " << i << "-" << j << endl;
-			unusedDominos.push_back(dominoTile(i, j));
+			unusedDominos.push_back(newTile);
 		}
 	}
 	cout << "# of elements: " << unusedDominos.size() << "\n";
@@ -63,11 +66,11 @@ bool boneYard::isEmpty()
 dominoTile boneYard::dealTile()
 {
 	// add a tile to the players hand.
-	dominoTile currentTile = unusedDominos.back();
+	dominoTile * dealTile = unusedDominos.back();
 	// removes the tile from the boneyard
 	unusedDominos.pop_back();
 	// return tile
-	return currentTile;
+	return * dealTile;
 }
 
 // removes a tile from the boneYard
@@ -82,7 +85,7 @@ void boneYard::printBoneYard()
 	cout << "Boneyard:" << "\n";
 	for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
 	{
-		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
+		cout << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
 		// Used for testing purposes
 		// int index = item - unusedDominos.begin();
 		/*if (index > 0 && (index + 1) % 3 == 0) 
