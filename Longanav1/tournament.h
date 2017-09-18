@@ -1,5 +1,6 @@
 #pragma once
 #include "gameRound.h"
+#include "gameBoard.h"
 
 class tournament
 {
@@ -26,6 +27,7 @@ public:
 private:
 	int tournamentScore;
 	vector<player *> playerList;
+	gameBoard newGameBoard;
 	// create a new gameRound
 	// gameRound newRound;
 	string playerName;

@@ -3,7 +3,6 @@
 #include <vector>
 // user defined libraries
 #include "dominoTile.h"
-//#include "boneYard.h"
 
 class playerHand
 {
@@ -20,7 +19,7 @@ public:
 	// remove dominoTile from the user hand
 	void removeTile(dominoTile tileToRemove);
 	
-	// 
+	// get tile at a certain location in the hand
 	dominoTile getTilesAt(int place);
 
 	// check to see if the hand is empty

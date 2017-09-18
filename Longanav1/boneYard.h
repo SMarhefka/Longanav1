@@ -9,6 +9,12 @@
 
 using namespace std;
 
+// This is the boneyard or stock for the dominos game
+// This class is responsible for:
+// - creating a new boneyard (at first 28 domino tiles)
+// - shuffling the domino tiles 
+// - handing out tiles until it is empty
+// - printing the dominos left in the boneyard onto the screen
 class boneYard
 {
 public:

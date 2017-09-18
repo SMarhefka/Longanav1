@@ -15,6 +15,8 @@ gameRound::~gameRound()
 void gameRound::setUpRound()
 {
 	distributeTiles();
+
+	getFirstPlayer();
 }
 
 void gameRound::setPlayerVec(vector<player*> inPlayers)
@@ -33,7 +35,7 @@ void gameRound::distributeTiles()
 			// then you want to give each player 1 tiles
 			gamePlayers.at(nextPlayerIndex)->getHand()->addTile(newBoneYard.dealTile());
 			// just to check I want to make sure that that it prints correctly
-			gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
+			// gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
 		}
 		gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
 	}
@@ -45,8 +47,9 @@ void gameRound::playRound()
 	// print whos move it is
 }
 
-unsigned short gameRound::getFirstPlayer(int listSize)
+unsigned short gameRound::getFirstPlayer()
 {
+
 	// check to see to see if the computer hand has the
 	return 0;
 }

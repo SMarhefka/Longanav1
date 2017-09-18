@@ -150,8 +150,8 @@
     <ClInclude Include="computer.h" />
     <ClInclude Include="dominoTile.h" />
     <ClInclude Include="human.h" />
-    <ClInclude Include="layout.h" />
-    <ClInclude Include="layoutView.h" />
+    <ClInclude Include="gameBoard.h" />
+    <ClInclude Include="gameBoardView.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerHand.h" />
     <ClInclude Include="stdafx.h" />
@@ -165,8 +165,8 @@
     <ClCompile Include="computer.cpp" />
     <ClCompile Include="dominoTile.cpp" />
     <ClCompile Include="human.cpp" />
-    <ClCompile Include="layout.cpp" />
-    <ClCompile Include="layoutView.cpp" />
+    <ClCompile Include="gameBoard.cpp" />
+    <ClCompile Include="gameBoardView.cpp" />
     <ClCompile Include="Longanav1.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playerHand.cpp" />

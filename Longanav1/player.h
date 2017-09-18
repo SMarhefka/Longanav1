@@ -15,7 +15,7 @@ public:
 	
 	// this function will place a tile onto the board
 	virtual void addToBoard();
-
+	// this function will a
 	virtual void addToHand();
 	// This is only a test at this point
 	// This function should take in a player's hand

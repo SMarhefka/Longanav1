@@ -10,14 +10,15 @@ class human : public player
 public:
 	// the default constructor of derived class is called
 	human();
+
 	// creates a constructor for human class with the arguement
 	// of a player name
 	human(string inName);
 
+	// default destructor
 	~human();
 
-	// this is the overridden function from player the
-	// player class
+	// this is the overridden function from the player class
 	void playMove();
 
 	// this is a getter function

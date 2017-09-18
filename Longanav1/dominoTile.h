@@ -8,6 +8,7 @@ class dominoTile
 public:
 	// default constructor
 	dominoTile();
+
 	// default destructor
 	~dominoTile();
 

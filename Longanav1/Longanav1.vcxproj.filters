@@ -48,13 +48,13 @@
     <ClInclude Include="tournament.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="layout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="layoutView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gameRound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameBoard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameBoardView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,13 +89,13 @@
     <ClCompile Include="tournament.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="layout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="layoutView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gameRound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gameBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gameBoardView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
