@@ -16,8 +16,3 @@ void gameBoardView::printBoardToScreen(playerHand &currentHand)
 {
 	currentHand.printHand();
 }
-
-void gameBoardView::printBoardToScreen(tournament &inScore)
-{
-	inScore.printScore();
-}

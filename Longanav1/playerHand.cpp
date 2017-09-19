@@ -15,14 +15,14 @@ playerHand::~playerHand()
 }
 
 //void playerHand::addTile()
-void playerHand::addTile(dominoTile tileToAdd)
+void playerHand::addTile(dominoTile a_tileToAdd)
 {
 	// pushes back that tile to the end of the vector playerTiles
-	playerTiles.push_back(tileToAdd);
+	playerTiles.push_back(a_tileToAdd);
 }
 
 // this function will be used when a player places their tile on the board
-void playerHand::removeTile(dominoTile tileToRemove)
+void playerHand::removeTile(dominoTile a_tileToRemove)
 {
 	// go through the vector and find the tile that
 	// is going to be deleted.  I also need to check
@@ -34,14 +34,37 @@ void playerHand::removeTile(dominoTile tileToRemove)
 
 }
 
-dominoTile playerHand::getTilesAt(int place)
+dominoTile playerHand::getTilesAt(int a_place)
 {
-	return playerTiles.at(place);
+	return playerTiles.at(a_place);
 }
 
+// Checks to see if the players hand is empty
 bool playerHand::isEmpty()
 {
 	return playerTiles.size() == 0;
+}
+
+bool playerHand::hasEngine(int a_inEngine)
+{
+	bool output;
+	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	{
+		if ((item->isDouble() && (item->getLeftSide() == a_inEngine)))
+		{
+			output = true;
+			return output;
+		}
+	}
+	output = false;
+	return output;
+}
+
+// returns the handsize or the number of tiles that 
+// the current user has
+int playerHand::getHandSize()
+{
+	return int(playerTiles.size());
 }
 
 void playerHand::printHand()

@@ -7,7 +7,7 @@
 // this is the default constructor
 human::human()
 {
-	cout << "I'm creating a human\n";
+	//cout << "I'm creating a human\n";
 	//humanHand = new playerHand;
 }
 
@@ -28,6 +28,6 @@ void human::playMove()
 
 playerHand* human::getHand()
 {
-	cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
+	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
 	return &currentHand;
 }

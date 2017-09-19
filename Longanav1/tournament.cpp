@@ -12,45 +12,51 @@ tournament::~tournament()
 void tournament::beginTournament()
 {
 	cout << "Welcome to Longana! What is the score that you would like to play until? ";
-	cin >> tournamentScore;
+	cin >> m_tournScore;
 
 	while (cin.fail())
 	{
 		cin.clear();
 		cin.ignore();
 		cout << "Please enter a number: ";
-		cin >> tournamentScore;
+		cin >> m_tournScore;
 	}
 
 	cout << "What name would you like to use? ";
-	cin >> playerName;
-	if (playerName.length() < 3)
+	cin >> m_playerName;
+	if (m_playerName.length() < 3)
 	{
-		playerName = "Player 1";
+		m_playerName = "Player 1";
 	}
 
 	createPlayers();
 
-	gameRound newRound;
-	newRound.setPlayerVec(playerList);
+	int a_rndNumber;
+
+	a_rndNumber = 1;
+	// create a newRound 
+	gameRound newRound = gameRound(a_rndNumber);
+	newRound.setPlayerVec(m_playerList);
 	// start a new gameRound
 	newRound.setUpRound();
+
+	//if (!newRound.roundOver());
 }
 
 void tournament::createPlayers()
 {
-	// this will be the computer player
+	// this will create a new computer object
 	player * comPlayer = new computer();
 
 	// this will be the human player
-	player * humanPlayer = new human(playerName);
+	player * humanPlayer = new human(m_playerName);
 
 	// place the players in a vecor
-	playerList.push_back(comPlayer);
-	playerList.push_back(humanPlayer);
+	m_playerList.push_back(comPlayer);
+	m_playerList.push_back(humanPlayer);
 }
 
 void tournament::printScore()
 {
-	cout << "Tournament Score: " << this->tournamentScore << "\n";
+	cout << "Tournament Score: " << m_tournScore << "\n";
 }

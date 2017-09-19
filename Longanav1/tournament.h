@@ -1,6 +1,5 @@
 #pragma once
 #include "gameRound.h"
-#include "gameBoard.h"
 
 class tournament
 {
@@ -25,10 +24,9 @@ public:
 	// function that will handle a file that is loaded in
 	// void loadGameFromFile();
 private:
-	int tournamentScore;
-	vector<player *> playerList;
-	gameBoard newGameBoard;
+	vector<player*> m_playerList;
 	// create a new gameRound
 	// gameRound newRound;
-	string playerName;
+	string m_playerName;
+	int m_tournScore;
 };

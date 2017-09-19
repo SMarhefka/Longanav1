@@ -2,17 +2,22 @@
 #include "human.h"
 #include "computer.h"
 #include "boneYard.h"
+#include "gameBoard.h"
 
 class gameRound
 {
 public:
 	// default constructor
 	gameRound();
-	
+
+	gameRound(int a_roundNumber);
+
 	// default destructor
 	~gameRound();
 
 	void setUpRound();
+
+	void setEngine();
 
 	// function to set the name of the player
 	void setPlayerVec(vector<player*> inPlayers);
@@ -26,12 +31,17 @@ public:
 	// find out who the first player in the round will be
 	unsigned short getFirstPlayer();
 
-	//bool roundOver();
+	bool roundOver();
 
 private:
-	vector<player*> gamePlayers;
-	// create a new boneYard
+	vector<player*> m_gamePlayers;
+	// creates a new boneYard
 	boneYard newBoneYard;
-
-	int engine;
+	// creates a new gameBoard;
+	gameBoard newGameBoard;
+	// this variable keeps track of the engine for
+	// the round
+	int m_engine;
+	int m_roundNum;
+	unsigned short m_playerIndex;
 };

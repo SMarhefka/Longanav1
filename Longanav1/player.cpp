@@ -7,7 +7,7 @@
 // this is the base class
 player::player()
 {
-	cout << "this is a player\n";
+	// cout << "this is a player\n";
 	playerType = "computer";
 }
 
@@ -34,7 +34,7 @@ void player::playMove()
 
 playerHand* player::getHand()
 {
-	cout << "Playing as: " << playerType << " I'm in the player::getHand method\n";
+	// cout << "Playing as: " << playerType << " I'm in the player::getHand method\n";
 	return &currentHand;
 }
 

@@ -9,21 +9,30 @@ class playerHand
 public:
 	// default constructor
 	playerHand();
+
 	// constructor with the player hand
 	// default destructor
 	~playerHand();
 
 	// add dominoTile to the user hand
-	void addTile(dominoTile tileToAdd);
+	void addTile(dominoTile a_tileToAdd);
 
 	// remove dominoTile from the user hand
-	void removeTile(dominoTile tileToRemove);
+	void removeTile(dominoTile a_tileToRemove);
 	
 	// get tile at a certain location in the hand
-	dominoTile getTilesAt(int place);
+	dominoTile getTilesAt(int a_place);
 
 	// check to see if the hand is empty
 	bool isEmpty();
+
+	// checks to see if the current hand has
+	// the engine
+	bool hasEngine(int a_inEngine);
+
+	// returns the size of the hand
+	int getHandSize();
+
 	// print hand
 	void printHand();
 

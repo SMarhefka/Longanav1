@@ -13,7 +13,7 @@ public:
 	~dominoTile();
 
 	// create a new domino tile with specific pips
-	dominoTile(int leftSide, int rightSide);
+	dominoTile(int a_leftSide, int a_rightSide);
 
 	// this will return the left-side of the tile
 	int getLeftSide();
@@ -24,7 +24,7 @@ public:
 	dominoTile getTile();
 
 	// this will return the actual tile
-	void setTile(int leftSide, int rightSide);
+	void setTile(int a_leftSide, int a_rightSide);
 
 	// this will return weather or not the tile is double
 	bool isDouble();
@@ -41,7 +41,7 @@ public:
 	void printTile();
 
 private:
-	int leftSide;
-	int rightSide;
+	int m_leftSide;
+	int m_rightSide;
 };
 
