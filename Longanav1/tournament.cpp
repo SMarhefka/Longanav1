@@ -31,12 +31,10 @@ void tournament::beginTournament()
 
 	createPlayers();
 
-	int a_rndNumber;
-
-	a_rndNumber = 1;
+	int a_rndNum = 8;
 	// create a newRound 
-	gameRound newRound = gameRound(a_rndNumber);
-	newRound.setPlayerVec(m_playerList);
+	gameRound newRound = gameRound(a_rndNum, m_playerList);
+	// newRound.setPlayerVec(m_playerList);
 	// start a new gameRound
 	newRound.setUpRound();
 

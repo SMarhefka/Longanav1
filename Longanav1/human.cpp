@@ -13,7 +13,7 @@ human::human()
 
 human::human(string name)
 {
-	cout << "I'm creating a human with a name: " << playerType << "\n";
+	// cout << "I'm creating a human with a name: " << playerType << "\n";
 	playerType = name;
 }
 
@@ -24,6 +24,11 @@ human::~human()
 void human::playMove()
 {
 	cout << "I'm playing as: " << playerType << " and I'm in the human::playMove() function!\n";
+}
+
+string human::getName()
+{
+	return string(playerType);
 }
 
 playerHand* human::getHand()

@@ -33,7 +33,6 @@ int dominoTile::getRightSide()
 }
 
 // this will retrieve the tile object
-// THIS IS CURRENTLY NOT WORKING
 dominoTile dominoTile::getTile()
 {
 	dominoTile tempDomino(m_leftSide, m_rightSide);

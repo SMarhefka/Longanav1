@@ -10,7 +10,7 @@ public:
 	// default constructor
 	gameRound();
 
-	gameRound(int a_roundNumber);
+	gameRound(int a_roundNumber, vector<player*> &a_gamePlayers);
 
 	// default destructor
 	~gameRound();
@@ -20,7 +20,7 @@ public:
 	void setEngine();
 
 	// function to set the name of the player
-	void setPlayerVec(vector<player*> inPlayers);
+	// void setPlayerVec(vector<player*> inPlayers);
 
 	// distrubute 8 tiles to each player
 	void distributeTiles();

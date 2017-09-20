@@ -10,8 +10,24 @@ gameBoard::~gameBoard()
 {
 }
 
-void gameBoard::printBoard()
+void gameBoard::addToLeft(dominoTile a_tileToAdd)
 {
-	// print boneYard vector to screen
-	cout << "I am in the gameBoard\n";
+	if (leftSide.size() == 0)
+	{
+		leftSide.push_back(a_tileToAdd);
+	}
+	else
+	{
+		insertAt = leftSide.begin();
+		insertAt = leftSide.insert(insertAt, a_tileToAdd);
+	}
+}
+
+void gameBoard::printToScreen()
+{
+	cout << "gameBoard: " << "\n";
+	for (auto item = leftSide.begin(); item != leftSide.end(); item++)
+	{
+		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
+	}
 }

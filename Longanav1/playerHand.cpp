@@ -15,7 +15,7 @@ playerHand::~playerHand()
 }
 
 //void playerHand::addTile()
-void playerHand::addTile(dominoTile a_tileToAdd)
+void playerHand::addTileToHand(dominoTile a_tileToAdd)
 {
 	// pushes back that tile to the end of the vector playerTiles
 	playerTiles.push_back(a_tileToAdd);
@@ -30,8 +30,17 @@ void playerHand::removeTile(dominoTile a_tileToRemove)
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		cout << "item: " << item->getLeftSide() << "\n";
-	}
+		cout << "tile: " << a_tileToRemove.getLeftSide() << "\n";
 
+		if ((item->getLeftSide() == a_tileToRemove.getLeftSide()) && ((item->getRightSide() == a_tileToRemove.getRightSide())))
+		{
+			playerTiles.erase(item);
+		}
+		if ((item->getLeftSide() == a_tileToRemove.getRightSide()) && ((item->getRightSide() == a_tileToRemove.getLeftSide())))
+		{
+			playerTiles.erase(item);
+		}
+	}
 }
 
 dominoTile playerHand::getTilesAt(int a_place)
@@ -47,17 +56,14 @@ bool playerHand::isEmpty()
 
 bool playerHand::hasEngine(int a_inEngine)
 {
-	bool output;
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		if ((item->isDouble() && (item->getLeftSide() == a_inEngine)))
 		{
-			output = true;
-			return output;
+			return true;
 		}
 	}
-	output = false;
-	return output;
+	return false;
 }
 
 // returns the handsize or the number of tiles that 

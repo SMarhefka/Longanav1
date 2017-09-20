@@ -11,8 +11,3 @@ gameBoardView::gameBoardView()
 gameBoardView::~gameBoardView()
 {
 }
-
-void gameBoardView::printBoardToScreen(playerHand &currentHand)
-{
-	currentHand.printHand();
-}

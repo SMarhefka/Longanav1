@@ -12,11 +12,14 @@ public:
 	~gameBoard();
 
 	// this function will print the board to the console screen
-	void printBoard();
+	void addToLeft(dominoTile a_tileToAdd);
 
+	// void printBoardToFile();
+	void printToScreen();
 
 
 private:
-	vector<dominoTile> boardLeft;
-	vector<dominoTile> boardRight;
+	vector<dominoTile>::iterator insertAt;
+	vector<dominoTile> leftSide;
+	vector<dominoTile> rightSide;
 };

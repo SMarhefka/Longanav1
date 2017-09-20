@@ -17,5 +17,7 @@ public:
 	~gameBoardView();
 
 	// one thing that should happen is that the gameBoard should be printed to the screen
-	void printBoardToScreen(playerHand &currentHand);
+	void printBoardToScreen();
+private:
+
 };

@@ -21,6 +21,8 @@ public:
 	// this is the overridden function from the player class
 	void playMove();
 
+	string getName();
+
 	// this is a getter function
 	playerHand* getHand();
 

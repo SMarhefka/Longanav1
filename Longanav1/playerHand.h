@@ -15,7 +15,7 @@ public:
 	~playerHand();
 
 	// add dominoTile to the user hand
-	void addTile(dominoTile a_tileToAdd);
+	void addTileToHand(dominoTile a_tileToAdd);
 
 	// remove dominoTile from the user hand
 	void removeTile(dominoTile a_tileToRemove);

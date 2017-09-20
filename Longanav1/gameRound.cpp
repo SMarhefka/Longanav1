@@ -8,9 +8,10 @@ gameRound::gameRound()
 	// cout << "newRound constructor called\n";
 }
 
-gameRound::gameRound(int a_roundNumber)
+gameRound::gameRound(int a_roundNumber, vector<player*> &a_gamePlayers)
 {
 	m_roundNum = a_roundNumber;
+	m_gamePlayers = a_gamePlayers;
 }
 
 gameRound::~gameRound()
@@ -24,23 +25,33 @@ void gameRound::setUpRound()
 	distributeTiles();
 
 	m_playerIndex = getFirstPlayer();
+	
+	cout << "First player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 
 	playRound();
 }
 
+// 9/19 10:30 implemented setEngine
 void gameRound::setEngine()
 {
-
-	if (m_roundNum == 1)
+	int a_count = 1;
+	int a_engineCount = 6;
+	while (a_count != m_roundNum)
 	{
-		m_engine = 6;
-	}
-}
+		if (a_engineCount == 0)
+		{
+			// reset the engine count
+			a_engineCount = 6;
+		}
+		else
+		{
+			// reduce engine count by 1
+			a_engineCount--;
+		}
 
-void gameRound::setPlayerVec(vector<player*> a_inPlayers)
-{
-	m_gamePlayers.push_back(a_inPlayers.at(0));
-	m_gamePlayers.push_back(a_inPlayers.at(1));
+		a_count++;
+	}
+	m_engine = a_engineCount;
 }
 
 void gameRound::distributeTiles()
@@ -51,7 +62,7 @@ void gameRound::distributeTiles()
 		for (int count = 0; count <= 7; count++)
 		{
 			// then you want to give each player 1 tiles
-			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTile(newBoneYard.dealTile());
+			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
 			// just to check I want to make sure that that it prints correctly
 			// gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
 		}
@@ -62,16 +73,16 @@ void gameRound::distributeTiles()
 
 void gameRound::playRound()
 {
-	while (!roundOver())
+	while (!(roundOver() == true))
 	{
 		// print whos move it is
-
+		m_gamePlayers.at(m_playerIndex)->getName();
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}
 	
 }
-
 
 unsigned short gameRound::getFirstPlayer()
 {
@@ -85,10 +96,10 @@ unsigned short gameRound::getFirstPlayer()
 		// a_testBool = newBoneYard.isEmpty();
 		if(!newBoneYard.isEmpty())
 		// give the computer a tile
-		m_gamePlayers.at(0)->getHand()->addTile(newBoneYard.dealTile());
+		m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard.dealTile());
 		m_gamePlayers.at(0)->getHand()->printHand();
 		// give the player a tile
-		m_gamePlayers.at(1)->getHand()->addTile(newBoneYard.dealTile());
+		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard.dealTile());
 		m_gamePlayers.at(1)->getHand()->printHand();
 
 	}
@@ -114,4 +125,5 @@ bool gameRound::roundOver()
 	{
 		return true;
 	}
+	return false;
 }
