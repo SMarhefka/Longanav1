@@ -19,11 +19,17 @@ player::~player()
 // 9/19 10:15 implemented an add to board function
 void player::addToBoard(gameBoard &newGameBoard)
 {
-	// int userChoice = 2;
+	int userChoice = 2;
 	cout << "I am playing as the: " << m_playerName << " and I am in the player::addToBoard function\n";
-	if(m_playerName == "Computer")
+	if (m_playerName == "Computer")
+	{
 		newGameBoard.addToLeft(m_currentHand.getTilesAt((userChoice - 1)));
-	// m_currentHand.removeTile(m_currentHand.getTilesAt((userChoice - 1)));
+	}
+	else
+	{
+		newGameBoard.addToRight(m_currentHand.getTilesAt((userChoice - 1)));
+	}
+	m_currentHand.removeTile(m_currentHand.getTilesAt((userChoice - 1)));
 }
 
 void player::addToHand()

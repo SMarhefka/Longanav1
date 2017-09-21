@@ -1,6 +1,11 @@
 #pragma once
-#include "gameBoard.h"
-#include "tournament.h"
+#include <queue>
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include "dominoTile.h"
+
+using namespace std;
 
 // The purpose of this class will be to print the following to the console:
 // - the tournament score
@@ -17,7 +22,12 @@ public:
 	~gameBoardView();
 
 	// one thing that should happen is that the gameBoard should be printed to the screen
-	void printBoardToScreen();
+	void gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
+	// 
+	void printToScreen();
+	void deleteLines();
 private:
-
+	queue<string> m_firstLine;
+	vector<string> m_secondLine;
+	queue<string> m_thirdLine;
 };

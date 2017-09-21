@@ -23,6 +23,11 @@ void gameBoard::addToLeft(dominoTile a_tileToAdd)
 	}
 }
 
+void gameBoard::addToRight(dominoTile a_tileToAdd)
+{
+	rightSide.push_back(a_tileToAdd);
+}
+
 // gets the rightMostTile from the right vector
 dominoTile gameBoard::getRightMostTile()
 {
@@ -35,11 +40,18 @@ dominoTile gameBoard::getRightMostTile()
 	return tempTile;
 }
 
+dominoTile gameBoard::getLeftMostTile()
+{
+	// create a new temporary dominoTile
+	dominoTile tempTile;
+	// set the tempTile to the first element in the 
+	// leftSide array
+	tempTile = leftSide.at(0);
+	// return the tile
+	return tempTile;
+}
+
 void gameBoard::printToScreen()
 {
-	cout << "gameBoard: " << "\n";
-	for (auto item = leftSide.begin(); item != leftSide.end(); item++)
-	{
-		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
-	}
+	m_boardView.printBoardToScreen(leftSide, rightSide);
 }

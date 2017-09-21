@@ -81,12 +81,16 @@ unsigned short gameRound::getFirstPlayer()
 		if(!newBoneYard.isEmpty())
 		// give the computer a tile
 		m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard.dealTile());
-		m_gamePlayers.at(0)->getHand()->printHand();
+		// m_gamePlayers.at(0)->getHand()->printHand();
 		// give the player a tile
 		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard.dealTile());
-		m_gamePlayers.at(1)->getHand()->printHand();
+		// m_gamePlayers.at(1)->getHand()->printHand();
 
 	}
+
+	m_gamePlayers.at(0)->getHand()->printHand();
+	m_gamePlayers.at(1)->getHand()->printHand();
+
 	// if the computer has the engine then the 
 	// first player will be set to 0
 	if (m_gamePlayers.at(0)->getHand()->hasEngine(m_engine))
@@ -105,7 +109,7 @@ void gameRound::playRound()
 		// print whos move it is
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 		// call playMove() for the current player
-		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+		// m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 		// m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());

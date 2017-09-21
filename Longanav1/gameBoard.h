@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "dominoTile.h"
-#include "gameBoard.h"
+#include "gameBoardView.h"
 
 class gameBoard
 {
@@ -14,14 +14,19 @@ public:
 	// this function will print the board to the console screen
 	void addToLeft(dominoTile a_tileToAdd);
 
+	void addToRight(dominoTile a_tileToAdd);
+
 	// this function will print the right most tile
 	dominoTile getRightMostTile();
+
+	dominoTile getLeftMostTile();
 
 	// void printBoardToFile();
 	void printToScreen();
 
 
 private:
+	gameBoardView m_boardView;
 	vector<dominoTile>::iterator insertAt;
 	vector<dominoTile> leftSide;
 	vector<dominoTile> rightSide;
