@@ -26,7 +26,14 @@ void playerHand::removeTile(dominoTile a_tileToRemove)
 {
 	// go through the vector and find the tile that
 	// is going to be deleted.  I also need to check
-	// check for the reverse verson of the 
+	// check for the reverse verson of the
+
+	//auto item = find(playerTiles.begin(), playerTiles.end(), a_tileToRemove);
+	//if (item != playerTiles.end())
+	//{
+	//	playerTiles.erase(item);
+	//}
+
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		cout << "item: " << item->getLeftSide() << "\n";
@@ -35,12 +42,20 @@ void playerHand::removeTile(dominoTile a_tileToRemove)
 		if ((item->getLeftSide() == a_tileToRemove.getLeftSide()) && ((item->getRightSide() == a_tileToRemove.getRightSide())))
 		{
 			playerTiles.erase(item);
-		}
-		if ((item->getLeftSide() == a_tileToRemove.getRightSide()) && ((item->getRightSide() == a_tileToRemove.getLeftSide())))
-		{
-			playerTiles.erase(item);
+			break;
 		}
 	}
+
+	//for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	//{
+	//	cout << "item: " << item->getLeftSide() << "\n";
+	//	cout << "tile: " << a_tileToRemove.getLeftSide() << "\n";
+
+	//	if ((item->getRightSide() == a_tileToRemove.getLeftSide()) && ((item->getLeftSide() == a_tileToRemove.getRightSide())))
+	//	{
+	//		playerTiles.erase(item);
+	//	}
+	//}
 }
 
 dominoTile playerHand::getTilesAt(int a_place)

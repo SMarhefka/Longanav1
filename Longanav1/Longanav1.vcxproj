@@ -159,6 +159,7 @@
     <ClInclude Include="testCases.h" />
     <ClInclude Include="tournament.h" />
     <ClInclude Include="gameRound.h" />
+    <ClInclude Include="validateInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boneYard.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="testCases.cpp" />
     <ClCompile Include="tournament.cpp" />
     <ClCompile Include="gameRound.cpp" />
+    <ClCompile Include="validateInput.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,7 +5,7 @@
 boneYard::boneYard()
 {
 	// printing for testing reasons
-	cout << "I am creating a new instance of boneYard\n";
+	// cout << "I am creating a new instance of boneYard\n";
 	createBoneYard();
 	shuffleBoneYard();
 }
@@ -24,7 +24,7 @@ void boneYard::createBoneYard()
 	unusedDominos.clear();
 
 	// Print Statement just to check
-	cout << "# of elements: " << unusedDominos.size() << "\n";
+	// cout << "# of elements: " << unusedDominos.size() << "\n";
 
 	// Create the 28 dominos
 	for (int i = 0; i <= 6; i++) 
@@ -37,13 +37,7 @@ void boneYard::createBoneYard()
 			unusedDominos.push_back(newTile);
 		}
 	}
-	cout << "# of elements: " << unusedDominos.size() << "\n";
-	
-	// use srand(seed) so that we can change the seed value
-	// srand(unsigned(time(0)));
-	// using built-in random generator shuffle the boneyard
-	// random_shuffle(unusedDominos.begin(), unusedDominos.end());
-
+	// cout << "# of elements: " << unusedDominos.size() << "\n";
 }
 
 void boneYard::shuffleBoneYard()

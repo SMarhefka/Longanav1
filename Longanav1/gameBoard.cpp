@@ -23,6 +23,18 @@ void gameBoard::addToLeft(dominoTile a_tileToAdd)
 	}
 }
 
+// gets the rightMostTile from the right vector
+dominoTile gameBoard::getRightMostTile()
+{
+	// create a new temporary dominoTile
+	dominoTile tempTile;
+	// set the tempTile to the last element in the 
+	// rightSide array
+	tempTile = rightSide.at(rightSide.size());
+	// return the tile
+	return tempTile;
+}
+
 void gameBoard::printToScreen()
 {
 	cout << "gameBoard: " << "\n";

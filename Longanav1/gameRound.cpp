@@ -26,8 +26,6 @@ void gameRound::setUpRound()
 
 	m_playerIndex = getFirstPlayer();
 	
-	cout << "First player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-
 	playRound();
 }
 
@@ -70,20 +68,6 @@ void gameRound::distributeTiles()
 	}
 }
 
-
-void gameRound::playRound()
-{
-	while (!(roundOver() == true))
-	{
-		// print whos move it is
-		m_gamePlayers.at(m_playerIndex)->getName();
-		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
-		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
-		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
-	}
-	
-}
-
 unsigned short gameRound::getFirstPlayer()
 {
 	// bool a_testBool;
@@ -114,15 +98,32 @@ unsigned short gameRound::getFirstPlayer()
 	return 1;
 }
 
+void gameRound::playRound()
+{
+	while (!(roundOver() == true))
+	{
+		// print whos move it is
+		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
+		// call playMove() for the current player
+		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+		// m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
+		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
+	}
+
+}
+
 bool gameRound::roundOver()
 {
 	// bool a_roundFinished;
-	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 0)
+	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 1)
 	{
+		cout << "The computer wins!\n";
 		return true;
 	}
-	if (m_gamePlayers.at(1)->getHand()->getHandSize() == 0)
+	if (m_gamePlayers.at(1)->getHand()->getHandSize() == 1)
 	{
+		cout << m_gamePlayers.at(1)->getName() << " wins!\n";
 		return true;
 	}
 	return false;

@@ -1,6 +1,7 @@
 #pragma once
 #include "player.h"
-#include <string>
+#include "validateInput.h"
+#include <iomanip>
 
 // human is the derived class
 // this means that this class will inherits all 
@@ -19,16 +20,22 @@ public:
 	~human();
 
 	// this is the overridden function from the player class
-	void playMove();
+	bool playMove(gameBoard newGameBoard);
 
-	string getName();
+	// this function is specific to the human class
+	void displayInitialOptions();
+
+	void displayTileOptions(int a_optionCount);
+
+	void executeOptions(gameBoard a_inGameBoard);
+
+	void selectTile(gameBoard a_inGameBoard);
 
 	// this is a getter function
 	playerHand* getHand();
 
 private:
-	// string humanName;
-	// playerHand humanHand;
-	// int score;
+	int m_userChoice;
+	validateInput m_checkInput;
 };
 

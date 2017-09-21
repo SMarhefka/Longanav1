@@ -8,11 +8,13 @@ public:
 	~tournament();
 
 	void beginTournament();
-
 	// function to create players
 	void createPlayers();
 
 	void printScore();
+
+	// return the tournament score
+	//void getTourScore();
 
 	// provide the user with game options.  These include starting a new game or loading
 	// in a previous game
