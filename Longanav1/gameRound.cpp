@@ -64,7 +64,10 @@ void gameRound::distributeTiles()
 			// just to check I want to make sure that that it prints correctly
 			// gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
 		}
+		// Used for testing purposes
+		cout << "Player Name: " << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
 		m_gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
+		cout << endl;
 	}
 }
 
@@ -88,8 +91,8 @@ unsigned short gameRound::getFirstPlayer()
 
 	}
 
-	m_gamePlayers.at(0)->getHand()->printHand();
-	m_gamePlayers.at(1)->getHand()->printHand();
+	//m_gamePlayers.at(0)->getHand()->printHand();
+	//m_gamePlayers.at(1)->getHand()->printHand();
 
 	// if the computer has the engine then the 
 	// first player will be set to 0
@@ -109,8 +112,8 @@ void gameRound::playRound()
 		// print whos move it is
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 		// call playMove() for the current player
-		// m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
-		// m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}

@@ -3,6 +3,7 @@
 #include "playerHand.h"
 #include "boneyard.h"
 #include "gameBoard.h"
+#include "validateInput.h"
 
 using namespace std;
 
@@ -23,7 +24,9 @@ public:
 	// I am not passing this by reference because I
 	// don't plan on modifying the game board in the
 	// player class
-	virtual bool playMove(gameBoard newGameBoard);
+	virtual bool playMove(gameBoard &newGameBoard);
+
+	virtual bool checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice);
 
 	// This will return the name of the current player
 	string getName();
@@ -32,11 +35,20 @@ public:
 
 	void setPassed(bool a_playerPass);
 
-	bool player::getPassed();
+	void setUserOptions(int a_indexNumber);
+
+	bool getPassed();
+
+	int getUserOption();
+
+	short getAddSide();
 
 protected:
+	validateInput m_checkInput;
 	playerHand m_currentHand;
 	string m_playerName;
 	bool m_playerPass;
+	int m_userChoice;
+	short m_whichSide;
 	int m_score;
 };

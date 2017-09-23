@@ -51,7 +51,17 @@ dominoTile gameBoard::getLeftMostTile()
 	return tempTile;
 }
 
+bool gameBoard::isLeftEmpty()
+{
+	return leftSide.size() == 0;
+}
+
+bool gameBoard::isRightEmpty()
+{
+	return rightSide.size() == 0;
+}
+
 void gameBoard::printToScreen()
 {
-	m_boardView.printBoardToScreen(leftSide, rightSide);
+	m_boardView.printBrdToScreen(leftSide, rightSide);
 }

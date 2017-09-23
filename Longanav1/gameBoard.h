@@ -21,6 +21,10 @@ public:
 
 	dominoTile getLeftMostTile();
 
+	bool isLeftEmpty();
+
+	bool isRightEmpty();
+
 	// void printBoardToFile();
 	void printToScreen();
 

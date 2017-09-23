@@ -24,7 +24,7 @@ public:
 	// one thing that should happen is that the gameBoard should be printed to the screen
 	void gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
 	// 
-	void printToScreen();
+	void printBrdToScreen(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
 	void deleteLines();
 private:
 	queue<string> m_firstLine;

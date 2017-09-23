@@ -90,7 +90,6 @@ int playerHand::getHandSize()
 
 void playerHand::printHand()
 {
-	cout << "Player Hand:" << "\n";
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
@@ -101,5 +100,5 @@ void playerHand::printHand()
 		cout << "\n";
 		}*/
 	}
-	cout << "\n";
+	cout << endl;
 }

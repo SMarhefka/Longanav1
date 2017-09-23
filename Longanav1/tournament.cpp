@@ -28,6 +28,7 @@ void tournament::beginTournament()
 	{
 		m_playerName = "Player 1";
 	}
+	cout << endl;
 
 	createPlayers();
 
