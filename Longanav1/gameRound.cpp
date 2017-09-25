@@ -114,6 +114,8 @@ void gameRound::playRound()
 		// call playMove() for the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+		// Here I am going to need to figure out which array to
+		// Place the user choice into
 		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}
@@ -122,7 +124,6 @@ void gameRound::playRound()
 
 bool gameRound::roundOver()
 {
-	// bool a_roundFinished;
 	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 1)
 	{
 		cout << "The computer wins!\n";

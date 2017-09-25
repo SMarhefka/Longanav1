@@ -21,12 +21,11 @@ human::~human()
 bool human::playMove(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
-	//cout << "I'm playing as: " << m_playerName << " and I'm in the 
-	//human::playMove() function!\n";
 	// display the hand of the user
 	getHand();
-	// display user options
+	// display the first set of user options
 	displayOptions1();
+	// execute the possible options
 	executeOptions(thisGameBoard);
 	while (m_exeSucc == false)
 	{
@@ -91,17 +90,22 @@ void human::executeOptions(gameBoard a_inGameBoard)
 		// if the user selects 0 
 		if (m_tempUserChoice == 0)
 		{
+			// this will go back to the main set of options
 			m_exeSucc = false;
 			break;
 		}
+		// otherwise set the tempUserChoice = what they chose minus 1
 		m_tempUserChoice = m_tempUserChoice - 1;
+
 		while (checkTileSelection(thisGameBoard, m_tempUserChoice) != true)
 		{
 			cout << "The tile you chose was invalid, please choose another tile\n";
 			displayOptions2(thisGameBoard);
 		}
-		
-		setUserOptions(m_tempUserChoice - 1);
+
+		m_exeSucc = true;
+
+		setUserOptions(m_tempUserChoice);
 		break;
 	case 2:
 		// if this function is called we need to check and
@@ -111,6 +115,7 @@ void human::executeOptions(gameBoard a_inGameBoard)
 		// This simply calls the help function from the player class
 		// the help function will need the players hand in order to 
 		// work
+		// getHelp()
 	case 4:
 		exit(0);
 	default:

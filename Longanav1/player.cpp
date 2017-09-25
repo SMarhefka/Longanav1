@@ -49,7 +49,23 @@ bool player::checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice)
 {
 	// if the user selects a double or if the computer passed it's turn
 	// then you need to check both sides of the board
-	if (m_currentHand.getTilesAt(a_userChoice).isDouble() == true || getPassed() == true)
+	if ((m_currentHand.getTilesAt(a_userChoice).isDouble() == true || getPassed() == true) && 
+		a_inGameBoard.isRightEmpty()==true)
+	{
+		if (m_checkInput.checkLeftSide(m_currentHand.getTilesAt(a_userChoice), a_inGameBoard.getLeftMostTile()) == true)
+		{
+			return true;
+		}
+	}
+	else if ((m_currentHand.getTilesAt(a_userChoice).isDouble() == true || getPassed() == true) &&
+		a_inGameBoard.isLeftEmpty() == true)
+	{
+		if (m_checkInput.checkRightSide(m_currentHand.getTilesAt(a_userChoice), a_inGameBoard.getRightMostTile()) == true)
+		{
+			return true;
+		}
+	}
+	else if (m_currentHand.getTilesAt(a_userChoice).isDouble() == true || getPassed() == true)
 	{
 		if (m_checkInput.checkLeftSide(m_currentHand.getTilesAt(a_userChoice), a_inGameBoard.getLeftMostTile()) == true)
 		{
