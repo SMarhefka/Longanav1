@@ -21,32 +21,37 @@ human::~human()
 void human::playMove(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
-	// display the hand of the user
-	getHand()->printHand();
+
 	// display the first set of user options
-	displayOptions1();
+	displayOptions1(thisGameBoard);
 	// execute the possible options
 	executeOptions(thisGameBoard);
 	while (m_exeSucc == false)
 	{
-		displayOptions1();
+		displayOptions1(thisGameBoard);
 		executeOptions(thisGameBoard);
 	}
 }
 
-void human::displayOptions1()
+void human::displayOptions1(gameBoard &a_inGameBoard)
 {
+	gameBoard thisGameBoard = a_inGameBoard;
+	// print the board to the screen
+	thisGameBoard.printToScreen();
+	// print the user hand
+	displayTileOptions();
+
 	cout << endl;
 
 	int optionCount = 1;
 	int userChoice;
 
 	cout << "Please Select an Option: " << endl;
-	cout << optionCount << " - Place a tile\n";
+	cout << optionCount << " - Place Tile\n";
 	optionCount++;
-	cout << optionCount << " - Pass my turn\n";
+	cout << optionCount << " - Pass Turn\n";
 	optionCount++;
-	cout << optionCount << " - Get help\n";
+	cout << optionCount << " - Get Help\n";
 
 	// take in the userInput
 	cout << "User Selection: ";
@@ -59,11 +64,11 @@ void human::displayOptions1()
 		cin.ignore();
 		optionCount = 1;
 		cout << "Please choose from one of the following options: " << endl;
-		cout << optionCount << " - Place a tile\n";
+		cout << optionCount << " - Place Tile\n";
 		optionCount++;
-		cout << optionCount << " - Pass my turn\n";
+		cout << optionCount << " - Pass Turn\n";
 		optionCount++;
-		cout << optionCount << " - Get help\n";
+		cout << optionCount << " - Get Help\n";
 
 		// take in the userInput
 		cout << "User Selection: ";
@@ -81,6 +86,8 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 	case 1:
 		// call function to allow the user to pick a tile
 		// that will be placed on the board
+		cout << "Press 0 to go back to the previous menu \n";
+
 		displayOptions2(thisGameBoard);
 		// if the user selects 0 
 		if (m_tempUserChoice == 0)
@@ -128,8 +135,10 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 	}
 }
 
-void human::displayTileOptions(int a_optionCount)
+void human::displayTileOptions()
 {
+	int a_optionCount = 1;
+	cout << endl;
 	// the user will also need to be able to see their hand
 	cout << getName() << "'s Hand" << endl;
 	m_currentHand.printHand();
@@ -141,7 +150,6 @@ void human::displayTileOptions(int a_optionCount)
 		cout << setw(4) << a_optionCount;
 	}
 	cout << endl << endl;
-	cout << "Press 0 to go back to the previous menu \n";
 }
 
 // displays the second set of options
@@ -152,11 +160,11 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 	int optionCount = 1;
 	// want to print the board for the player
 	// to see their options
-	thisGameBoard.printToScreen();
-	cout << endl;
-	displayTileOptions(optionCount);
+	// thisGameBoard.printToScreen();
+	// cout << endl;
+	// displayTileOptions(optionCount);
 	// take in the userInput
-	cout << "User Selection: ";
+	cout << "Tile Number: ";
 	cin >> userChoice;
 	// check to make sure that the user has entered a valid number
 	// while the user doesn't provide a valid input
@@ -170,9 +178,9 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 			<< m_currentHand.getHandSize() << endl;
 		thisGameBoard.printToScreen();
 		cout << endl;
-		displayTileOptions(optionCount);
+		displayTileOptions();
 		// take in the userInput
-		cout << "User Selection: ";
+		cout << "Tile Number: ";
 		cin >> userChoice;
 	}
 	// once we get a valid input we will store it 

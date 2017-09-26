@@ -68,18 +68,14 @@ void gameRound::distributeTiles()
 			// gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
 		}
 		// Used for testing purposes
-		cout << "Player Name: " << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
-		m_gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
-		cout << endl;
+		// cout << "Player Name: " << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
+		// m_gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
+		// cout << endl;
 	}
 }
 
 unsigned short gameRound::getFirstPlayer()
 {
-	// bool a_testBool;
-	// a_testBool = (m_gamePlayers.at(0)->getHand()->hasEngine(m_engine));
-	// a_testBool = (m_gamePlayers.at(1)->getHand()->hasEngine(m_engine));
-	
 	while ((m_gamePlayers.at(0)->getHand()->hasEngine(m_engine)) == false && 
 		(m_gamePlayers.at(1)->getHand()->hasEngine(m_engine)) == false)
 	{
@@ -113,7 +109,7 @@ void gameRound::playRound()
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 		// print the board
-		newGameBoard.printToScreen();
+		// newGameBoard.printToScreen();
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}

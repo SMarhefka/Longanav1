@@ -17,7 +17,7 @@ player::~player()
 
 void player::playMove(gameBoard &a_inGameBoard)
 {
-	cout << "I'm playing as: " << m_playerName << " and I am in player player::playMove() function\n";
+	// cout << "I'm playing as: " << m_playerName << " and I am in player player::playMove() function\n";
 	// if the current hand contains the engine then
 	if (getHand()->hasEngine(m_inEngine) == true)
 	{

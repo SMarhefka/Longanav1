@@ -23,15 +23,13 @@ public:
 	void playMove(gameBoard &a_inGameBoard);
 
 	// this function is specific to the human class
-	void displayOptions1();
+	void displayOptions1(gameBoard &a_inGameBoard);
 
-	void displayTileOptions(int a_optionCount);
+	void displayTileOptions();
 
 	void executeOptions(gameBoard &a_inGameBoard);
 
 	void displayOptions2(gameBoard &a_inGameBoard);
-
-	void displayOptions3();
 
 	// this is a getter function
 	playerHand* getHand();
