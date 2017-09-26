@@ -8,7 +8,7 @@ gameRound::gameRound()
 	// cout << "newRound constructor called\n";
 }
 
-gameRound::gameRound(int a_roundNumber, vector<player*> &a_gamePlayers)
+gameRound::gameRound(int &a_roundNumber, vector<player*> &a_gamePlayers)
 {
 	m_roundNum = a_roundNumber;
 	m_gamePlayers = a_gamePlayers;
@@ -20,12 +20,15 @@ gameRound::~gameRound()
 
 void gameRound::setUpRound()
 {
+	// set the engine for the corresponding round
 	setEngine();
-
+	// distribute 8 tiles to each tile
 	distributeTiles();
-
+	// figure out the first player
 	m_playerIndex = getFirstPlayer();
-	
+
+	m_gamePlayers.at(m_playerIndex)->setEngineFRound(m_engine);
+
 	playRound();
 }
 
@@ -88,11 +91,7 @@ unsigned short gameRound::getFirstPlayer()
 		// give the player a tile
 		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard.dealTile());
 		// m_gamePlayers.at(1)->getHand()->printHand();
-
 	}
-
-	//m_gamePlayers.at(0)->getHand()->printHand();
-	//m_gamePlayers.at(1)->getHand()->printHand();
 
 	// if the computer has the engine then the 
 	// first player will be set to 0
@@ -111,25 +110,23 @@ void gameRound::playRound()
 	{
 		// print whos move it is
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-		// call playMove() for the current player
+		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
-		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
-		// Here I am going to need to figure out which array to
-		// Place the user choice into
-		m_gamePlayers.at(m_playerIndex)->addToBoard(newGameBoard);
+		// print the board
+		newGameBoard.printToScreen();
+		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}
-
 }
 
 bool gameRound::roundOver()
 {
-	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 1)
+	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 0)
 	{
 		cout << "The computer wins!\n";
 		return true;
 	}
-	if (m_gamePlayers.at(1)->getHand()->getHandSize() == 1)
+	if (m_gamePlayers.at(1)->getHand()->getHandSize() == 0)
 	{
 		cout << m_gamePlayers.at(1)->getName() << " wins!\n";
 		return true;

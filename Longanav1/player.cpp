@@ -15,34 +15,31 @@ player::~player()
 {
 }
 
-// 9/19 10:15 implemented an add to board function
-void player::addToBoard(gameBoard &newGameBoard)
-{
-	m_userChoice = getUserOption();
-	// int userChoice = 2;
-	cout << "I am playing as the: " << m_playerName << " and I am in the player::addToBoard function\n";
-	if (m_playerName == "Computer")
-	{
-		newGameBoard.addToLeft(m_currentHand.getTilesAt((m_userChoice)));
-	}
-	else
-	{
-		newGameBoard.addToRight(m_currentHand.getTilesAt((m_userChoice)));
-	}
-	m_currentHand.removeTile(m_currentHand.getTilesAt((m_userChoice)));
-}
-
-void player::addToHand()
-{
-	cout << "I'm playing as: " << m_playerName << " and I am in player player::addToHand() function\n";
-}
-
-bool player::playMove(gameBoard &newGameBoard)
+void player::playMove(gameBoard &a_inGameBoard)
 {
 	cout << "I'm playing as: " << m_playerName << " and I am in player player::playMove() function\n";
-	// m_userChoice = 1;
-	// cout << "I'm in player playMove()\n";
-	return true;
+	// if the current hand contains the engine then
+	if (getHand()->hasEngine(m_inEngine) == true)
+	{
+		int handSize = m_currentHand.getHandSize();
+		// find the domino tile that has the engine
+		for (int count = 0; count < handSize; count++)
+		{
+			if ((getHand()->getTilesAt(count).isDouble() == true) && (getHand()->getTilesAt(count).getLeftSide() == 6))
+			{
+				m_userChoice = count;
+			}
+		}
+		// place the tile on the board
+		a_inGameBoard.addToRight(m_currentHand.getTilesAt(m_userChoice));
+		// remove the tile from the players hand
+		m_currentHand.removeTile(m_currentHand.getTilesAt((m_userChoice)));
+	}
+	// otherwise
+	else
+	{
+		// run checkPass 
+	}
 }
 
 bool player::checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice)
@@ -52,7 +49,7 @@ bool player::checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice)
 	if ((m_currentHand.getTilesAt(a_userChoice).isDouble() == true || getPassed() == true) && 
 		a_inGameBoard.isRightEmpty()==true)
 	{
-		if (m_checkInput.checkLeftSide(m_currentHand.getTilesAt(a_userChoice), a_inGameBoard.getLeftMostTile()) == true)
+		if (m_checkInput.checkLeftSide(a_inGameBoard.getLeftMostTile(), m_currentHand.getTilesAt(a_userChoice)) == true)
 		{
 			return true;
 		}
@@ -124,5 +121,30 @@ int player::getUserOption()
 short player::getAddSide()
 {
 	return m_whichSide;
+}
+
+void player::setEngineFRound(int & a_inEngine)
+{
+	m_inEngine = a_inEngine;
+}
+
+bool player::checkPass(gameBoard &a_inNewGameBoard)
+{
+	int handSize = m_currentHand.getHandSize();
+	// go though every element
+	for (auto item = 0; item < handSize; item++)
+	{
+		// if the left side is false (meaning there are no matches)
+		// and the right side is false (meaning that there are no matches)
+		// then set the checkPassed
+		if (m_checkInput.checkLeftSide(m_currentHand.getTilesAt(item),
+			a_inNewGameBoard.getLeftMostTile()) == false &&
+			m_checkInput.checkLeftSide(m_currentHand.getTilesAt(item),
+				a_inNewGameBoard.getLeftMostTile()) == false)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 

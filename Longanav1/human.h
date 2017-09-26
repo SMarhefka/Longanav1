@@ -20,16 +20,18 @@ public:
 	~human();
 
 	// this is the overridden function from the player class
-	bool playMove(gameBoard &newGameBoard);
+	void playMove(gameBoard &a_inGameBoard);
 
 	// this function is specific to the human class
 	void displayOptions1();
 
 	void displayTileOptions(int a_optionCount);
 
-	void executeOptions(gameBoard a_inGameBoard);
+	void executeOptions(gameBoard &a_inGameBoard);
 
-	void displayOptions2(gameBoard a_inGameBoard);
+	void displayOptions2(gameBoard &a_inGameBoard);
+
+	void displayOptions3();
 
 	// this is a getter function
 	playerHand* getHand();

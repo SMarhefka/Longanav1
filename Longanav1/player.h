@@ -15,16 +15,11 @@ public:
 	// default destuctor
 	~player();
 	
-	// this function will place a tile onto the board
-	virtual void addToBoard(gameBoard &newGameBoard);
-	// this function will a
-	virtual void addToHand();
-
 	// This is only a test at this point
 	// I am not passing this by reference because I
 	// don't plan on modifying the game board in the
 	// player class
-	virtual bool playMove(gameBoard &newGameBoard);
+	virtual void playMove(gameBoard &a_inGameBoard);
 
 	virtual bool checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice);
 
@@ -43,12 +38,17 @@ public:
 
 	short getAddSide();
 
+	void setEngineFRound(int &a_inEngine);
+
+	bool checkPass(gameBoard &a_inNewGameBoard);
+
 protected:
 	validateInput m_checkInput;
 	playerHand m_currentHand;
 	string m_playerName;
 	bool m_playerPass;
+	int m_inEngine;
 	int m_userChoice;
-	short m_whichSide;
+	char m_whichSide;
 	int m_score;
 };

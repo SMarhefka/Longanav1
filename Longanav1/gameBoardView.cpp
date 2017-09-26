@@ -15,7 +15,7 @@ gameBoardView::~gameBoardView()
 void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide)
 {
 	cout << endl;
-	cout << "Current Board:";
+	cout << "Current Board:" << endl;
 	deleteLines();
 
 	m_secondLine.push_back("L");
@@ -91,7 +91,7 @@ void gameBoardView::printBrdToScreen(vector<dominoTile> &a_leftSide, vector<domi
 			cout << " ";
 		}
 	}
-	//cout << "\n";
+	cout << endl;
 }
 
 void gameBoardView::deleteLines()

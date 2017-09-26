@@ -18,11 +18,11 @@ human::~human()
 {
 }
 
-bool human::playMove(gameBoard &a_inGameBoard)
+void human::playMove(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
 	// display the hand of the user
-	getHand();
+	getHand()->printHand();
 	// display the first set of user options
 	displayOptions1();
 	// execute the possible options
@@ -32,9 +32,6 @@ bool human::playMove(gameBoard &a_inGameBoard)
 		displayOptions1();
 		executeOptions(thisGameBoard);
 	}
-	// returns true or false based
-	// on if the move can be made succesfully
-	return true;
 }
 
 void human::displayOptions1()
@@ -50,8 +47,7 @@ void human::displayOptions1()
 	cout << optionCount << " - Pass my turn\n";
 	optionCount++;
 	cout << optionCount << " - Get help\n";
-	optionCount++;
-	cout << optionCount << " - Exit Program (without saving)\n\n";
+
 	// take in the userInput
 	cout << "User Selection: ";
 	cin >> userChoice;
@@ -68,8 +64,7 @@ void human::displayOptions1()
 		cout << optionCount << " - Pass my turn\n";
 		optionCount++;
 		cout << optionCount << " - Get help\n";
-		optionCount++;
-		cout << optionCount << " - Quit Program (without saving)\n\n";
+
 		// take in the userInput
 		cout << "User Selection: ";
 		cin >> userChoice;
@@ -78,7 +73,7 @@ void human::displayOptions1()
 	m_tempUserChoice = userChoice;
 }
 
-void human::executeOptions(gameBoard a_inGameBoard)
+void human::executeOptions(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
 	switch (m_tempUserChoice)
@@ -94,7 +89,7 @@ void human::executeOptions(gameBoard a_inGameBoard)
 			m_exeSucc = false;
 			break;
 		}
-		// otherwise set the tempUserChoice = what they chose minus 1
+		// otherwise set the tempUserChoice = what the user chose minus 1
 		m_tempUserChoice = m_tempUserChoice - 1;
 
 		while (checkTileSelection(thisGameBoard, m_tempUserChoice) != true)
@@ -102,7 +97,7 @@ void human::executeOptions(gameBoard a_inGameBoard)
 			cout << "The tile you chose was invalid, please choose another tile\n";
 			displayOptions2(thisGameBoard);
 		}
-
+		// set the execution variable to successful
 		m_exeSucc = true;
 
 		setUserOptions(m_tempUserChoice);
@@ -110,14 +105,24 @@ void human::executeOptions(gameBoard a_inGameBoard)
 	case 2:
 		// if this function is called we need to check and
 		// make sure that the user cannot actually make a move
-		// checkPass()
+		if (checkPass(thisGameBoard) == true)
+		{
+			// set passed to true
+			setPassed(true);
+			// set the execution variable to successful
+			m_exeSucc = true;
+			break;
+		}
+		// otherwise there is a playable tile in the user hand
+		// set the execution variable to successful
+		cout << "There is a playable tile\n";
+		m_exeSucc = false;
+		break;
 	case 3:
 		// This simply calls the help function from the player class
 		// the help function will need the players hand in order to 
 		// work
 		// getHelp()
-	case 4:
-		exit(0);
 	default:
 		break;
 	}
@@ -140,7 +145,7 @@ void human::displayTileOptions(int a_optionCount)
 }
 
 // displays the second set of options
-void human::displayOptions2(gameBoard a_inGameBoard)
+void human::displayOptions2(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
 	int userChoice;
