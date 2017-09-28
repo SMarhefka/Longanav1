@@ -34,34 +34,34 @@ void testCases::testDomino()
 }
 
 // Simple test to make sure that the boneYard class works correctly
-void testCases::testBoneYard()
-{
-	boneYard newBoneYard;
-	newBoneYard.createBoneYard();
-	newBoneYard.printBoneYard();
-	cout << "\n";
-
-	newBoneYard.shuffleBoneYard();
-	cout << newBoneYard.getSize() << "\n";
-	newBoneYard.printBoneYard();
-	cout << "\n";
-
-	newBoneYard.removeTile();
-	cout << newBoneYard.getSize() << "\n";
-	newBoneYard.printBoneYard();
-	cout << "\n";
-
-	system("pause");
-	newBoneYard.~boneYard();
-	cout << newBoneYard.getSize() << "\n";
-	if (newBoneYard.isEmpty() == true)
-	{
-		cout << "boneyard is empty\n";
-	}
-	else
-	{
-		cout << "boneyard is not empty\n";
-	}
-	cout << "\n";
-	system("pause");
-}
+//void testCases::testBoneYard()
+//{
+//	boneYard newBoneYard;
+//	newBoneYard.createBoneYard();
+//	newBoneYard.printBoneYard();
+//	cout << "\n";
+//
+//	newBoneYard.shuffleBoneYard();
+//	cout << newBoneYard.getSize() << "\n";
+//	newBoneYard.printBoneYard();
+//	cout << "\n";
+//
+//	newBoneYard.removeTile();
+//	cout << newBoneYard.getSize() << "\n";
+//	newBoneYard.printBoneYard();
+//	cout << "\n";
+//
+//	system("pause");
+//	newBoneYard.~boneYard();
+//	cout << newBoneYard.getSize() << "\n";
+//	if (newBoneYard.isEmpty() == true)
+//	{
+//		cout << "boneyard is empty\n";
+//	}
+//	else
+//	{
+//		cout << "boneyard is not empty\n";
+//	}
+//	cout << "\n";
+//	system("pause");
+//}

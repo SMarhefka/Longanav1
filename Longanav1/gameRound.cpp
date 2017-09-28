@@ -108,8 +108,21 @@ void gameRound::playRound()
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+
+		if (m_gamePlayers.at(m_playerIndex)->getAddSide() == 'L')
+		{
+			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			newGameBoard.addToLeft(playerTile);
+			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
+		}
+		else if(m_gamePlayers.at(m_playerIndex)->getAddSide() == 'R')
+		{
+			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			newGameBoard.addToRight(playerTile);
+			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
+		}
 		// print the board
-		// newGameBoard.printToScreen();
+		newGameBoard.printToScreen();
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}

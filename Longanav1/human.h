@@ -25,17 +25,22 @@ public:
 	// this function is specific to the human class
 	void displayOptions1(gameBoard &a_inGameBoard);
 
-	void displayTileOptions();
+	void displayTiles();
 
 	void executeOptions(gameBoard &a_inGameBoard);
 
 	void displayOptions2(gameBoard &a_inGameBoard);
 
+	bool validSide(int &a_tempUserChoice, char & a_inSide);
+
+	void findEnginePosition();
 	// this is a getter function
 	playerHand* getHand();
 
 private:
+	int m_enginPosition;
 	int m_tempUserChoice;
 	bool m_exeSucc;
+	bool m_validMove;
 };
 
