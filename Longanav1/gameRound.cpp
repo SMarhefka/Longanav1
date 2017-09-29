@@ -125,9 +125,8 @@ void gameRound::playRound()
 		}
 		else if (m_gamePlayers.at(m_playerIndex)->getPassed() == true)
 		{
-			m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard.dealTile());
+			m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
 		}
-		
 		// print the board
 		newGameBoard.printToScreen();
 		// get the next player

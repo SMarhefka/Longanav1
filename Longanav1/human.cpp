@@ -51,6 +51,9 @@ void human::playMove(gameBoard &a_inGameBoard)
 	// now we just have to add the tile to the board
 	// set the userOptions
 	setUserOptions(m_userSelection, m_whichSide);
+	// because the execution was successful I can also set
+	// the passed variable as false
+	setPassed(false);
 }
 
 void human::printFirstOptions()
@@ -130,57 +133,6 @@ void human::displayOptions1(gameBoard &a_inGameBoard)
 	m_tempUserChoice = userChoice;
 }
 
-// displays the second set of options
-void human::displayOptions2(gameBoard &a_inGameBoard)
-{
-	int userChoice;
-	gameBoard thisGameBoard = a_inGameBoard;
-
-	displayTiles();
-
-	cout << "Press 0 to go back to the previous menu \n";
-	cout << "User Selection: ";
-	
-	//ignore all characters left in the buffer
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> userChoice;
-	
-	// check to make sure that the user has entered a valid number
-	// while the user doesn't provide a valid input
-	while (!cin.good() || (userChoice > m_currentHand.getHandSize()))
-	{
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		// print an error message
-		cout << "Inccorect input - Please enter a value between 1 and " << m_currentHand.getHandSize() << endl;
-
-		a_inGameBoard.printToScreen();
-		cout << endl;
-		displayTiles();
-
-		cout << endl;
-		cout << "Press 0 to go back to the previous menu \n";
-		// take in the userInput
-		cout << "User Selection: ";
-		cin >> userChoice;
-	}
-	// once we get a valid input we will store it 
-	// into a temporary variable
-	m_tileChoice = userChoice;
-
-	// if the user doesn't select 0 
-	if (m_tileChoice != 0)
-	{
-		//then ask the user for left or right
-		printLeftRight();
-		if (m_whichSide == 'B')
-		{
-			displayOptions2(thisGameBoard);
-		}
-	}
-}
 
 void human::executeOptions(gameBoard &a_inGameBoard)
 {
@@ -226,6 +178,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 					break;
 				}
 			}
+			/*			
 			// this will go back to the main set of options
 			if (m_tileChoice == 0)
 			{
@@ -233,6 +186,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 				m_exeSucc = false;
 				break;
 			}
+			*/
 		}
 		else
 		{
@@ -321,6 +275,59 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 		break;
 	}
 }
+
+// displays the second set of options
+void human::displayOptions2(gameBoard &a_inGameBoard)
+{
+	int userChoice;
+	gameBoard thisGameBoard = a_inGameBoard;
+
+	displayTiles();
+
+	cout << "Press 0 to go back to the previous menu \n";
+	cout << "User Selection: ";
+
+	//ignore all characters left in the buffer
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin >> userChoice;
+
+	// check to make sure that the user has entered a valid number
+	// while the user doesn't provide a valid input
+	while (!cin.good() || (userChoice > m_currentHand.getHandSize()))
+	{
+		//clear the error state
+		cin.clear();
+		//ignore all characters left in the buffer
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		// print an error message
+		cout << "Inccorect input - Please enter a value between 1 and " << m_currentHand.getHandSize() << endl;
+
+		a_inGameBoard.printToScreen();
+		cout << endl;
+		displayTiles();
+
+		cout << endl;
+		cout << "Press 0 to go back to the previous menu \n";
+		// take in the userInput
+		cout << "User Selection: ";
+		cin >> userChoice;
+	}
+	// once we get a valid input we will store it 
+	// into a temporary variable
+	m_tileChoice = userChoice;
+
+	// if the user doesn't select 0 
+	if (m_tileChoice != 0)
+	{
+		//then ask the user for left or right
+		printLeftRight();
+		if (m_whichSide == 'B')
+		{
+			displayOptions2(thisGameBoard);
+		}
+	}
+}
+
 
 void human::displayTiles()
 {
