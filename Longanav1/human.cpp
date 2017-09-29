@@ -68,17 +68,30 @@ void human::printFirstOptions()
 void human::printLeftRight()
 {
 	cout << "Which Side - Left/Right: ";
+	cout << "Press B To Go To The Previous Menu \n";
 	//ignore all characters left in the buffer
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> m_whichSide;
+
+	bool validInput;
+	if(toupper(m_whichSide) == 'L' || toupper(m_whichSide) == 'R' || toupper(m_whichSide) == 'B')
+	{
+		validInput = true;
+	}
+	else
+	{
+		validInput = false;
+	}
+
 	// while the input fails
-	while (cin.fail())
+	while (validInput != true)
 	{
 		//clear the error state
 		cin.clear();
 		//ignore all characters left in the buffer
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "Please Enter - Left or Right: ";
+		cout << "Press B To Go To The Previous Menu \n";
 		cin >> m_whichSide;
 	}
 	// set the side that the user selected to uppercase
@@ -162,6 +175,10 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 	{
 		//then ask the user for left or right
 		printLeftRight();
+		if (m_whichSide == 'B')
+		{
+			displayOptions2(thisGameBoard);
+		}
 	}
 }
 
@@ -181,26 +198,47 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			m_exeSucc = false;
 			break;
 		}
-		
-		// otherwise set the tempUserChoice = what the user chose minus 1
-		m_tileChoice = m_tileChoice - 1;
-		
-		// this checks that the tile and side that the user selected
-		// is valid
+
+		// this checks that the tile and side that the user 
+		// selected is valid
 		if (m_currentHand.hasEngine(m_inEngine) == true)
 		{
 			dominoTile tempTile;
-			tempTile = m_currentHand.getTilesAt(m_tileChoice);
-			while ((tempTile.isDouble() != true && tempTile.getLeftSide() != m_inEngine) || m_whichSide != 'L')
+			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
+
+			bool validTile;
+			if (tempTile.isDouble() == true && tempTile.getLeftSide() == m_inEngine)
 			{
-				cout << "Please select the engine\n";
+				validTile = true;
+			}
+			else
+			{
+				validTile = false;
+			}
+
+			while (validTile != true || m_whichSide != 'L')
+			{
+				cout << "Engine not Selected\n";
 				displayOptions2(thisGameBoard);
+				// this will go back to the main set of options
+				if (m_tileChoice == 0)
+				{
+					break;
+				}
+			}
+			// this will go back to the main set of options
+			if (m_tileChoice == 0)
+			{
+				// this will go back to the main set of options
+				m_exeSucc = false;
+				break;
 			}
 		}
 		else
 		{
-			while (checkTileSelection(thisGameBoard, m_tileChoice) != true
-				&& validSide(m_tileChoice, m_whichSide) != true)
+			int tempTileChoice = m_tileChoice - 1;
+			while (checkTileSelection(thisGameBoard, tempTileChoice) != true
+				&& validSide(tempTileChoice, m_whichSide) != true)
 			{
 				cout << "The tile you chose was invalid, please choose another tile\n";
 				displayOptions2(thisGameBoard);
@@ -214,11 +252,11 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			break;
 		}
 
-
+		m_tileChoice = m_tileChoice - 1;
 		if (m_currentHand.hasEngine(m_inEngine) != true)
 		{
 			// if the selected side is left
-			if (m_whichSide = 'L')
+			if (m_whichSide == 'L')
 			{
 				// if the left pips of the user tile match the left pips of the board
 				if (m_checkInput.leftSideOnly(thisGameBoard.getLeftMostTile(),
@@ -234,7 +272,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 				}
 			}
 			// if the selected side is right
-			else if (m_whichSide = 'R')
+			else if (m_whichSide == 'R')
 			{
 				// if the right pips of the user tile match the left pips of the board
 				if (m_checkInput.rightSideOnly(thisGameBoard.getRightMostTile(),
