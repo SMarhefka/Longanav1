@@ -1,6 +1,6 @@
 #pragma once
 #include "player.h"
-
+#include <iostream>
 #include <iomanip>
 
 // human is the derived class
@@ -22,6 +22,10 @@ public:
 	// this is the overridden function from the player class
 	void playMove(gameBoard &a_inGameBoard);
 
+	void printFirstOptions();
+
+	void printLeftRight();
+
 	// this function is specific to the human class
 	void displayOptions1(gameBoard &a_inGameBoard);
 
@@ -40,6 +44,7 @@ public:
 private:
 	int m_enginPosition;
 	int m_tempUserChoice;
+	int m_tileChoice;
 	bool m_exeSucc;
 	bool m_validMove;
 };

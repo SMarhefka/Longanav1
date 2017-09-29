@@ -41,7 +41,11 @@ void player::playMove(gameBoard &a_inGameBoard)
 	// otherwise
 	else
 	{
-		// run checkPass 
+		// run checkPass
+		m_userSelection = getHand()->getTilesAt(0);
+		m_whichSide = 'R';
+		setUserOptions(m_userSelection, m_whichSide);
+
 	}
 }
 
@@ -49,22 +53,13 @@ void player::playMove(gameBoard &a_inGameBoard)
 bool player::checkMove(gameBoard &a_inGameBoard)
 {
 	int handSize = m_currentHand.getHandSize();
-	// if both the left and right sides are empty then
-	// check to see if the user has the engine
-	if (m_currentHand.hasEngine(m_inEngine) == true)
+	// go though every element
+	for (auto item = 0; item < handSize; item++)
 	{
-		return true;
-	}
-	else
-	{
-		// go though every element
-		for (auto item = 0; item < handSize; item++)
+		if (checkTileSelection(a_inGameBoard, item) == true)
 		{
-			if (checkTileSelection(a_inGameBoard, item) == true)
-			{
-				// then set the valid move to true
-				return true;
-			}
+			// then set the valid move to true
+			return true;
 		}
 	}
 	return false;

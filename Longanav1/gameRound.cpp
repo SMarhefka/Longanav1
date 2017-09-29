@@ -105,22 +105,29 @@ void gameRound::playRound()
 	while (!(roundOver() == true))
 	{
 		// print whos move it is
-		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
+		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl << endl;
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 
 		if (m_gamePlayers.at(m_playerIndex)->getAddSide() == 'L')
 		{
-			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			dominoTile playerTile;
+			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
 			newGameBoard.addToLeft(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 		}
 		else if(m_gamePlayers.at(m_playerIndex)->getAddSide() == 'R')
 		{
-			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			dominoTile playerTile;
+			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
 			newGameBoard.addToRight(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 		}
+		else if (m_gamePlayers.at(m_playerIndex)->getPassed() == true)
+		{
+			m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard.dealTile());
+		}
+		
 		// print the board
 		newGameBoard.printToScreen();
 		// get the next player
