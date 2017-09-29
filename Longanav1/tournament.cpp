@@ -24,7 +24,7 @@ void tournament::beginTournament()
 
 	cout << "What name would you like to use? ";
 	cin >> m_playerName;
-	if (m_playerName.length() <= 2)
+	if (m_playerName.length() < 3)
 	{
 		m_playerName = "Player 1";
 	}

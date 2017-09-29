@@ -28,21 +28,14 @@ void gameBoard::addToRight(dominoTile a_tileToAdd)
 	rightSide.push_back(a_tileToAdd);
 }
 
-// this gets the right most tile to be compared
+// gets the rightMostTile from the right vector
 dominoTile gameBoard::getRightMostTile()
 {
 	// create a new temporary dominoTile
 	dominoTile tempTile;
 	// set the tempTile to the last element in the 
 	// rightSide array
-	if (rightSide.empty())
-	{
-		tempTile = leftSide.at(leftSide.size() - 1);
-	}
-	else
-	{
-		tempTile = rightSide.at(rightSide.size() - 1);
-	}
+	tempTile = rightSide.at(rightSide.size());
 	// return the tile
 	return tempTile;
 }
@@ -51,16 +44,9 @@ dominoTile gameBoard::getLeftMostTile()
 {
 	// create a new temporary dominoTile
 	dominoTile tempTile;
-	if (leftSide.empty())
-	{
-		tempTile = rightSide.at(0);
-	}
-	else
-	{
-		// set the tempTile to the first element in the 
-		// leftSide array
-		tempTile = leftSide.at(0);
-	}
+	// set the tempTile to the first element in the 
+	// leftSide array
+	tempTile = leftSide.at(0);
 	// return the tile
 	return tempTile;
 }

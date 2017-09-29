@@ -9,5 +9,5 @@ public:
 	// function to test the domino class
 	void testDomino();
 	// function to test the boneYard class
-	// void testBoneYard();
+	void testBoneYard();
 };

@@ -23,9 +23,6 @@ public:
 
 	virtual bool checkTileSelection(gameBoard &a_inGameBoard, int &a_userChoice);
 
-	// check for valid moves
-	virtual bool checkMove(gameBoard &a_inGameBoard);
-
 	// This will return the name of the current player
 	string getName();
 
@@ -33,30 +30,25 @@ public:
 
 	void setPassed(bool a_playerPass);
 
-	void setUserOptions(dominoTile & a_userTile, char & a_incomingSide);
+	void setUserOptions(int a_indexNumber);
 
 	bool getPassed();
 
-	dominoTile getUserOption();
+	int getUserOption();
 
-	char getAddSide();
+	short getAddSide();
 
 	void setEngineFRound(int &a_inEngine);
 
-protected:
-	// creates a new instance of validate 
-	validateInput m_checkInput;
-	// creates a new player hand
-	playerHand m_currentHand;
-	dominoTile m_userSelection;
-	// playerHand
-	string m_playerName;
+	bool checkPass(gameBoard &a_inNewGameBoard);
 
+protected:
+	validateInput m_checkInput;
+	playerHand m_currentHand;
+	string m_playerName;
 	bool m_playerPass;
-	
 	int m_inEngine;
 	int m_userChoice;
-	int m_score;
-
 	char m_whichSide;
+	int m_score;
 };
