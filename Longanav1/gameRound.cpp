@@ -68,18 +68,14 @@ void gameRound::distributeTiles()
 			// gamePlayers.at(nextPlayerIndex)->getHand()->getTilesAt(count).printTile();
 		}
 		// Used for testing purposes
-		cout << "Player Name: " << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
-		m_gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
-		cout << endl;
+		// cout << "Player Name: " << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
+		// m_gamePlayers.at(nextPlayerIndex)->getHand()->printHand();
+		// cout << endl;
 	}
 }
 
 unsigned short gameRound::getFirstPlayer()
 {
-	// bool a_testBool;
-	// a_testBool = (m_gamePlayers.at(0)->getHand()->hasEngine(m_engine));
-	// a_testBool = (m_gamePlayers.at(1)->getHand()->hasEngine(m_engine));
-	
 	while ((m_gamePlayers.at(0)->getHand()->hasEngine(m_engine)) == false && 
 		(m_gamePlayers.at(1)->getHand()->hasEngine(m_engine)) == false)
 	{
@@ -109,9 +105,28 @@ void gameRound::playRound()
 	while (!(roundOver() == true))
 	{
 		// print whos move it is
-		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
+		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl << endl;
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+
+		if (m_gamePlayers.at(m_playerIndex)->getAddSide() == 'L')
+		{
+			dominoTile playerTile;
+			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			newGameBoard.addToLeft(playerTile);
+			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
+		}
+		else if(m_gamePlayers.at(m_playerIndex)->getAddSide() == 'R')
+		{
+			dominoTile playerTile;
+			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			newGameBoard.addToRight(playerTile);
+			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
+		}
+		else if (m_gamePlayers.at(m_playerIndex)->getPassed() == true)
+		{
+			m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
+		}
 		// print the board
 		newGameBoard.printToScreen();
 		// get the next player

@@ -30,7 +30,7 @@ public:
 	bool isDouble();
 
 	// this will reverse the tile
-	void reverseTile();
+	dominoTile reverseTile();
 
 	// this will count the total of the tile
 	// this will be important when summing up the

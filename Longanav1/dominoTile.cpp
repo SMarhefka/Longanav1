@@ -60,7 +60,7 @@ void dominoTile::printTile()
 }
 
 // this function will reverse the tile
-void dominoTile::reverseTile()
+dominoTile dominoTile::reverseTile()
 {
 	// create a temporary variable and set it to the left-hand side
 	int m_tempPip = m_leftSide;
@@ -68,6 +68,7 @@ void dominoTile::reverseTile()
 	m_leftSide = m_rightSide;
 	// finally set the right-hand side to the temporary variable
 	m_rightSide = m_tempPip;
+	return dominoTile(m_leftSide, m_rightSide);
 }
 
 int dominoTile::tileSum()
