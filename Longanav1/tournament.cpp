@@ -3,6 +3,8 @@
 
 tournament::tournament()
 {
+	string m_playerName = "";
+	int m_tournScore = 0;
 }
 
 tournament::~tournament()
@@ -18,7 +20,7 @@ void tournament::beginTournament()
 	{
 		cin.clear();
 		cin.ignore();
-		cout << "Please enter a number: ";
+		cout << "Please enter a valid number: ";
 		cin >> m_tournScore;
 	}
 
@@ -32,14 +34,12 @@ void tournament::beginTournament()
 
 	createPlayers();
 
-	int a_rndNum = 1;
+	int rndNum = 1;
 	// create a newRound 
-	gameRound newRound = gameRound(a_rndNum, m_playerList);
+	gameRound newRound = gameRound(rndNum, m_playerList);
 	// newRound.setPlayerVec(m_playerList);
 	// start a new gameRound
 	newRound.setUpRound();
-
-	//if (!newRound.roundOver());
 }
 
 void tournament::createPlayers()

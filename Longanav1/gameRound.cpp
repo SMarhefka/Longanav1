@@ -27,7 +27,7 @@ void gameRound::setUpRound()
 	// figure out the first player
 	m_playerIndex = getFirstPlayer();
 
-	m_gamePlayers.at(m_playerIndex)->setEngineFRound(m_engine);
+	m_gamePlayers.at(m_playerIndex)->getEngineFromRound(m_engine);
 
 	playRound();
 }
@@ -109,23 +109,26 @@ void gameRound::playRound()
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 
-		if (m_gamePlayers.at(m_playerIndex)->getAddSide() == 'L')
+		if (m_gamePlayers.at(m_playerIndex)->getSelectedSide() == 'L')
 		{
 			dominoTile playerTile;
-			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			// get the selected tile
+			playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
 			newGameBoard.addToLeft(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 		}
-		else if(m_gamePlayers.at(m_playerIndex)->getAddSide() == 'R')
+		else if(m_gamePlayers.at(m_playerIndex)->getSelectedSide() == 'R')
 		{
 			dominoTile playerTile;
-			playerTile = m_gamePlayers.at(m_playerIndex)->getUserOption();
+			// get the selected tile
+			playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
 			newGameBoard.addToRight(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 		}
-		else if (m_gamePlayers.at(m_playerIndex)->getPassed() == true)
+		else if (m_gamePlayers.at(m_playerIndex)->getPassCount() == 1)
 		{
 			m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
+			m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 		}
 		// print the board
 		newGameBoard.printToScreen();

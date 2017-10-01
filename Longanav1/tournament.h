@@ -27,8 +27,6 @@ public:
 	// void loadGameFromFile();
 private:
 	vector<player*> m_playerList;
-	// create a new gameRound
-	// gameRound newRound;
 	string m_playerName;
 	int m_tournScore;
 };
