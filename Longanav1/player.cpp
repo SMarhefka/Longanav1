@@ -9,13 +9,15 @@ player::player()
 {
 	m_passCount = 0;
 	m_playerScore = 0;
-	m_engineValue = 0;
 	m_userChoice = 0;
 	m_totalPips = 0;
-	
-	m_whichSide = NULL;
+	m_engineValue = 0;
 
-	m_playerPass = false;
+	m_whichSide = ' ';
+	m_validMove = false;
+	m_HumanPass = false;
+	m_ComputerPass = false;
+
 	m_playerName = "Computer";
 }
 
@@ -39,8 +41,8 @@ void player::playMove(gameBoard &a_inGameBoard)
 			}
 		}
 		setUserOptions(m_userSelection, m_whichSide);
-		setPassed(false);
 		m_passCount = 0;
+		setPassed(false);
 	}
 	// otherwise
 	else
@@ -49,20 +51,19 @@ void player::playMove(gameBoard &a_inGameBoard)
 		// the computer can make
 		if (checkMove(a_inGameBoard) == true)
 		{
+			m_validMove = true;
 			// get important information
 			// this is the pips associated with the 
-			int boardLeftmostPips = a_inGameBoard.getLeftMostTile().getLeftSide();
-			int boardRightmostPips = a_inGameBoard.getRightMostTile().getRightSide();
+			// int boardLeftmostPips = a_inGameBoard.getLeftMostTile().getLeftSide();
+			// int boardRightmostPips = a_inGameBoard.getRightMostTile().getRightSide();
+			int handSize = m_currentHand.getHandSize();
 			bool humanPassed = getPassed();
 
-			if (!m_playOrder.empty())
-			{
-				m_playOrder.clear();
-			}
-
+			// clear the play order
+			m_playOrder.clear();
+			// re-do the play order
 			m_playOrder = tilePlayOrder();
 			// go through the hand
-			int handSize = m_currentHand.getHandSize();
 			for (int count = 0; count < handSize; count++)
 			{
 				if (checkTileSelection(a_inGameBoard, m_playOrder.at(count)) == true)
@@ -101,22 +102,30 @@ void player::playMove(gameBoard &a_inGameBoard)
 		// if there is no valid move
 		if (checkMove(a_inGameBoard) == false)
 		{
+			m_validMove = false;
 			// increase the pass count by 1
 			m_passCount++;
 			// if the pass count is > 1
 			// so if the move has been passed twice
 			if (m_passCount > 1)
 			{
+				m_passCount = 0;
 				// then set the passed variable to true
 				setPassed(true);
 			}
+			m_userChoice = 0;
+			m_whichSide = ' ';
+			setUserOptions(m_userSelection, m_whichSide);
 		}
-
 		// run checkPass
 		//m_userSelection = m_currentHand.getTilesAt(0);
 		//m_whichSide = 'R';
-		setUserOptions(m_userSelection, m_whichSide);
-		setPassed(false);
+		if (m_validMove == true)
+		{
+			setUserOptions(m_userSelection, m_whichSide);
+			setPassed(false);
+			m_passCount = 0;
+		}
 	}
 }
 
@@ -199,7 +208,11 @@ playerHand* player::getHand()
 
 bool player::getPassed()
 {
-	return m_playerPass;
+	if (m_playerName == "Computer")
+	{
+		return m_HumanPass;
+	}
+	return m_ComputerPass;
 }
 
 int player::getScore(int a_inNumber)
@@ -223,7 +236,7 @@ int player::getPassCount()
 	return m_passCount;
 }
 
-void player::getEngineFromRound(int & a_inEngine)
+void player::setEngineFromRound(int & a_inEngine)
 {
 	m_engineValue = a_inEngine;
 }
@@ -248,24 +261,11 @@ vector<dominoTile> player::tilePlayOrder()
 	vector<int> rightSideTiles;
 
 	// clear all vectors
-	if (!playList.empty())
-	{
-		// Removes all elements from the playList (which are destroyed)
-		// leaving the container with a size of 0.
-		playList.clear();
-	}
-	else if (!leftSideTiles.empty())
-	{
-		// Removes all elements from the leftSideTiles (which are destroyed)
-		// leaving the container with a size of 0.
-		leftSideTiles.clear();
-	}
-	else if (!rightSideTiles.empty())
-	{
-		// Removes all elements from the rightSideTiles (which are destroyed)
-		// leaving the container with a size of 0.
-		rightSideTiles.clear();
-	}
+	// the clear command removes all elements from the playList (which are destroyed)
+	// leaving the container with a size of 0.
+	playList.clear();
+	leftSideTiles.clear();
+	rightSideTiles.clear();
 
 	// set leftSidTile to all 0
 	for (int count = 0; count <= 6; count++)
@@ -273,85 +273,109 @@ vector<dominoTile> player::tilePlayOrder()
 		leftSideTiles.push_back(0);
 	}
 
-	int handSize = m_currentHand.getHandSize();
-	// find the domino tile that has the engine
-	for (int count = 0; count < handSize; count++)
-	{
-		// set up a temporary tile
-		dominoTile tempTile = m_currentHand.getTilesAt(count);
-		// push the tile to the back of the playList
-		playList.push_back(tempTile);
-		// set up a rightValue
-		int rightValue = tempTile.getRightSide();
-		// go through the different cases
-		if (rightValue == 0)
-		{
-			leftSideTiles[0]++;
-		}
-		else if (rightValue == 1)
-		{
-			leftSideTiles[1]++;
-		}
-		else if (rightValue == 2)
-		{
-			leftSideTiles[2]++;
-		}
-		else if (rightValue == 3)
-		{
-			leftSideTiles[3]++;
-		}
-		else if (rightValue == 4)
-		{
-			leftSideTiles[4]++;
-		}
-		else if (rightValue == 5)
-		{
-			leftSideTiles[5]++;
-		}
-		else if (rightValue == 6)
-		{
-			leftSideTiles[6]++;
-		}
-		// get the left hand value of the tile
-		int leftValue = tempTile.getLeftSide();
-		// go through every potential value
-		if (rightValue == 0)
-		{
-			leftSideTiles[0]++;
-		}
-		else if (rightValue == 1)
-		{
-			leftSideTiles[1]++;
-		}
-		else if (rightValue == 2)
-		{
-			leftSideTiles[2]++;
-		}
-		else if (rightValue == 3)
-		{
-			leftSideTiles[3]++;
-		}
-		else if (rightValue == 4)
-		{
-			leftSideTiles[4]++;
-		}
-		else if (rightValue == 5)
-		{
-			leftSideTiles[5]++;
-		}
-		else if (rightValue == 6)
-		{
-			leftSideTiles[6]++;
-		}
-	}
+	// cout << "\nCurrent Hand ";
+	// m_currentHand.printHand();
+	// cout << endl;
 
-	// reorder the tiles
+	int handSize = m_currentHand.getHandSize();
+	int tileSide;
+	int tileVal = 0;
+	for (tileSide = 0; tileSide < 2; tileSide++)
+	{
+		for (int count = 0; count < handSize; count++)
+		{
+			// set up a temporary tile
+			dominoTile tempTile = m_currentHand.getTilesAt(count);
+			if (tileSide == 0)
+			{
+				// push the tile to the back of the playList
+				playList.push_back(tempTile);
+				// get the left hand value of the tile
+				tileVal = tempTile.getLeftSide();
+			}
+			else
+			{
+				tileVal = tempTile.getRightSide();
+			}
+			// int leftValue = tempTile.getLeftSide();
+			//int rightValue = tempTile.getRightSide();
+			// go through every potential value
+			if (tileVal == 0)
+			{
+				leftSideTiles[0]++;
+			}
+			else if (tileVal == 1)
+			{
+				leftSideTiles[1]++;
+			}
+			else if (tileVal == 2)
+			{
+				leftSideTiles[2]++;
+			}
+			else if (tileVal == 3)
+			{
+				leftSideTiles[3]++;
+			}
+			else if (tileVal == 4)
+			{
+				leftSideTiles[4]++;
+			}
+			else if (tileVal == 5)
+			{
+				leftSideTiles[5]++;
+			}
+			else if (tileVal == 6)
+			{
+				leftSideTiles[6]++;
+			}
+			// set up a rightValue
+			// int rightValue = tempTile.getRightSide();
+			// go through the different cases
+			/*if (rightValue == 0)
+			{
+			leftSideTiles[0]++;
+			}
+			else if (rightValue == 1)
+			{
+			leftSideTiles[1]++;
+			}
+			else if (rightValue == 2)
+			{
+			leftSideTiles[2]++;
+			}
+			else if (rightValue == 3)
+			{
+			leftSideTiles[3]++;
+			}
+			else if (rightValue == 4)
+			{
+			leftSideTiles[4]++;
+			}
+			else if (rightValue == 5)
+			{
+			leftSideTiles[5]++;
+			}
+			else if (rightValue == 6)
+			{
+			leftSideTiles[6]++;
+			}*/
+		}
+	}
+	
+	//reorder the tiles based the left hand side
+	for (int count = 0; count < leftSideTiles.size(); count++)
+	{
+		cout << "Count: " << count << "  Times: " << leftSideTiles[count] << endl;
+	}
+	
+	// reorder the tiles based the left hand side
 	for (int count = 0; count < handSize; count++)
 	{
-		dominoTile tempTile;
-		tempTile = playList[count];
-		rightSideTiles.push_back(leftSideTiles[tempTile.getLeftSide()] + leftSideTiles[tempTile.getRightSide()]);
+		rightSideTiles.push_back(leftSideTiles[playList[count].getLeftSide()] + leftSideTiles[playList[count].getRightSide()]);
+		// cout << rightSideTiles[count] << endl;
 	}
+	// cout << endl;
+
 	for (int x = 0; x < handSize - 1; x++)
 	{
 		for (int y = 0; y < handSize - 1; y++)
@@ -363,17 +387,31 @@ vector<dominoTile> player::tilePlayOrder()
 				// swap the value on the left for the value
 				// on the right hand side
 				swap(rightSideTiles.at(y), rightSideTiles.at(y + 1));
-				swap(playList.at(y), playList.at(y + 1));
+				swap(playList[y], playList[y + 1]);
 			}
 		}
 	}
 	// return the player list
+	//for (int count = 0; count < playList.size(); count++)
+	//{ 
+	//	cout << "tile: ";
+	//	playList.at(count).printTile();
+	//	cout << endl;
+	//}
+
 	return playList;
 }
 
 void player::setPassed(bool a_playerPass)
 {
-	m_playerPass = a_playerPass;
+	if (m_playerName == "Computer")
+	{
+		m_ComputerPass = a_playerPass;
+	}
+	else
+	{
+		m_HumanPass = a_playerPass;
+	}
 }
 
 void player::setUserOptions(dominoTile & a_userTile, char & a_incomingSide)

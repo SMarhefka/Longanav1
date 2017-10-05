@@ -78,7 +78,7 @@ void human::printFirstOptions()
 
 void human::printLeftRight()
 {
-	cout << "Press B To Go To The Previous Menu \n";
+	cout << "\nNOTE: Press B To Go To The Previous Menu \n";
 	cout << "Which Side - Left/Right: ";
 	//ignore all characters left in the buffer
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -91,7 +91,7 @@ void human::printLeftRight()
 		cin.clear();
 		//ignore all characters left in the buffer
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Press B To Go To The Previous Menu \n";
+		cout << "\nNOTE: Press B To Go To The Previous Menu \n";
 		cout << "Please Enter - Left or Right: ";
 		cin >> m_whichSide;
 	}
@@ -160,17 +160,22 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			{
 				if (m_whichSide != 'L')
 				{
-					cout << "Invalid Side Selected\n";
+					cout << endl << "Invalid Side Selected\n";
 				}
 				else
 				{
-					cout << "Engine not Selected\n";
+					cout << endl << "Engine not Selected\n";
 				}
+
 				displayOptions2(thisGameBoard);
-				tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
 				// this will go back to the main set of options
-				if (m_tileChoice == 0)
+				if (m_tileChoice > 0)
 				{
+					tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
+				}
+				else
+				{
+					// break out of the loop
 					break;
 				}
 			}
@@ -181,7 +186,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
 			
 			while (checkTileSelection(thisGameBoard, tempTile) != true
-				|| m_checkInput.validSideCheck(tempTile, m_whichSide, m_playerName, m_playerPass) != true)
+				|| m_checkInput.validSideCheck(tempTile, m_whichSide, m_playerName, m_ComputerPass) != true)
 			{
 				if (checkTileSelection(thisGameBoard, tempTile) != true)
 				{
@@ -189,13 +194,15 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 				}
 				else
 				{
-					cout << "The side you chose was invalid\n";
+					cout << endl << "The side you chose was invalid\n";
 				}
-
+				// re-display the tiles that the user can choose from
 				displayOptions2(thisGameBoard);
-				tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
-				// if the user selects 0 
-				if (m_tileChoice == 0)
+				if (m_tileChoice > 0)
+				{
+					tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
+				}
+				else
 				{
 					// break out of the loop
 					break;
@@ -261,12 +268,19 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 		// make sure that the user cannot actually make a move
 		if(m_validMove == false)
 		{
+			// increase the pass count by 1
 			m_passCount++;
+			// if the pass count is > 1
+			// so if the move has been passed twice
 			if (m_passCount > 1)
 			{
-				// set passed to true
+				m_passCount = 0;
+				// then set the passed variable to true
 				setPassed(true);
 			}
+			m_userChoice = 0;
+			m_whichSide = ' ';
+			setUserOptions(m_userSelection, m_whichSide);
 			// set the execution variable to successful
 			m_exeSucc = true;
 			break;
@@ -294,7 +308,7 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 
 	displayTiles();
 
-	cout << "Press 0 to go back to the previous menu \n";
+	cout << endl << "Press 0 to go back to the previous menu \n";
 	cout << "User Selection: ";
 
 	//ignore all characters left in the buffer
@@ -373,5 +387,5 @@ void human::findEnginePosition()
 playerHand* human::getHand()
 {
 	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
-	return &m_currentHand;
+	return & m_currentHand;
 }

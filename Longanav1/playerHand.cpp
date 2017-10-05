@@ -35,6 +35,11 @@ void playerHand::removeTile(dominoTile a_tileToRemove)
 			playerTiles.erase(item);
 			break;
 		}
+		else if ((item->getLeftSide() == a_tileToRemove.getRightSide()) && ((item->getRightSide() == a_tileToRemove.getLeftSide())))
+		{
+			playerTiles.erase(item);
+			break;
+		}
 	}
 }
 
@@ -49,7 +54,7 @@ bool playerHand::isEmpty()
 	return playerTiles.size() == 0;
 }
 
-bool playerHand::hasEngine(int a_inEngine)
+bool playerHand::hasEngine(int & a_inEngine)
 {
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
@@ -73,12 +78,6 @@ void playerHand::printHand()
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
-		// Used for testing purposes
-		// int index = item - unusedDominos.begin();
-		/*if (index > 0 && (index + 1) % 3 == 0)
-		{
-		cout << "\n";
-		}*/
 	}
 	cout << endl;
 }

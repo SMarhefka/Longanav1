@@ -14,7 +14,7 @@ public:
 	void printScore();
 
 	// return the tournament score
-	//void getTourScore();
+	int getTourScore();
 
 	// provide the user with game options.  These include starting a new game or loading
 	// in a previous game
@@ -25,6 +25,7 @@ public:
 
 	// function that will handle a file that is loaded in
 	// void loadGameFromFile();
+
 private:
 	vector<player*> m_playerList;
 	string m_playerName;

@@ -26,7 +26,7 @@ public:
 	// check for valid moves
 	virtual bool checkMove(gameBoard &a_inGameBoard);
 
-	void getEngineFromRound(int &a_inEngine);
+	void setEngineFromRound(int & a_inEngine);
 
 	dominoTile getSelectedTile();
 
@@ -65,10 +65,12 @@ protected:
 	vector <dominoTile> m_playOrder;
 
 	char m_whichSide;
-	bool m_playerPass;
+	bool m_HumanPass;
+	bool m_ComputerPass;
+	bool m_validMove;
 
-	int m_playerScore;
 	int m_engineValue;
+	int m_playerScore;
 	int m_userChoice;
 	int m_passCount;
 	int m_totalPips;

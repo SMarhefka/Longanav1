@@ -72,7 +72,7 @@ bool validateInput::checkRightSide(dominoTile a_btileRight, dominoTile a_inTile)
 	return false;
 }
 
-bool validateInput::validSideInput(char & a_inSide)
+bool validateInput::validSideInput(char a_inSide)
 {
 	if (toupper(a_inSide) == 'L' || toupper(a_inSide) == 'R' || toupper(a_inSide) == 'B')
 	{
@@ -81,7 +81,7 @@ bool validateInput::validSideInput(char & a_inSide)
 	return false;
 }
 
-bool validateInput::validSideCheck(dominoTile & a_inTile, char & a_inSide, string & a_inpName, bool & a_inPassed)
+bool validateInput::validSideCheck(dominoTile &a_inTile, char & a_inSide, string & a_inpName, bool & a_inPassed)
 {
 	bool valid = NULL;
 	if (a_inpName == "Computer")
@@ -123,4 +123,3 @@ bool validateInput::validEnginePlacement(dominoTile & a_inTile, int & a_inEngine
 	}
 	return false;
 }
-

@@ -28,7 +28,7 @@ public:
 
 	// checks to see if the current hand has
 	// the engine
-	bool hasEngine(int a_inEngine);
+	bool hasEngine(int & a_inEngine);
 
 	// returns the size of the hand
 	int getHandSize();

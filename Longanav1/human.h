@@ -36,15 +36,14 @@ public:
 	void displayOptions2(gameBoard &a_inGameBoard);
 
 	void findEnginePosition();
+
 	// this is a getter function
 	playerHand* getHand();
 
 private:
-	int m_enginPosition;
 	int m_tempUserChoice;
+	int m_enginPosition;
 	int m_tileChoice;
-
 	bool m_exeSucc;
-	bool m_validMove;
 };
 

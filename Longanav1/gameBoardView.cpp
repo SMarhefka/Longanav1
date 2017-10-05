@@ -16,9 +16,12 @@ void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTi
 {
 	deleteLines();
 
+	m_mergeSides = combineSides(a_leftSide, a_rightSide);
+	
 	m_secondLine.push_back("L");
 
-	for (auto item = a_leftSide.begin(); item != a_leftSide.end(); item++)
+	// for (auto item = a_leftSide.begin(); item != a_leftSide.end(); item++)
+	for (auto item = m_mergeSides.begin(); item != m_mergeSides.end(); item++)
 	{
 		if (item->isDouble() == true)
 		{
@@ -36,7 +39,7 @@ void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTi
 		}
 	}
 
-	for (auto item = a_rightSide.begin(); item != a_rightSide.end(); item++)
+	/*for (auto item = a_rightSide.begin(); item != a_rightSide.end(); item++)
 	{
 		if (item->isDouble() == true)
 		{
@@ -52,7 +55,8 @@ void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTi
 			m_secondLine.push_back("-");
 			m_secondLine.push_back(to_string(item->getRightSide()));
 		}
-	}
+	}*/
+
 	m_secondLine.push_back(" R");
 }
 
@@ -89,7 +93,7 @@ void gameBoardView::printBrdToScreen(vector<dominoTile> &a_leftSide, vector<domi
 			cout << " ";
 		}
 	}
-	cout << endl;
+	cout << endl << endl;
 }
 
 void gameBoardView::deleteLines()
@@ -106,6 +110,27 @@ void gameBoardView::deleteLines()
 	{
 		m_thirdLine.pop();
 	}
+}
+
+vector<dominoTile> gameBoardView::combineSides(vector<dominoTile>& a_leftSide, vector<dominoTile>& a_rightSide)
+{
+	vector<dominoTile> mergedVector;
+	if (!a_leftSide.empty())
+	{
+		for (auto item = a_leftSide.begin(); item != a_leftSide.end(); item++)
+		{
+			mergedVector.push_back(*item);
+		}
+	}
+	if (!a_rightSide.empty())
+	{
+		for (auto item = a_rightSide.begin(); item != a_rightSide.end(); item++)
+		{
+			mergedVector.push_back(*item);
+		}
+	}
+
+	return mergedVector;
 }
 
 
