@@ -89,6 +89,14 @@ void boneYard::printBoneYard()
 	}
 }
 
+void boneYard::printBoneYard(ofstream & a_inStream)
+{
+	for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
+	{
+		a_inStream << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
+	}
+}
+
 int boneYard::getSize()
 {
 	return int(unusedDominos.size());

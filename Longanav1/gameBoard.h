@@ -25,9 +25,9 @@ public:
 
 	bool isRightEmpty();
 
-	// void printBoardToFile();
 	void printToScreen();
 
+	void printBoardToFile(ofstream & a_inStream);
 
 private:
 	gameBoardView m_boardView;

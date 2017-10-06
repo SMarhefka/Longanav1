@@ -15,6 +15,7 @@ gameRound::gameRound(int &a_roundNumber, vector<player*> &a_gamePlayers, int a_i
 	m_gamePlayers = a_gamePlayers;
 	m_engineVal = getEngine();
 	m_inTourScore = a_inTouScore;
+	m_playerIndex = 0;
 }
 
 gameRound::~gameRound()
@@ -27,8 +28,21 @@ void gameRound::setUpRound()
 	getEngine();
 	// distribute 8 tiles to each tile
 	distributeTiles();
-	// ask the user if they would like to save the current game
-	// askToSave();
+	// ask the user if they would like to save their game
+	askToSave();
+	// if the user selects to save the file then we just want
+	// to print everything to the file
+	if (m_saveSelection == 'Y')
+	{
+		// print everything to the file
+		printToFile(-1);
+		m_saveSelection = ' ';
+		cout << "Saved File Successfully!" << endl;
+		// wait for the system
+		system("pause");
+		// exit successfully
+		exit(0);
+	}
 
 	// figure out the first player
 	m_playerIndex = getFirstPlayer();
@@ -188,7 +202,21 @@ void gameRound::playRound()
 		cout << "Current Board:" << endl;
 		newGameBoard.printToScreen();
 
-
+		// ask the user if they would like to save their game
+		askToSave();
+		// if the user selects to save the file then we just want
+		// to print everything to the file
+		if (m_saveSelection == 'Y')
+		{
+			// print everything to the file
+			printToFile(m_playerIndex);
+			m_saveSelection = ' ';
+			cout << "Saved to file successfully!" << endl;
+			// wait for the system
+			system("pause");
+			// exit successfully
+			exit(0);
+		}
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}
@@ -213,38 +241,12 @@ bool gameRound::roundOver()
 	return false;
 }
 
-bool gameRound::getSave()
-{
-	return m_saveGame;
-}
-
-void gameRound::setSave(char a_saveSelection)
-{
-	if (m_saveSelection == 'Y')
-	{
-		m_saveGame = true;
-	}
-	else
-	{
-		m_saveGame = false;
-	}
-}
-
 void gameRound::printRoundNum()
 {
 	// Print the round number
 	cout << "Round No.: " << m_roundNum;
 	// Print an empty space
 	cout << endl;
-}
-
-bool gameRound::validSave(char a_inSave)
-{
-	if (toupper(a_inSave) == 'Y' || toupper(a_inSave) == 'N')
-	{
-		return true;
-	}
-	return false;
 }
 
 void gameRound::askToSave()
@@ -256,7 +258,7 @@ void gameRound::askToSave()
 	cin >> m_saveSelection;
 
 	// while the input fails
-	while (validSave(m_saveSelection) != true)
+	while (validSaveInput(m_saveSelection) != true)
 	{
 		//clear the error state
 		cin.clear();
@@ -265,5 +267,188 @@ void gameRound::askToSave()
 		cout << "Invalid Input - Please Enter Y/N: ";
 		cin >> m_saveSelection;
 	}
+}
+
+bool gameRound::validSaveInput(char a_inSave)
+{
+	if (toupper(a_inSave) == 'Y' || toupper(a_inSave) == 'N')
+	{
+		return true;
+	}
+	return false;
+}
+
+string gameRound::getFile()
+{
+	string fileName;
+	cout << "Enter name of the text file that you want to save to: ";
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin >> fileName;
+
+	while (cin.fail())
+	{
+		//clear the error state
+		cin.clear();
+		//ignore all characters left in the buffer
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Invalid Input - Please Enter a valid filename: ";
+		cin >> fileName;
+	}
+	/*----Get File Info----*/
+
+	/*----Check for '.txt' in filename----*/
+	int findPos = int(fileName.find(".txt"));
+	if (findPos < 0)
+	{
+		fileName.append(".txt");
+	}
+	/*----Check for '.txt' in filename----*/
+
+	// return the fileName
+	return fileName;
+}
+
+void gameRound::printToFile(int a_inPlayerIndex)
+{
+	int currentPlayer;
+	int nextPlayer;
+
+	if (a_inPlayerIndex == -1)
+	{
+		currentPlayer = 0;
+		nextPlayer = (currentPlayer + 1) % int(m_gamePlayers.size());
+	}
+	else
+	{
+		currentPlayer = a_inPlayerIndex;
+		nextPlayer = (a_inPlayerIndex + 1) % int(m_gamePlayers.size());
+	}
+	
+	/*----------figure out if the current player is the computer---------------*/
+	bool currPlyrCom;
+	if (m_gamePlayers.at(currentPlayer)->getName() == "Computer")
+	{
+		currPlyrCom = true;
+	}
+	else
+	{
+		currPlyrCom = false;
+	}
+	/*----------figure out if the current player is the computer---------------*/
+
+	/*--------------------print everything out to the file------------------*/
+	/*----Get File Info----*/
+	string userFileName = getFile();
+	// test the name of the the outputFile
+	cout << userFileName << endl;
+
+	ofstream outputFile(userFileName.c_str());
+
+	if (!outputFile.fail())
+	{
+		// Print out the tournament score
+		outputFile << "Tournament Score: " << m_inTourScore << "\n";
+		// Print out the current round number
+		outputFile << "Round No.: " << m_roundNum << endl;
+		// Create a space
+		outputFile << endl;
+		// print computer hand and score to file
+		outputFile << "Computer: " << endl;
+		outputFile << "    " << "Hand: ";
+		if (currPlyrCom == true)
+		{
+			m_gamePlayers.at(currentPlayer)->getHand()->printHandToFile(outputFile);
+		}
+		else
+		{
+			m_gamePlayers.at(nextPlayer)->getHand()->printHandToFile(outputFile);
+		}
+		outputFile << endl;
+		// print the scores
+		outputFile << "    " << "Score: ";
+		if (currPlyrCom == true)
+		{
+			outputFile << m_gamePlayers.at(currentPlayer)->getScore();
+		}
+		else
+		{
+			outputFile << m_gamePlayers.at(nextPlayer)->getScore();
+		}
+		// Create a space
+		outputFile << endl;
+		// print human hand and score to file
+		outputFile << "Human: " << endl;
+		outputFile << "    " << "Hand: ";
+		if (currPlyrCom == true)
+		{
+			m_gamePlayers.at(nextPlayer)->getHand()->printHandToFile(outputFile);
+		}
+		else
+		{
+			m_gamePlayers.at(currentPlayer)->getHand()->printHandToFile(outputFile);
+		}
+		// Create a space
+		outputFile << endl;
+		outputFile << "    " << "Score: ";
+		if (currPlyrCom == true)
+		{
+			outputFile << m_gamePlayers.at(currentPlayer)->getScore();
+		}
+		else
+		{
+			outputFile << m_gamePlayers.at(nextPlayer)->getScore();
+		}
+		// Create a space
+		outputFile << endl << endl;
+		// print the layout to the file
+		outputFile << "Layout:" << endl;
+		newGameBoard.printBoardToFile(outputFile);
+		// Create a space
+		outputFile << endl << endl;
+		// print the boneyard to file
+		outputFile << "Boneyard:" << endl;
+		// print the boneyard
+		newBoneYard.printBoneYard(outputFile);
+		// Create a space
+		outputFile << endl << endl;
+		// print if the previous player passed
+		outputFile << "Previous Player Passed: ";
+		// if the current player is the computer then the previous
+		// player is the human.  With the way my get passed works
+		// it returns if the previous player has passed 
+		if (a_inPlayerIndex == -1)
+		{
+			outputFile << "";
+		}
+		else
+		{
+			if (m_gamePlayers.at(currentPlayer)->getPassed() == true)
+			{
+				outputFile << "Yes";
+			}
+			else
+			{
+				outputFile << "No";
+			}
+		}
+		// Create a space
+		outputFile << endl << endl;
+		// print the next player
+		outputFile << "Next Player: ";
+		if (a_inPlayerIndex == -1)
+		{
+			outputFile << "";
+		}
+		else
+		{
+			outputFile << m_gamePlayers.at(nextPlayer)->getName() << endl;
+		}
+		outputFile.close();
+	}
+	else
+	{
+		cout << "Unable to open file\n";
+	}
+	/*----------print everything out to the file---------------*/
 }
 

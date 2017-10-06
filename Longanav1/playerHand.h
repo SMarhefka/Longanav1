@@ -36,6 +36,8 @@ public:
 	// print hand
 	void printHand();
 
+	void printHandToFile(ofstream &a_inStream);
+
 private:
 	// need a shared point to avoid object slicing
 	// this shared pointer will also be useful when polymorphism

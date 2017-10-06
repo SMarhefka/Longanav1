@@ -215,9 +215,13 @@ bool player::getPassed()
 	return m_ComputerPass;
 }
 
-int player::getScore(int a_inNumber)
+void player::addScore(int a_inNumber)
 {
 	m_playerScore = m_playerScore + a_inNumber;
+}
+
+int player::getScore()
+{
 	return m_playerScore;
 }
 
@@ -363,11 +367,12 @@ vector<dominoTile> player::tilePlayOrder()
 	}
 	
 	//reorder the tiles based the left hand side
+	/*
 	for (int count = 0; count < leftSideTiles.size(); count++)
 	{
 		cout << "Count: " << count << "  Times: " << leftSideTiles[count] << endl;
 	}
-	
+	*/
 	// reorder the tiles based the left hand side
 	for (int count = 0; count < handSize; count++)
 	{
@@ -391,6 +396,7 @@ vector<dominoTile> player::tilePlayOrder()
 			}
 		}
 	}
+
 	// return the player list
 	//for (int count = 0; count < playList.size(); count++)
 	//{ 

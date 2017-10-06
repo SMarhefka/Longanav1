@@ -4,6 +4,10 @@
 #include "boneYard.h"
 #include "gameBoard.h"
 #include <string>
+#include <ostream>
+//fstream: Stream class to both read and write from/to files.
+#include <fstream>
+
 
 class gameRound
 {
@@ -31,18 +35,17 @@ public:
 
 	bool roundOver();
 
-	bool getSave();
-
-	void setSave(char a_saveSelection);
-
 	void printRoundNum();
 	
-	bool validSave(char a_inSave);
-
+	/*-----------------------Save to file functions----------------------*/
 	void askToSave();
 
-	/*-----------------------Save to file functions----------------------*/
+	bool validSaveInput(char a_inSave);
 
+	string getFile();
+
+	void printToFile(int a_inPlayerIndex);
+	/*-----------------------Save to file functions----------------------*/
 
 private:
 	vector<player*> m_gamePlayers;
@@ -54,11 +57,11 @@ private:
 	gameBoard newGameBoard;
 	// this variable keeps track of the engine for 
 	// the current round
+	unsigned short m_playerIndex;
 	int m_engineVal;
 	// this is read in from the tournament class
 	int m_roundNum;
+	// get the tournament score
 	int m_inTourScore;
-	unsigned short m_playerIndex;
 	char m_saveSelection;
-	bool m_saveGame;
 };

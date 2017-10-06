@@ -131,7 +131,6 @@ void human::displayOptions1(gameBoard &a_inGameBoard)
 	m_tempUserChoice = userChoice;
 }
 
-
 void human::executeOptions(gameBoard &a_inGameBoard)
 {
 	gameBoard thisGameBoard = a_inGameBoard;
@@ -324,7 +323,7 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 		//ignore all characters left in the buffer
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		// print an error message
-		cout << "Inccorect input - Please enter a value between 1 and " << m_currentHand.getHandSize() << endl;
+		cout << endl << "Inccorect input - Please enter a value between 1 and " << m_currentHand.getHandSize() << endl;
 
 		a_inGameBoard.printToScreen();
 		cout << endl;

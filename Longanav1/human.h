@@ -2,6 +2,7 @@
 #include "player.h"
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 
 // human is the derived class
 // this means that this class will inherits all 

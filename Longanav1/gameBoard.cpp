@@ -79,3 +79,8 @@ void gameBoard::printToScreen()
 {
 	m_boardView.printBrdToScreen(leftSide, rightSide);
 }
+
+void gameBoard::printBoardToFile(ofstream & a_inStream)
+{
+	m_boardView.printBrdToFile(a_inStream, leftSide, rightSide);
+}

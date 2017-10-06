@@ -6,6 +6,7 @@
 #include <algorithm>
 //this library provides use with the time function needed
 #include <time.h>
+#include <fstream>
 
 using namespace std;
 
@@ -41,6 +42,8 @@ public:
 	
 	// print bonyard to the screen
 	void printBoneYard();
+
+	void printBoneYard(ofstream & a_inStream);
 
 	// get the size of the boneYard
 	int getSize();

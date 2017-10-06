@@ -4,6 +4,7 @@
 #include "boneyard.h"
 #include "gameBoard.h"
 #include "validateInput.h"
+#include <fstream>
 
 using namespace std;
 
@@ -37,7 +38,9 @@ public:
 
 	bool getPassed();
 
-	int getScore(int a_inNumber);
+	void addScore(int a_inNumber);
+
+	int getScore();
 
 	char getSelectedSide();
 
@@ -58,6 +61,7 @@ protected:
 	playerHand m_currentHand;
 	// creates a new dominoTile
 	dominoTile m_userSelection;
+
 	// new string variable that stores the
 	// player hand
 	string m_playerName;

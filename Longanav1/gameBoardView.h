@@ -1,9 +1,10 @@
 #pragma once
+#include "dominoTile.h"
 #include <queue>
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include "dominoTile.h"
+#include <fstream>
 
 using namespace std;
 
@@ -29,6 +30,8 @@ public:
 	vector<dominoTile> combineSides(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
 	
 	void printBrdToScreen(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
+
+	void printBrdToFile(ofstream & a_inStream, vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
 
 private:
 	queue<string> m_firstLine;

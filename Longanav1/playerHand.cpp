@@ -2,6 +2,7 @@
 #include "playerHand.h"
 #include "gameRound.h"
 #include <string>
+#include <fstream>
 
 // default constructor
 playerHand::playerHand()
@@ -78,6 +79,15 @@ void playerHand::printHand()
 	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
 	{
 		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
+	}
+	cout << endl;
+}
+
+void playerHand::printHandToFile(ofstream & a_inStream)
+{
+	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	{
+		a_inStream << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
 	}
 	cout << endl;
 }
