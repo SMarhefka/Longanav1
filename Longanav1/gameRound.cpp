@@ -118,7 +118,7 @@ void gameRound::playRound()
 		// print whos move it is
 		cout << "Before Play" << endl;
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-		cout << "Hand: ";
+		cout << "Hand: " << endl;
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 		cout << endl;
 
@@ -133,7 +133,7 @@ void gameRound::playRound()
 		}
 
 		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
-		cout << "Hand: ";
+		cout << "Hand: " << endl;
 		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
 		cout << endl;
 
@@ -154,9 +154,8 @@ void gameRound::playRound()
 		}
 		if (m_gamePlayers.at(m_playerIndex)->getSelectedSide() == 'L')
 		{
-			dominoTile playerTile;
-			// get the selected tile
-			playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
+			// create a new tile and set it to the user selection
+			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
 			newGameBoard.addToLeft(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 			// m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
@@ -164,14 +163,13 @@ void gameRound::playRound()
 		}
 		else if(m_gamePlayers.at(m_playerIndex)->getSelectedSide() == 'R')
 		{
-			dominoTile playerTile;
-			// get the selected tile
-			playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
+			// create a new tile and set it to the user selection
+			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
 			newGameBoard.addToRight(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 			cout << endl;
 		}
-		
+		/*
 		cout << "After Play" << endl;
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 		cout << "Hand: ";
@@ -186,12 +184,11 @@ void gameRound::playRound()
 		{
 			nextPlayer = m_playerIndex - 1;
 		}
-
 		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
 		cout << "Hand: ";
 		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
 		cout << endl;
-
+		*/
 		// print the board
 		cout << "Current Board:" << endl;
 		newGameBoard.printToScreen();
@@ -211,6 +208,7 @@ void gameRound::playRound()
 			// exit successfully
 			exit(0);
 		}
+
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}

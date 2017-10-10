@@ -12,16 +12,14 @@ gameBoardView::~gameBoardView()
 {
 }
 
-void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide)
+void gameBoardView::getBoard(vector<dominoTile> &a_inBoard)
 {
 	deleteLines();
-
-	m_mergeSides = combineSides(a_leftSide, a_rightSide);
 	
 	m_secondLine.push_back("L");
 
 	// for (auto item = a_leftSide.begin(); item != a_leftSide.end(); item++)
-	for (auto item = m_mergeSides.begin(); item != m_mergeSides.end(); item++)
+	for (auto item = a_inBoard.begin(); item != a_inBoard.end(); item++)
 	{
 		if (item->isDouble() == true)
 		{
@@ -41,9 +39,9 @@ void gameBoardView::gatherInputs(vector<dominoTile> &a_leftSide, vector<dominoTi
 	m_secondLine.push_back(" R");
 }
 
-void gameBoardView::printBrdToScreen(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide)
+void gameBoardView::printBrdToScreen(vector<dominoTile> &a_inBoard)
 {
-	gatherInputs(a_leftSide, a_rightSide);
+	getBoard(a_inBoard);
 	for (int item = 0; item < m_secondLine.size(); item++)
 	{
 		if (m_secondLine.at(item) == "|")
@@ -77,24 +75,22 @@ void gameBoardView::printBrdToScreen(vector<dominoTile> &a_leftSide, vector<domi
 	cout << endl;
 }
 
-void gameBoardView::printBrdToFile(ofstream & a_inStream, vector<dominoTile>& a_leftSide, vector<dominoTile>& a_rightSide)
+void gameBoardView::printBrdToFile(ofstream & a_inStream, vector<dominoTile>& a_inBoard)
 {
 	// delete lines
 	deleteLines();
-	// merge the two lines
-	m_mergeSides = combineSides(a_leftSide, a_rightSide);
-
+	
 	// print out the left part
 	a_inStream << "    " << "L ";
 	// go throught the merged vector
-	for (int countVal = 0; countVal < m_mergeSides.size(); countVal++)
+	for (int countVal = 0; countVal < a_inBoard.size(); countVal++)
 	{
 		// print out the left side to the file
-		a_inStream << m_mergeSides.at(countVal).getLeftSide();
+		a_inStream << a_inBoard.at(countVal).getLeftSide();
 		// print out the dash to the output file
 		a_inStream << "-";
 		// print out the right hand side to the output file
-		a_inStream << m_mergeSides.at(countVal).getRightSide();
+		a_inStream << a_inBoard.at(countVal).getRightSide();
 		a_inStream << " ";
 	}
 	a_inStream << "R";
@@ -114,27 +110,6 @@ void gameBoardView::deleteLines()
 	{
 		m_thirdLine.pop();
 	}
-}
-
-vector<dominoTile> gameBoardView::combineSides(vector<dominoTile>& a_leftSide, vector<dominoTile>& a_rightSide)
-{
-	vector<dominoTile> mergedVector;
-	if (!a_leftSide.empty())
-	{
-		for (auto item = a_leftSide.begin(); item != a_leftSide.end(); item++)
-		{
-			mergedVector.push_back(*item);
-		}
-	}
-	if (!a_rightSide.empty())
-	{
-		for (auto item = a_rightSide.begin(); item != a_rightSide.end(); item++)
-		{
-			mergedVector.push_back(*item);
-		}
-	}
-
-	return mergedVector;
 }
 
 

@@ -113,43 +113,40 @@ void tournament::loadFromFile()
 		// prints out the current line that we are on
 		cout << incomingLine << endl;
 
-		if (lineCount < 3)
+		// This will search for any two words with either a . or a :
+		// used for tournamennt score and round number
+		regex matchCase("([[:w:]])([[:w:]]+ )([[:w:]]+.: )([[:d:]]+)");
+		smatch matchString;
+		// sets if the pattern could be found
+		searchFound = regex_search(incomingLine, matchString, matchCase);
+		if (searchFound == true)
 		{
-			// This will search for any two words with either a . or a :
-			// used for tournamennt score and round number
-			regex matchCase("([[:w:]]+ )([[:w:]]+.: )([[:d:]]+)");
-			smatch matchString;
-			// sets if the pattern could be found
-			searchFound = regex_search(incomingLine, matchString, matchCase);
-			if (searchFound == true)
+			if (matchString[1] == "T")
 			{
-				if (matchString[1] == "Tournament ")
-				{
-					m_tournScore = stoi(matchString[3]);
-				}
-				if (matchString[2] == "No.: ")
-				{
-					m_inRoundNum = stoi(matchString[3]);
-				}
+				m_tournScore = stoi(matchString[4]);
+			}
+			if (matchString[3] == "No.: ")
+			{
+				m_inRoundNum = stoi(matchString[4]);
 			}
 		}
-		// otherwise the pattern to look out for is: ([[:w:]]+:)"
 		else
 		{
+			// otherwise the pattern to look out for is: ([[:w:]]+:)"
 			// this pattern is going to be used to find all of the other
 			// variables that we need
-			regex matchCase("([[:w:]]+:)");
+			regex matchCase("([[:w:]])([[:w:]]+:)");
 			smatch matchString;
 			searchFound = regex_search(incomingLine, matchString, matchCase);
 
 			/*-------------------------Retrieves Computer Hand and Score----------------------*/
 			// checks to see if the current line says computer
-			if (searchFound == true && matchString[1] == "Computer:")
+			if (searchFound == true && matchString[1] == "C")
 			{
 				m_isComputer = true;
 			}
 			// if it is the computer and it is the hand
-			if(m_isComputer == true && matchString[1] == "Hand:")
+			if (m_isComputer == true && matchString[1] == "H")
 			{
 				regex tilePattern("([[:d:]])-([[:d:]])");
 				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
@@ -158,11 +155,14 @@ void tournament::loadFromFile()
 					smatch a_matched = *it;
 					if (a_matched[1].matched && a_matched[2].matched)
 					{
-						cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
+						m_comHand.push_back(*newTile);
+						delete newTile;
 					}
 				}
 			}
-			else if (m_isComputer == true && matchString[1] == "Score:")
+			else if (m_isComputer == true && matchString[1] == "S")
 			{
 				regex newMatch("([[:w:]]+.: )([[:d:]]+)");
 				smatch newString;
@@ -175,13 +175,21 @@ void tournament::loadFromFile()
 			/*-------------------------Retrieves Computer Hand and Score----------------------*/
 
 			/*-------------------------Retrieves Human Hand and Score----------------------*/
-			// checks to see if the current line says computer
-			if (searchFound == true && matchString[1] == "Human:")
+			string humanString = matchString[1].str() + matchString[2].str();
+			// checks to see if the current line says Human
+			if (searchFound == true && humanString == "Human:" || humanString != "Computer:")
 			{
 				m_isHuman = true;
+				if (humanString != "Human:")
+				{
+					regex newPattern("([[:w:]]+)");
+					smatch newResult;
+					regex_search(incomingLine, newResult, newPattern);
+					m_playerName = (newResult[1]);
+				}
 			}
 			// if it is the computer and it is the hand
-			if (m_isHuman == true && matchString[1] == "Hand:")
+			if (m_isHuman == true && matchString[1] == "H")
 			{
 				regex tilePattern("([[:d:]])-([[:d:]])");
 				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
@@ -190,11 +198,14 @@ void tournament::loadFromFile()
 					smatch a_matched = *it;
 					if (a_matched[1].matched && a_matched[2].matched)
 					{
-						cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
+						m_playerHand.push_back(*newTile);
+						delete newTile;
 					}
 				}
 			}
-			else if (m_isHuman == true && matchString[1] == "Score:")
+			else if (m_isHuman == true && matchString[1] == "S")
 			{
 				regex newMatch("([[:w:]]+.: )([[:d:]]+)");
 				smatch newString;
@@ -205,7 +216,101 @@ void tournament::loadFromFile()
 				}
 			}
 			/*-------------------------Retrieves Human Hand and Score----------------------*/
+
+			/*--------------------------Retrieve the board from file--------------------------------*/
+			// checks to see if the current line says Layout
+			if (searchFound == true && matchString[1] == "L")
+			{
+				m_isBoard = true;
+			}
+
+			if (m_isBoard == true)
+			{
+				regex tilePattern("([[:d:]])-([[:d:]])");
+				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
+					it != sregex_iterator(); ++it)
+				{
+					smatch a_matched = *it;
+					if (a_matched[1].matched && a_matched[2].matched)
+					{
+						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
+						m_layoutTiles.push_back(*newTile);
+						delete newTile;
+					}
+				}
+			}
+			/*--------------------------Retrieve the board--------------------------------*/
+
+			/*--------------------------Retrieves the boneYard--------------------------------*/
+			// checks to see if the current line says Layout
+			if (searchFound == true && matchString[1] == "B")
+			{
+				m_isBoneYard = true;
+			}
+
+			if (m_isBoneYard == true)
+			{
+				regex tilePattern("([[:d:]])-([[:d:]])");
+				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
+					it != sregex_iterator(); ++it)
+				{
+					smatch a_matched = *it;
+					if (a_matched[1].matched && a_matched[2].matched)
+					{
+						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
+						m_boneyardTiles.push_back(*newTile);
+						delete newTile;
+					}
+				}
+			}
+			/*--------------------------Retrieves the boneYard--------------------------------*/
+
+			/*--------------------------Previous Player Passed--------------------------------*/
+			if (searchFound == true && matchString[1] == "P")
+			{
+				regex passedCase("([[:w:]]+: )([[:w:]]");
+				smatch matchElement;
+				regex_search(incomingLine, matchElement, passedCase);
+				if (matchElement[2] == "N")
+				{
+					m_playerPassed = false;
+				}
+				else if (matchElement[2] == "Y")
+				{
+					m_playerPassed = true;
+				}
+				else
+				{
+					cout << "Player Passed Error" << endl;
+				}
+			}
+			/*--------------------------Previous Player Passed--------------------------------*/
+
+			/*--------------------------Get the Next Player--------------------------------*/
+			if (searchFound == true && matchString[1] == "N")
+			{
+				regex passedCase("([[:w:]]+: )([[:w:]]");
+				smatch matchElement;
+				regex_search(incomingLine, matchElement, passedCase);
+				if (matchElement[2] == "C")
+				{
+					m_nextPlayer = 0;
+				}
+				else if (matchElement[2] == "H" || m_playerName.substr(0, 1) == matchElement[2])
+				{
+					m_nextPlayer = 1;
+				}
+				else
+				{
+					cout << "Next Player Error" << endl;
+				}
+			}
+			/*--------------------------Previous Player Passed--------------------------------*/
+
 		}
+			
 	}
 	inFile.close();
 }

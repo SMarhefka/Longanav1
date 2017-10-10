@@ -56,10 +56,12 @@ private:
 	// this variable keeps track of the engine for 
 	// the current round
 	unsigned short m_playerIndex;
+	// this is the engine variable
 	int m_engineVal;
 	// this is read in from the tournament class
 	int m_roundNum;
 	// get the tournament score
 	int m_inTourScore;
+	// variable to keep track of save
 	char m_saveSelection;
 };
