@@ -12,7 +12,9 @@ int main()
 	//newTest.testDomino();
 
 	tournament newTournament;
-	newTournament.beginTournament();
+
+	
+	newTournament.loadUserOptions();
 
 	system("pause");
 

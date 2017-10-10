@@ -8,18 +8,12 @@ gameRound::gameRound()
 
 gameRound::gameRound(int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTouScore)
 {
-	//newBoneYard = new boneYard();
-	//newGameBoard = new gameBoard();
-
+	newBoneYard = new boneYard();
 	m_roundNum = a_roundNumber;
 	m_gamePlayers = a_gamePlayers;
 	m_engineVal = getEngine();
 	m_inTourScore = a_inTouScore;
 	m_playerIndex = 0;
-}
-
-gameRound::~gameRound()
-{
 }
 
 void gameRound::setUpRound()
@@ -81,7 +75,7 @@ void gameRound::distributeTiles()
 		for (int count = 0; count <= 7; count++)
 		{
 			// then you want to give each player 1 tiles
-			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
+			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTileToHand(newBoneYard->dealTile());
 		}
 	}
 }
@@ -92,12 +86,12 @@ unsigned short gameRound::getFirstPlayer()
 		(m_gamePlayers.at(1)->getHand()->hasEngine(m_engineVal)) == false)
 	{
 		// a_testBool = newBoneYard.isEmpty();
-		if(!newBoneYard.isEmpty())
+		if(!newBoneYard->isEmpty())
 		// give the computer a tile
-		m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard.dealTile());
+		m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard->dealTile());
 		// m_gamePlayers.at(0)->getHand()->printHand();
 		// give the player a tile
-		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard.dealTile());
+		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard->dealTile());
 		// m_gamePlayers.at(1)->getHand()->printHand();
 	}
 
@@ -148,9 +142,9 @@ void gameRound::playRound()
 
 		if (m_gamePlayers.at(m_playerIndex)->getPassCount() == 1)
 		{
-			if (!newBoneYard.isEmpty())
+			if (!newBoneYard->isEmpty())
 			{
-				m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard.dealTile());
+				m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard->dealTile());
 				m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 			}
 			else
@@ -234,7 +228,7 @@ bool gameRound::roundOver()
 		cout << m_gamePlayers.at(1)->getName() << " wins!\n";
 		return true;
 	}
-	if (newBoneYard.getSize() == 0 && m_gamePlayers.at(0)->getPassed() == true && m_gamePlayers.at(0)->getPassed() == true)
+	if (newBoneYard->getSize() == 0 && m_gamePlayers.at(0)->getPassed() == true && m_gamePlayers.at(0)->getPassed() == true)
 	{
 		return true;
 	}
@@ -278,10 +272,10 @@ bool gameRound::validSaveInput(char a_inSave)
 	return false;
 }
 
-string gameRound::getFile()
+string gameRound::getOutputFile()
 {
 	string fileName;
-	cout << "Enter name of the text file that you want to save to: ";
+	cout << "Enter name of the file that you want to save to: ";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> fileName;
 
@@ -338,7 +332,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 
 	/*--------------------print everything out to the file------------------*/
 	/*----Get File Info----*/
-	string userFileName = getFile();
+	string userFileName = getOutputFile();
 	// test the name of the the outputFile
 	cout << userFileName << endl;
 
@@ -375,7 +369,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 			outputFile << m_gamePlayers.at(nextPlayer)->getScore();
 		}
 		// Create a space
-		outputFile << endl;
+		outputFile << endl << endl;
 		// print human hand and score to file
 		outputFile << "Human: " << endl;
 		outputFile << "    " << "Hand: ";
@@ -408,7 +402,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 		// print the boneyard to file
 		outputFile << "Boneyard:" << endl;
 		// print the boneyard
-		newBoneYard.printBoneYard(outputFile);
+		newBoneYard->printBoneYard(outputFile);
 		// Create a space
 		outputFile << endl << endl;
 		// print if the previous player passed
@@ -452,3 +446,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 	/*----------print everything out to the file---------------*/
 }
 
+gameRound::~gameRound()
+{
+	delete newBoneYard;
+}

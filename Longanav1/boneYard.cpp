@@ -60,7 +60,7 @@ bool boneYard::isEmpty()
 dominoTile boneYard::dealTile()
 {
 	// add a tile to the players hand.
-	dominoTile * dealTile = unusedDominos.back();
+	dominoTile* dealTile = unusedDominos.back();
 	// removes the tile from the boneyard
 	unusedDominos.pop_back();
 	// return tile
@@ -80,13 +80,12 @@ void boneYard::printBoneYard()
 	for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
 	{
 		cout << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
-		// Used for testing purposes
-		// int index = item - unusedDominos.begin();
-		/*if (index > 0 && (index + 1) % 3 == 0) 
-		{
-			cout << "\n";
-		}*/
 	}
+}
+
+int boneYard::getSize()
+{
+	return int(unusedDominos.size());
 }
 
 void boneYard::printBoneYard(ofstream & a_inStream)
@@ -96,11 +95,4 @@ void boneYard::printBoneYard(ofstream & a_inStream)
 		a_inStream << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
 	}
 }
-
-int boneYard::getSize()
-{
-	return int(unusedDominos.size());
-}
-
-
 

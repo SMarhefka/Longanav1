@@ -8,7 +8,6 @@
 //fstream: Stream class to both read and write from/to files.
 #include <fstream>
 
-
 class gameRound
 {
 public:
@@ -42,19 +41,18 @@ public:
 
 	bool validSaveInput(char a_inSave);
 
-	string getFile();
+	string getOutputFile();
 
 	void printToFile(int a_inPlayerIndex);
 	/*-----------------------Save to file functions----------------------*/
 
 private:
-	vector<player*> m_gamePlayers;
 	// creates a new boneYard
-	//boneYard* newBoneYard;
-	boneYard newBoneYard;
+	boneYard* newBoneYard;
 	// creates a new gameBoard;
-	//gameBoard* newGameBoard;
 	gameBoard newGameBoard;
+
+	vector<player*> m_gamePlayers;
 	// this variable keeps track of the engine for 
 	// the current round
 	unsigned short m_playerIndex;
