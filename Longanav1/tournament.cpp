@@ -74,19 +74,6 @@ void tournament::loadFromFile()
 		cin.clear();
 		cin.ignore();
 		cin >> userInput;
-		while (cin.fail())
-		{
-			cout << endl;
-			cout << "Invalid Filename - Please enter a valid filename" << endl;
-			cout << "Filename: ";
-			//clear the error state
-			cin.clear();
-			//ignore all characters left in the buffer
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cin >> userInput;
-			cout << endl;
-		}
-		/*----Get File Info----*/
 
 		/*----Check for '.txt' in filename----*/
 		int findPos = int(userInput.find(".txt"));
@@ -119,6 +106,11 @@ void tournament::loadFromFile()
 		smatch matchString;
 		// sets if the pattern could be found
 		searchFound = regex_search(incomingLine, matchString, matchCase);
+
+		// ((\w)\w+)(.*):\W
+		// group 1 = ((\w)\w+)
+		// group 2 = (\w)
+		// group 3 = (.*)
 		if (searchFound == true)
 		{
 			if (matchString[1] == "T")
