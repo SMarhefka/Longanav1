@@ -33,19 +33,14 @@ public:
 	// return the tournament score
 	int getTourScore();
 
-	// provide the user with game options.  These include starting a new game or loading
-	// in a previous game
-	// void gameOptions();
-
-	// function that will handle a new game
-	// void startNewGame(bool isNewGame, string a_whoWonLastRound);
-
-	// function that will handle a file that is loaded in
-	// void loadGameFromFile();
+	// This creates a vector
+	vector<dominoTile> createVector(string a_inLine);
 
 private:
 	vector<player*> m_playerList;
+	
 	int m_tempUserChoice;
+
 	string m_playerName;
 
 	/*--------Variables that will be used when file is read in----------*/

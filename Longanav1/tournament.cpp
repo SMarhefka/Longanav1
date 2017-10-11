@@ -141,19 +141,7 @@ void tournament::loadFromFile()
 			// if it is the computer and it is the hand
 			if (m_isComputer == true && matchString[1] == "H")
 			{
-				regex tilePattern("([[:d:]])-([[:d:]])");
-				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
-					it != sregex_iterator(); ++it)
-				{
-					smatch a_matched = *it;
-					if (a_matched[1].matched && a_matched[2].matched)
-					{
-						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
-						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
-						m_comHand.push_back(*newTile);
-						delete newTile;
-					}
-				}
+				m_comHand = createVector(incomingLine);
 			}
 			else if (m_isComputer == true && matchString[1] == "S")
 			{
@@ -181,22 +169,10 @@ void tournament::loadFromFile()
 					m_playerName = (newResult[1]);
 				}
 			}
-			// if it is the computer and it is the hand
+			// if it is the players hand
 			if (m_isHuman == true && matchString[1] == "H")
 			{
-				regex tilePattern("([[:d:]])-([[:d:]])");
-				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
-					it != sregex_iterator(); ++it)
-				{
-					smatch a_matched = *it;
-					if (a_matched[1].matched && a_matched[2].matched)
-					{
-						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
-						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
-						m_playerHand.push_back(*newTile);
-						delete newTile;
-					}
-				}
+				m_playerHand = createVector(incomingLine);
 			}
 			else if (m_isHuman == true && matchString[1] == "S")
 			{
@@ -219,19 +195,7 @@ void tournament::loadFromFile()
 
 			if (m_isBoard == true)
 			{
-				regex tilePattern("([[:d:]])-([[:d:]])");
-				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
-					it != sregex_iterator(); ++it)
-				{
-					smatch a_matched = *it;
-					if (a_matched[1].matched && a_matched[2].matched)
-					{
-						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
-						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
-						m_layoutTiles.push_back(*newTile);
-						delete newTile;
-					}
-				}
+				m_layoutTiles = createVector(incomingLine);
 			}
 			/*--------------------------Retrieve the board--------------------------------*/
 
@@ -244,19 +208,7 @@ void tournament::loadFromFile()
 
 			if (m_isBoneYard == true)
 			{
-				regex tilePattern("([[:d:]])-([[:d:]])");
-				for (sregex_iterator it = sregex_iterator(incomingLine.begin(), incomingLine.end(), tilePattern);
-					it != sregex_iterator(); ++it)
-				{
-					smatch a_matched = *it;
-					if (a_matched[1].matched && a_matched[2].matched)
-					{
-						//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
-						dominoTile * newTile = new dominoTile(stoi(a_matched[1]), stoi(a_matched[2]));
-						m_boneyardTiles.push_back(*newTile);
-						delete newTile;
-					}
-				}
+				m_boneyardTiles = createVector(incomingLine);
 			}
 			/*--------------------------Retrieves the boneYard--------------------------------*/
 
@@ -397,5 +349,29 @@ void tournament::printScore()
 int tournament::getTourScore()
 {
 	return m_tournScore;
+}
+
+vector<dominoTile> tournament::createVector(string a_inLine)
+{
+	vector<dominoTile> outputVector;
+
+	// The pattern to look for
+	regex searchPatten("([[:d:]])-([[:d:]])");
+	// Go through the line
+	for (sregex_iterator it = sregex_iterator(a_inLine.begin(), a_inLine.end(), searchPatten);
+		it != sregex_iterator(); ++it)
+	{
+		smatch toMatch = *it;
+		if (toMatch[1].matched && toMatch[2].matched)
+		{
+			//cout << "    " << a_matched[1] << "-" << a_matched[2] << endl;
+			// Create a new tile
+			dominoTile* newTile = new dominoTile(stoi(toMatch[1]), stoi(toMatch[2]));
+			outputVector.push_back(*newTile);
+			delete newTile;
+		}
+	}
+	// return the output vector
+	return outputVector;
 }
 
