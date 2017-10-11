@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "tournament.h"
 
+// NOTE: THIS IS A WORKING VERSION
 tournament::tournament()
 {
 	m_playerList.clear();
