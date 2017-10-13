@@ -20,7 +20,7 @@ gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_g
 	m_fileFunctions = new fileFunctions();
 }
 
-gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYardTiles, string a_inPlayerPassed, string a_inNextPlayer)
+gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYardTiles, short a_inNextPlayer)
 {
 	m_isNewRound = a_isNewRound;
 	m_roundNumber = a_roundNumber;
@@ -28,33 +28,14 @@ gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_g
 	m_engineVal = getEngine();
 	m_inTourScore = a_inTourScore;
 	m_newBoneYard = new boneYard(a_inBoneYardTiles);
-	string m_inPassed = a_inPlayerPassed;
-	if (m_inPassed != " ")
+	m_inNextPlayer = a_inNextPlayer;
+	if (m_inNextPlayer != -1)
 	{
-		m_playerIndex = setNextPlayer(m_inNextPlayer);
-	}
-	string m_inNextPlayer = a_inNextPlayer;
-	if (m_inNextPlayer != " ")
-	{
-		m_playerIndex = setNextPlayer(m_inNextPlayer);
+		m_playerIndex = m_inNextPlayer;
 	}
 	// create a new validate object
 	m_newValidate = new validateInput();
 	m_fileFunctions = new fileFunctions();
-}
-
-unsigned short gameRound::setNextPlayer(string a_inNextPlayer)
-{
-	unsigned short tempValue;
-	if (a_inNextPlayer == "C")
-	{
-		tempValue = 0;
-	}
-	else if (a_inNextPlayer != " ")
-	{
-		tempValue = 1;
-	}
-	return tempValue;
 }
 
 void gameRound::setUpRound()
@@ -76,7 +57,7 @@ void gameRound::setUpRound()
 		// figure out the first player
 		m_playerIndex = getFirstPlayer();
 	}
-	else if (m_isNewRound!= true && m_inNextPlayer == " ")
+	else if (m_isNewRound!= true && m_inNextPlayer == -1)
 	{
 		// figure out the first player
 		m_playerIndex = getFirstPlayer();

@@ -61,7 +61,6 @@ protected:
 	validateInput* m_checkInput;
 	// creates a new player hand
 	playerHand m_currentHand;
-
 	// creates a new dominoTile
 	dominoTile m_userSelection;
 

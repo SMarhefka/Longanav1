@@ -7,13 +7,21 @@ human::human()
 	//cout << "I'm creating a human\n";
 	m_playerName = "Human";
 	m_playerScore = 0;
+	m_tempUserChoice = 0;
+	m_enginePosition = 0;
+	m_tileChoice = 0;
+	m_exeSucc = false;
 }
 
-human::human(string name)
+human::human(string a_inName)
 {
 	// cout << "I'm creating a human with a name: " << playerType << "\n";
-	m_playerName = name;
+	m_playerName = a_inName;
 	m_playerScore = 0;
+	m_tempUserChoice = 0;
+	m_enginePosition = 0;
+	m_tileChoice = 0;
+	m_exeSucc = false;
 }
 
 human::~human()
@@ -378,7 +386,7 @@ void human::findEnginePosition()
 		if (m_currentHand.getTilesAt(numCount).isDouble() == true && 
 			m_currentHand.getTilesAt(numCount).getLeftSide() == m_engineValue)
 		{
-			m_enginPosition = numCount;
+			m_enginePosition = numCount;
 		}
 	}
 }

@@ -17,7 +17,6 @@ player::player()
 
 	m_whichSide = ' ';
 	m_validMove = false;
-	m_HumanPass = false;
 	m_ComputerPass = false;
 
 	m_playerName = "Computer";
@@ -26,7 +25,7 @@ player::player()
 player::player(playerHand a_inUserHand, int a_inScore)
 {
 	m_currentHand = a_inUserHand;
-	m_playerName = "Computer";
+	m_playerScore = a_inScore;
 }
 
 player::~player()

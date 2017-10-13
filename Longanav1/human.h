@@ -15,11 +15,12 @@ public:
 
 	// creates a constructor for human class with the arguement
 	// of a player name
-	human(string inName);
+	human(string a_inName);
 
 	// creates a new human with the playerhand and the player score
-	human(playerHand &a_inUserHand, int &a_inScore) : player(a_inUserHand, a_inScore)
+	human(playerHand a_inUserHand, int a_inScore, bool a_inPassed) : player(a_inUserHand, a_inScore)
 	{
+		m_HumanPass = a_inPassed;
 	};
 
 	// default destructor
@@ -43,12 +44,14 @@ public:
 
 	void findEnginePosition();
 
+	bool getHumanPass();
+
 	// this is a getter function
 	playerHand* getHand();
 
 private:
 	int m_tempUserChoice;
-	int m_enginPosition;
+	int m_enginePosition;
 	int m_tileChoice;
 	bool m_exeSucc;
 };

@@ -168,7 +168,18 @@ void tournament::loadFromFile()
 		}
 		if (firstChar == "N")
 		{
-			m_nextPlayer = groupFour.substr(0, 1);
+			if (groupFour.substr(0, 1) == " ")
+			{
+				m_nextPlayer = -1;
+			}
+			else if (groupFour.substr(0, 1) == "C")
+			{
+				m_nextPlayer = 0;
+			}
+			else
+			{
+				m_nextPlayer = 1;
+			}
 		}
 	}
 	inFile.close();
@@ -218,19 +229,24 @@ void tournament::createPlayers(bool a_isNewGame)
 	}
 	else
 	{
+
 		// create a new hand with the computer's tiles
 		playerHand* tempHand;
+		bool tempPassed;
 
 		tempHand = new playerHand(m_comHand);
+		tempPassed = getPassed(m_nextPlayer, m_playerPassed, 0);
+		
 		// create a new player with the particular hand
-		player* loadComputer = new computer(*tempHand, m_computerScore);
+		player* loadComputer = new computer(*tempHand, m_computerScore, tempPassed);
 
 		delete tempHand;
 
 		// create a new hand with the player's tiles
 		tempHand = new playerHand(m_playerHand);
+		tempPassed = getPassed(m_nextPlayer, m_playerPassed, 1);
 		// create a new player with the particular hand
-		player* loadPlayer = new human(*tempHand, m_playerScore);
+		player* loadPlayer = new human(*tempHand, m_playerScore, tempPassed);
 
 		delete tempHand;
 
@@ -240,6 +256,20 @@ void tournament::createPlayers(bool a_isNewGame)
 		m_playerList.push_back(loadPlayer);
 	}
 
+}
+
+bool tournament::getPassed(short a_inPlyrIndex, string m_playerPassed, short a_currIndex)
+{
+	short previousPlayer;
+	if (m_playerPassed == "Y" && a_inPlyrIndex != 1)
+	{
+		previousPlayer = (a_inPlyrIndex + 1) % 2;
+		if (previousPlayer == a_currIndex)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void tournament::playTournament(bool a_isNewRound)
@@ -256,7 +286,7 @@ void tournament::playTournament(bool a_isNewRound)
 		else
 		{
 			// create a new round with the prepared values
-			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore, m_boneyardTiles, m_playerPassed, m_nextPlayer);
+			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore, m_boneyardTiles, m_nextPlayer);
 		}
 		// set up the current round
 		newRound->setUpRound();

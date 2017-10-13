@@ -17,7 +17,7 @@ public:
 
 	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore);
 
-	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYard, string a_inPlayerPassed, string a_inNextPlayer);
+	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYard, short a_inNextPlayer);
 
 	// default destructor
 	~gameRound();
@@ -64,7 +64,7 @@ private:
 	bool m_isNewRound;
 
 	string m_inPassed;
-	string m_inNextPlayer;
+	short m_inNextPlayer;
 
 	// this variable keeps track of the engine for 
 	// the current round

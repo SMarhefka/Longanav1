@@ -38,6 +38,8 @@ public:
 
 	bool tournamentOver();
 
+	bool getPassed(short a_inPlyrIndex, string m_playerPassed, short a_currIndex);
+
 	//boneYard* createBoard(vector<dominoTile> a_inLayoutTiles);
 
 private:
@@ -86,6 +88,6 @@ private:
 	string m_playerPassed;
 
 	// this variable sets the next player
-	string m_nextPlayer;
+	short m_nextPlayer;
 	/*--------Variables that will be used when file is read in----------*/
 };
