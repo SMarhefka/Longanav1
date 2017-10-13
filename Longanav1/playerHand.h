@@ -10,6 +10,9 @@ public:
 	// default constructor
 	playerHand();
 
+	// overload constructor
+	playerHand(vector<dominoTile> &a_inUserHand);
+
 	// constructor with the player hand
 	// default destructor
 	~playerHand();
@@ -42,6 +45,6 @@ private:
 	// need a shared point to avoid object slicing
 	// this shared pointer will also be useful when polymorphism
 	// needs to be implemented.
-	vector<dominoTile> playerTiles;
+	vector<dominoTile> m_playerTiles;
 };
 

@@ -85,7 +85,7 @@ void human::printLeftRight()
 	cin >> m_whichSide;
 
 	// while the input fails
-	while (m_checkInput.validSideInput(m_whichSide) != true)
+	while (m_checkInput->validSideInput(m_whichSide) != true)
 	{
 		//clear the error state
 		cin.clear();
@@ -155,7 +155,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			dominoTile tempTile;
 			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
 
-			while (m_checkInput.validEnginePlacement(tempTile, m_engineValue) != true || m_whichSide != 'L')
+			while (m_checkInput->validEnginePlacement(tempTile, m_engineValue) != true || m_whichSide != 'L')
 			{
 				if (m_whichSide != 'L')
 				{
@@ -185,7 +185,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
 			
 			while (checkTileSelection(thisGameBoard, tempTile) != true
-				|| m_checkInput.validSideCheck(tempTile, m_whichSide, m_playerName, m_ComputerPass) != true)
+				|| m_checkInput->validSideCheck(tempTile, m_whichSide, m_playerName, m_ComputerPass) != true)
 			{
 				if (checkTileSelection(thisGameBoard, tempTile) != true)
 				{
@@ -225,7 +225,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			if (m_whichSide == 'L')
 			{
 				// if the left pips of the user tile match the left pips of the board
-				if (m_checkInput.leftSideOnly(thisGameBoard.getLeftMostTile(),
+				if (m_checkInput->leftSideOnly(thisGameBoard.getLeftMostTile(),
 					m_currentHand.getTilesAt(m_tileChoice)) == true)
 				{
 					// then we want to add the user tile to the board but
@@ -241,7 +241,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			else if (m_whichSide == 'R')
 			{
 				// if the right pips of the user tile match the left pips of the board
-				if (m_checkInput.rightSideOnly(thisGameBoard.getRightMostTile(),
+				if (m_checkInput->rightSideOnly(thisGameBoard.getRightMostTile(),
 					m_currentHand.getTilesAt(m_tileChoice)) == true)
 				{
 					// then we want to add the user tile to the board but

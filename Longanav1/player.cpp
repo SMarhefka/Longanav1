@@ -7,6 +7,7 @@
 // this is the base class
 player::player()
 {
+	m_checkInput = new validateInput;
 	m_passCount = 0;
 	m_playerScore = 0;
 	m_userChoice = 0;
@@ -18,6 +19,12 @@ player::player()
 	m_HumanPass = false;
 	m_ComputerPass = false;
 
+	m_playerName = "Computer";
+}
+
+player::player(playerHand &a_inUserHand)
+{
+	m_testHand = a_inUserHand;
 	m_playerName = "Computer";
 }
 
@@ -73,10 +80,10 @@ void player::playMove(gameBoard &a_inGameBoard)
 			}
 
 			char sideValue = 'L';
-			if (m_checkInput.validSideCheck(m_userSelection, sideValue, m_playerName, humanPassed) == true)
+			if (m_checkInput->validSideCheck(m_userSelection, sideValue, m_playerName, humanPassed) == true)
 			{
 				m_whichSide = sideValue;
-				if (m_checkInput.leftSideOnly(a_inGameBoard.getLeftMostTile(), m_userSelection) == true)
+				if (m_checkInput->leftSideOnly(a_inGameBoard.getLeftMostTile(), m_userSelection) == true)
 				{
 					m_userSelection = m_userSelection;
 				}
@@ -86,10 +93,10 @@ void player::playMove(gameBoard &a_inGameBoard)
 				}
 			}
 			sideValue = 'R';
-			if (m_checkInput.validSideCheck(m_userSelection, sideValue, m_playerName, humanPassed) == true)
+			if (m_checkInput->validSideCheck(m_userSelection, sideValue, m_playerName, humanPassed) == true)
 			{
 				m_whichSide = sideValue;
-				if (m_checkInput.rightSideOnly(a_inGameBoard.getRightMostTile(), m_userSelection) == true)
+				if (m_checkInput->rightSideOnly(a_inGameBoard.getRightMostTile(), m_userSelection) == true)
 				{
 					m_userSelection = m_userSelection.reverseTile();
 				}
@@ -166,11 +173,11 @@ bool player::checkTileSelection(gameBoard &a_inGameBoard, dominoTile &a_inUserTi
 	// then you need to check both sides of the board
 	if (a_inUserTile.isDouble() == true || getPassed() == true)
 	{
-		if (m_checkInput.checkLeftSide(a_inGameBoard.getLeftMostTile(), a_inUserTile) == true)
+		if (m_checkInput->checkLeftSide(a_inGameBoard.getLeftMostTile(), a_inUserTile) == true)
 		{
 			return true;
 		}
-		if (m_checkInput.checkRightSide(a_inGameBoard.getRightMostTile(), a_inUserTile) == true)
+		if (m_checkInput->checkRightSide(a_inGameBoard.getRightMostTile(), a_inUserTile) == true)
 		{
 			return true;
 		}
@@ -178,14 +185,14 @@ bool player::checkTileSelection(gameBoard &a_inGameBoard, dominoTile &a_inUserTi
 	else if (m_playerName == "Computer")
 	{
 
-		if (m_checkInput.checkRightSide(a_inGameBoard.getRightMostTile(), a_inUserTile) == true)
+		if (m_checkInput->checkRightSide(a_inGameBoard.getRightMostTile(), a_inUserTile) == true)
 		{
 			return true;
 		}
 	}
 	else
 	{
-		if (m_checkInput.checkLeftSide(a_inGameBoard.getLeftMostTile(), a_inUserTile) == true)
+		if (m_checkInput->checkLeftSide(a_inGameBoard.getLeftMostTile(), a_inUserTile) == true)
 		{
 			return true;
 		}
@@ -203,7 +210,7 @@ string player::getName()
 playerHand* player::getHand()
 {
 	// cout << "Playing as: " << playerType << " I'm in the player::getHand method\n";
-	return & m_currentHand;
+	return &m_currentHand;
 }
 
 bool player::getPassed()
@@ -406,6 +413,12 @@ vector<dominoTile> player::tilePlayOrder()
 	//}
 
 	return playList;
+}
+
+playerHand* player::getTestHand()
+{
+	return &m_testHand;
+	//return playerHand();
 }
 
 void player::setPassed(bool a_playerPass)

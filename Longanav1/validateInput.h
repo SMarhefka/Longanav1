@@ -1,4 +1,5 @@
 #pragma once
+#include <regex>
 #include <string>
 #include "dominoTile.h"
 using namespace std;
@@ -21,5 +22,8 @@ public:
 	bool validSideCheck(dominoTile &a_inTile, char & a_inSide, string & a_inpName, bool & a_inPassed);
 	// checks to make sure that the user placed the engine correctly
 	bool validEnginePlacement(dominoTile &a_inTile, int & a_inEngine);
-	
+	// check to see if the filename given is valid
+	bool validFileName(string a_inFileName);
+	// checks to see if the userSelected a validl option
+	bool validUserInput(string a_userInput, int a_inMaxOptions);
 };

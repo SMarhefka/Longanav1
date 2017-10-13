@@ -123,3 +123,30 @@ bool validateInput::validEnginePlacement(dominoTile & a_inTile, int & a_inEngine
 	}
 	return false;
 }
+
+bool validateInput::validFileName(string a_inFileName)
+{
+	string testString = a_inFileName;
+	regex invalidPatten("(([^\\w]+)(.*))");
+	if (regex_match(testString, invalidPatten))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool validateInput::validUserInput(string a_userInput, int a_inMaxOptions)
+{
+	string testInput = a_userInput;
+	regex digitSearch("(^\\d)");
+	smatch matchElement;
+
+	if (regex_search(testInput, matchElement, digitSearch))
+	{
+		if (stoi(matchElement[1]) >= 1 || stoi(matchElement[1]) <= a_inMaxOptions)
+		{
+			return true;
+		}
+	}
+	return false;
+}

@@ -393,12 +393,12 @@ void gameRound::printToFile(int a_inPlayerIndex)
 		// Create a space
 		outputFile << endl << endl;
 		// print the layout to the file
-		outputFile << "Layout:" << endl;
+		outputFile << "Layout: " << endl;
 		newGameBoard.printBoardToFile(outputFile);
 		// Create a space
 		outputFile << endl << endl;
 		// print the boneyard to file
-		outputFile << "Boneyard:" << endl;
+		outputFile << "Boneyard: " << endl;
 		// print the boneyard
 		newBoneYard->printBoneYard(outputFile);
 		// Create a space

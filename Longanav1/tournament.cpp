@@ -4,6 +4,7 @@
 // NOTE: THIS IS A WORKING VERSION BUT IT WILL BE CHANGED
 tournament::tournament()
 {
+	m_validateInputs = new validateInput;
 	m_playerList.clear();
 	m_playerName = "";
 	m_tournScore = 0;
@@ -16,7 +17,7 @@ tournament::~tournament()
 
 void tournament::loadUserOptions()
 {
-	int userChoice;
+	string userChoice;
 
 	cout << "|***************************************************|" << endl;
 	cout << "|                    Longana Game 2017              |" << endl;
@@ -29,8 +30,10 @@ void tournament::loadUserOptions()
 	cout << "User Selection: ";
 	cin >> userChoice;
 
+	userChoice = userChoice.substr(0, 1);
+	
 	// validate the input
-	while (userChoice < 1 || userChoice > 2)
+	while (m_validateInputs->validUserInput(userChoice, 2) != true)
 	{
 		//clear the error state
 		cin.clear();
@@ -42,17 +45,21 @@ void tournament::loadUserOptions()
 		cout << "2. Load Previous Game" << endl;
 		cout << "User Selection: ";
 		cin >> userChoice;	
+		// Get just the firt value
+		userChoice = userChoice.substr(0, 1);
 	}
 	cout << endl;
 
-	m_tempUserChoice = userChoice;
-	if (m_tempUserChoice == 1)
+	if (stoi(userChoice) == 1)
 	{
 		newTournament();
 	}
 	else
 	{
 		loadFromFile();
+		playerHand* newHand = new playerHand(m_comHand);
+		player* compPlayer = new computer(*newHand);
+		compPlayer->getTestHand()->printHand();
 	}
 }
 
@@ -60,10 +67,7 @@ void tournament::loadFromFile()
 {
 	// initialize the incoming line
 	string incomingLine;
-	string userInput;
-	
-	userInput = getInputFile();
-	
+	string userInput = getInputFile();
 	ifstream inFile(userInput.c_str());
 
 	while (!inFile.is_open())
@@ -75,187 +79,109 @@ void tournament::loadFromFile()
 		cin.clear();
 		cin.ignore();
 		cin >> userInput;
-
-		/*----Check for '.txt' in filename----*/
-		int findPos = int(userInput.find(".txt"));
-		if (findPos < 0)
-		{
-			userInput.append(".txt");
-		}
-		/*----Check for '.txt' in filename----*/
-		cout << endl;
-		// OPENED THE FILE AT THIS POINT
-		// CAN'T FORGET TO CLOSE IT.
+		userInput = appendTxt(userInput);
+		// try to open the given file
 		inFile.open(userInput.c_str());
 	}
 
-	// initialize the linecount to 0
-	int lineCount = 0;
-	// initialize the search varaible to false
-	bool searchFound = false;
 	// get every new line
 	while (getline(inFile, incomingLine, '\n'))
 	{
-		// increase the linecount by 1
-		lineCount++;
 		// prints out the current line that we are on
-		cout << incomingLine << endl;
-
-		// This will search for any two words with either a . or a :
-		// used for tournamennt score and round number
-		regex matchCase("([[:w:]])([[:w:]]+ )([[:w:]]+.: )([[:d:]]+)");
-		smatch matchString;
-		// sets if the pattern could be found
-		searchFound = regex_search(incomingLine, matchString, matchCase);
-
-		// ((\w)\w+)(.*):\W
-		// group 1 = ((\w)\w+)
-		// group 2 = (\w)
-		// group 3 = (.*)
-		if (searchFound == true)
+		// cout << incomingLine << endl;
+		regex searchCase("(((\\w)\\w+.*[:][^\\w]|[^\\s])(.*))");
+		smatch matchGroup;
+		// initialize the first element
+		string firstChar = " ";
+		// initialize the first group
+		string groupOne = " ";
+		// initialize the variable that will 
+		string groupTwo = " ";
+		// initialize the last group
+		string groupFour = " ";
+		
+		// if the search pattern could be found
+		if (regex_search(incomingLine, matchGroup, searchCase) == true)
 		{
-			if (matchString[1] == "T")
+			firstChar = matchGroup[3];
+			groupOne = matchGroup[1];
+			groupTwo = matchGroup[2];
+			groupFour = matchGroup[4];
+		}
+		
+		setBooleans(firstChar);
+		
+		if (firstChar == "T")
+		{
+			m_tournScore = stoi(groupFour);
+		}
+		if (firstChar == "R")
+		{
+			m_inRoundNum = stoi(groupFour);
+		}
+		if (groupTwo == "Hand: ")
+		{	
+			if(m_isComputer == true)
 			{
-				m_tournScore = stoi(matchString[4]);
+				m_comHand = createVector(groupFour);
 			}
-			if (matchString[3] == "No.: ")
+			else
 			{
-				m_inRoundNum = stoi(matchString[4]);
+				m_playerHand = createVector(groupFour);
 			}
 		}
-		else
+		if (firstChar == "S")
 		{
-			// otherwise the pattern to look out for is: ([[:w:]]+:)"
-			// this pattern is going to be used to find all of the other
-			// variables that we need
-			regex matchCase("([[:w:]])([[:w:]]+:)");
-			smatch matchString;
-			searchFound = regex_search(incomingLine, matchString, matchCase);
-
-			/*-------------------------Retrieves Computer Hand and Score----------------------*/
-			// checks to see if the current line says computer
-			if (searchFound == true && matchString[1] == "C")
+			if (m_isComputer == true)
 			{
-				m_isComputer = true;
+				m_computerScore = stoi(groupFour);
+				m_isComputer = false;
 			}
-			// if it is the computer and it is the hand
-			if (m_isComputer == true && matchString[1] == "H")
+			else
 			{
-				m_comHand = createVector(incomingLine);
+				m_playerScore = stoi(groupFour);
 			}
-			else if (m_isComputer == true && matchString[1] == "S")
-			{
-				regex newMatch("([[:w:]]+.: )([[:d:]]+)");
-				smatch newString;
-				bool newSearch = regex_search(incomingLine, newString, newMatch);
-				if (newSearch == true)
-				{
-					m_computerScore = stoi(newString[2]);
-				}
-			}
-			/*-------------------------Retrieves Computer Hand and Score----------------------*/
-
-			/*-------------------------Retrieves Human Hand and Score----------------------*/
-			string humanString = matchString[1].str() + matchString[2].str();
-			// checks to see if the current line says Human
-			if (searchFound == true && humanString == "Human:" || humanString != "Computer:")
-			{
-				m_isHuman = true;
-				if (humanString != "Human:")
-				{
-					regex newPattern("([[:w:]]+)");
-					smatch newResult;
-					regex_search(incomingLine, newResult, newPattern);
-					m_playerName = (newResult[1]);
-				}
-			}
-			// if it is the players hand
-			if (m_isHuman == true && matchString[1] == "H")
-			{
-				m_playerHand = createVector(incomingLine);
-			}
-			else if (m_isHuman == true && matchString[1] == "S")
-			{
-				regex newMatch("([[:w:]]+.: )([[:d:]]+)");
-				smatch newString;
-				bool newSearch = regex_search(incomingLine, newString, newMatch);
-				if (newSearch == true)
-				{
-					m_playerScore = stoi(newString[2]);
-				}
-			}
-			/*-------------------------Retrieves Human Hand and Score----------------------*/
-
-			/*--------------------------Retrieve the board from file--------------------------------*/
-			// checks to see if the current line says Layout
-			if (searchFound == true && matchString[1] == "L")
-			{
-				m_isBoard = true;
-			}
-
-			if (m_isBoard == true)
-			{
-				m_layoutTiles = createVector(incomingLine);
-			}
-			/*--------------------------Retrieve the board--------------------------------*/
-
-			/*--------------------------Retrieves the boneYard--------------------------------*/
-			// checks to see if the current line says Layout
-			if (searchFound == true && matchString[1] == "B")
-			{
-				m_isBoneYard = true;
-			}
-
-			if (m_isBoneYard == true)
-			{
-				m_boneyardTiles = createVector(incomingLine);
-			}
-			/*--------------------------Retrieves the boneYard--------------------------------*/
-
-			/*--------------------------Previous Player Passed--------------------------------*/
-			if (searchFound == true && matchString[1] == "P")
-			{
-				regex passedCase("([[:w:]]+: )([[:w:]]");
-				smatch matchElement;
-				regex_search(incomingLine, matchElement, passedCase);
-				if (matchElement[2] == "N")
-				{
-					m_playerPassed = false;
-				}
-				else if (matchElement[2] == "Y")
-				{
-					m_playerPassed = true;
-				}
-				else
-				{
-					cout << "Player Passed Error" << endl;
-				}
-			}
-			/*--------------------------Previous Player Passed--------------------------------*/
-
-			/*--------------------------Get the Next Player--------------------------------*/
-			if (searchFound == true && matchString[1] == "N")
-			{
-				regex passedCase("([[:w:]]+: )([[:w:]]");
-				smatch matchElement;
-				regex_search(incomingLine, matchElement, passedCase);
-				if (matchElement[2] == "C")
-				{
-					m_nextPlayer = 0;
-				}
-				else if (matchElement[2] == "H" || m_playerName.substr(0, 1) == matchElement[2])
-				{
-					m_nextPlayer = 1;
-				}
-				else
-				{
-					cout << "Next Player Error" << endl;
-				}
-			}
-			/*--------------------------Previous Player Passed--------------------------------*/
-
 		}
-			
+		if (firstChar != "L" && m_isBoard == true)
+		{
+			m_layoutTiles = createVector(groupOne);
+			m_isBoard = false;
+		}
+		if (firstChar != "B" && m_isBoneYard == true)
+		{
+			m_boneyardTiles = createVector(groupOne);
+			m_isBoneYard = false;
+		}
+		if (firstChar == "P")
+		{
+			if (groupFour.substr(0, 1) == "Y")
+			{
+				m_playerPassed = true;
+			}
+			else if (groupFour.substr(0, 1) == "N")
+			{
+				m_playerPassed = false;
+			}
+			else
+			{
+				m_playerPassed = NULL;
+			}
+		}
+		if (firstChar == "N")
+		{
+			if (groupFour.substr(0, 1) == "C")
+			{
+				m_nextPlayer = 0;
+			}
+			else if (groupFour.substr(0, 1) == " ")
+			{
+				m_nextPlayer = NULL;
+			}
+			else
+			{
+				m_nextPlayer = 1;
+			}
+		}
 	}
 	inFile.close();
 }
@@ -316,7 +242,8 @@ string tournament::getInputFile()
 	cout << "Filename: ";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> fileName;
-	while (cin.fail())
+
+	while (m_validateInputs->validFileName(fileName) != true)
 	{
 		cout << "Invalid Filename - Please enter a valid filename" << endl;
 		cout << "Filename: ";
@@ -330,15 +257,25 @@ string tournament::getInputFile()
 	/*----Get File Info----*/
 
 	/*----Check for '.txt' in filename----*/
-	int findPos = int(fileName.find(".txt"));
-	if (findPos < 0)
-	{
-		fileName.append(".txt");
-	}
+	fileName = appendTxt(fileName);
 	/*----Check for '.txt' in filename----*/
 
 	// return the fileName
 	return fileName;
+}
+
+string tournament::appendTxt(string a_inFileName)
+{
+	string outputFile = a_inFileName;
+	regex fileEnding("(.txt$)");
+	/*----Check for '.txt' in filename----*/
+	if (regex_match(outputFile, fileEnding) != true)
+	{
+		outputFile.append(".txt");
+	}
+	/*----Check for '.txt' in filename----*/
+
+	return outputFile;
 }
 
 void tournament::printScore()
@@ -349,6 +286,22 @@ void tournament::printScore()
 int tournament::getTourScore()
 {
 	return m_tournScore;
+}
+
+void tournament::setBooleans(string a_inElementOne)
+{
+	if (a_inElementOne == "C")
+	{
+		m_isComputer = true;
+	}
+	else if (a_inElementOne == "L")
+	{
+		m_isBoard = true;
+	}
+	else if (a_inElementOne == "B")
+	{
+		m_isBoneYard = true;
+	}
 }
 
 vector<dominoTile> tournament::createVector(string a_inLine)

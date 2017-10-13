@@ -13,7 +13,6 @@ int main()
 
 	tournament newTournament;
 
-	
 	newTournament.loadUserOptions();
 
 	system("pause");

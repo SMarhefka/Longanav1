@@ -6,6 +6,7 @@
 #include <sstream>
 #include <regex>
 #include <string>
+#include <cstring>
 
 class tournament
 {
@@ -27,39 +28,44 @@ public:
 	// get the file information needed
 	string getInputFile();
 
+	string appendTxt(string a_inFileName);
+
 	// print the tournament score
 	void printScore();
 
 	// return the tournament score
 	int getTourScore();
 
+	void setBooleans(string a_inElementOne);
+
 	// This creates a vector
 	vector<dominoTile> createVector(string a_inLine);
 
 private:
+	validateInput* m_validateInputs;
+
 	vector<player*> m_playerList;
 	
-	int m_tempUserChoice;
+	vector<player*> m_testList;
 
 	string m_playerName;
 
-	/*--------Variables that will be used when file is read in----------*/
 	// This will keep track of the tournament score
 	int m_tournScore;
 	// This is going to be the variable for the round number
 	int m_inRoundNum;
 
+	/*--------Variables that will be used when file is read in----------*/
+
 	// this boolean will be true if we are loading up the
 	// computer variables
 	bool m_isComputer;
+
 	// This is going to be the vector for the computerHand
 	vector<dominoTile> m_comHand;
 	// this will store the commputer score
 	int m_computerScore;
 
-	// this boolean will be true if and when we are loading up
-	// the player variables
-	bool m_isHuman;
 	// This is going to be the vector for the playerHand
 	vector<dominoTile> m_playerHand;
 	// this will store the player score

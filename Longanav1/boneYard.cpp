@@ -31,13 +31,14 @@ void boneYard::createBoneYard()
 	{
 		for (int j = i; j <= 6; j++) 
 		{
-			dominoTile * newTile = new dominoTile(i, j);
+			dominoTile* tempTile = new dominoTile(i, j);
 			// placed for testing purposes
 			// cout << "Domino: " << i << "-" << j << endl;
-			unusedDominos.push_back(newTile);
+			unusedDominos.push_back(tempTile);
+			// delete the temporary domino
+			delete tempTile;
 		}
 	}
-	// cout << "# of elements: " << unusedDominos.size() << "\n";
 }
 
 void boneYard::shuffleBoneYard()
@@ -62,9 +63,9 @@ dominoTile boneYard::dealTile()
 	// add a tile to the players hand.
 	dominoTile* dealTile = unusedDominos.back();
 	// removes the tile from the boneyard
-	unusedDominos.pop_back();
+	removeTile();
 	// return tile
-	return * dealTile;
+	return *dealTile;
 }
 
 // removes a tile from the boneYard
@@ -72,6 +73,12 @@ void boneYard::removeTile()
 {
 	unusedDominos.pop_back();
 }
+
+int boneYard::getSize()
+{
+	return int(unusedDominos.size());
+}
+
 
 // this function prints the values stored in the boneYard
 void boneYard::printBoneYard()
@@ -83,10 +90,6 @@ void boneYard::printBoneYard()
 	}
 }
 
-int boneYard::getSize()
-{
-	return int(unusedDominos.size());
-}
 
 void boneYard::printBoneYard(ofstream & a_inStream)
 {

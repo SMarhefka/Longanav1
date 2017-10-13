@@ -7,38 +7,43 @@
 // default constructor
 playerHand::playerHand()
 {
-	//playerTiles.clear();
+}
+
+playerHand::playerHand(vector<dominoTile> & a_inUserHand)
+{
+	m_playerTiles = a_inUserHand;
 }
 
 // default destructor
 playerHand::~playerHand()
 {
+	m_playerTiles.clear();
 }
 
 //void playerHand::addTile()
 void playerHand::addTileToHand(dominoTile a_tileToAdd)
 {
 	// pushes back that tile to the end of the vector playerTiles
-	playerTiles.push_back(a_tileToAdd);
+	m_playerTiles.push_back(a_tileToAdd);
 }
 
 // this function will be used when a player places their tile on the board
 void playerHand::removeTile(dominoTile a_tileToRemove)
 {
 	// go through the vector and find the tile that is going to be deleted.
-	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	for (auto item = m_playerTiles.begin(); item != m_playerTiles.end(); item++)
 	{
 		// cout << "item: " << item->getLeftSide() << "\n";
 		// cout << "tile: " << a_tileToRemove.getLeftSide() << "\n";
 
 		if ((item->getLeftSide() == a_tileToRemove.getLeftSide()) && ((item->getRightSide() == a_tileToRemove.getRightSide())))
 		{
-			playerTiles.erase(item);
+			m_playerTiles.erase(item);
 			break;
 		}
 		else if ((item->getLeftSide() == a_tileToRemove.getRightSide()) && ((item->getRightSide() == a_tileToRemove.getLeftSide())))
 		{
-			playerTiles.erase(item);
+			m_playerTiles.erase(item);
 			break;
 		}
 	}
@@ -46,18 +51,18 @@ void playerHand::removeTile(dominoTile a_tileToRemove)
 
 dominoTile playerHand::getTilesAt(int a_place)
 {
-	return playerTiles.at(a_place);
+	return m_playerTiles.at(a_place);
 }
 
 // Checks to see if the players hand is empty
 bool playerHand::isEmpty()
 {
-	return playerTiles.size() == 0;
+	return m_playerTiles.size() == 0;
 }
 
 bool playerHand::hasEngine(int & a_inEngine)
 {
-	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	for (auto item = m_playerTiles.begin(); item != m_playerTiles.end(); item++)
 	{
 		if ((item->isDouble() && (item->getLeftSide() == a_inEngine)))
 		{
@@ -71,12 +76,12 @@ bool playerHand::hasEngine(int & a_inEngine)
 // the current user has
 int playerHand::getHandSize()
 {
-	return int(playerTiles.size());
+	return int(m_playerTiles.size());
 }
 
 void playerHand::printHand()
 {
-	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	for (auto item = m_playerTiles.begin(); item != m_playerTiles.end(); item++)
 	{
 		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
 	}
@@ -85,7 +90,7 @@ void playerHand::printHand()
 
 void playerHand::printHandToFile(ofstream & a_inStream)
 {
-	for (auto item = playerTiles.begin(); item != playerTiles.end(); item++)
+	for (auto item = m_playerTiles.begin(); item != m_playerTiles.end(); item++)
 	{
 		a_inStream << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
 	}

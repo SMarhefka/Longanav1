@@ -13,6 +13,10 @@ class player
 public:
 	// default constuctor
 	player();
+
+	// overloaded constructor
+	player(playerHand &a_inUserHand);
+
 	// default destuctor
 	~player();
 	
@@ -54,11 +58,18 @@ public:
 
 	vector <dominoTile> tilePlayOrder();
 
+	virtual playerHand* getTestHand();
+
 protected:
 	// creates a new instance of validate class
-	validateInput m_checkInput;
+	validateInput* m_checkInput;
 	// creates a new player hand
 	playerHand m_currentHand;
+
+	//test hand
+	playerHand m_testHand;
+
+
 	// creates a new dominoTile
 	dominoTile m_userSelection;
 
