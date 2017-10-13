@@ -7,9 +7,11 @@ public:
 	// default constructor
 	computer();
 
-	computer(playerHand &a_inUserHand) : player(a_inUserHand) {};
+	computer(playerHand &a_inUserHand, int &a_inScore) : player(a_inUserHand, a_inScore)
+	{
+	};
 	// default destructor
-	~computer();
+	~computer(); 
 private:
 	// playerHand computerHand;
 };

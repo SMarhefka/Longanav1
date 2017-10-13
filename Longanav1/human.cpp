@@ -58,7 +58,7 @@ void human::playMove(gameBoard &a_inGameBoard)
 		setUserOptions(m_userSelection, m_whichSide);
 		// because the execution was successful I can also set
 		// the passed variable to false
-		setPassed(false);
+		m_HumanPass = false;
 		// I also want to reset the pass count
 		m_passCount = 0;
 	}
@@ -275,7 +275,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			{
 				m_passCount = 0;
 				// then set the passed variable to true
-				setPassed(true);
+				m_HumanPass = true;
 			}
 			m_userChoice = 0;
 			m_whichSide = ' ';

@@ -3,6 +3,7 @@
 #include "computer.h"
 #include "boneYard.h"
 #include "gameBoard.h"
+#include "fileFunctions.h"
 #include <string>
 #include <ostream>
 //fstream: Stream class to both read and write from/to files.
@@ -14,7 +15,9 @@ public:
 	// default constructor
 	gameRound();
 
-	gameRound(int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore);
+	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore);
+
+	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYard, string a_inPlayerPassed, string a_inNextPlayer);
 
 	// default destructor
 	~gameRound();
@@ -38,28 +41,38 @@ public:
 	
 	/*-----------------------Save to file functions----------------------*/
 	void askToSave();
+	
+	void executeSave(short a_inSaveOption);
 
-	bool validSaveInput(char a_inSave);
-
-	string getOutputFile();
-
-	void printToFile(int a_inPlayerIndex);
+	void printToFile(short a_inPlayerIndex);
 	/*-----------------------Save to file functions----------------------*/
+
+	unsigned short setNextPlayer(string a_inNextPlayer);
 
 private:
 	// creates a new boneYard
-	boneYard* newBoneYard;
+	boneYard* m_newBoneYard;
+	// create a new validation object
+	validateInput* m_newValidate;
+	// creates a new file functions object
+	fileFunctions* m_fileFunctions;
 	// creates a new gameBoard;
 	gameBoard newGameBoard;
 
 	vector<player*> m_gamePlayers;
+
+	bool m_isNewRound;
+
+	string m_inPassed;
+	string m_inNextPlayer;
+
 	// this variable keeps track of the engine for 
 	// the current round
 	unsigned short m_playerIndex;
 	// this is the engine variable
 	int m_engineVal;
 	// this is read in from the tournament class
-	int m_roundNum;
+	int m_roundNumber;
 	// get the tournament score
 	int m_inTourScore;
 	// variable to keep track of save

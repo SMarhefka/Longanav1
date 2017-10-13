@@ -5,9 +5,13 @@
 tournament::tournament()
 {
 	m_validateInputs = new validateInput;
+	m_fileFunctions = new fileFunctions;
+
 	m_playerList.clear();
+
 	m_playerName = "";
 	m_tournScore = 0;
+	m_roundNum = 0;
 }
 
 tournament::~tournament()
@@ -33,7 +37,7 @@ void tournament::loadUserOptions()
 	userChoice = userChoice.substr(0, 1);
 	
 	// validate the input
-	while (m_validateInputs->validUserInput(userChoice, 2) != true)
+	while (m_validateInputs->validUserSelection(userChoice, 2) != true)
 	{
 		//clear the error state
 		cin.clear();
@@ -53,21 +57,25 @@ void tournament::loadUserOptions()
 	if (stoi(userChoice) == 1)
 	{
 		newTournament();
+		createPlayers(true);
+		playTournament(true);
 	}
 	else
 	{
+		// load and gather all of the information from the file
 		loadFromFile();
-		playerHand* newHand = new playerHand(m_comHand);
-		player* compPlayer = new computer(*newHand);
-		compPlayer->getTestHand()->printHand();
+		// create players from the file information
+		createPlayers(false);
+		playTournament(false);
 	}
+	
 }
 
 void tournament::loadFromFile()
 {
 	// initialize the incoming line
 	string incomingLine;
-	string userInput = getInputFile();
+	string userInput = m_fileFunctions->getInputFile();
 	ifstream inFile(userInput.c_str());
 
 	while (!inFile.is_open())
@@ -79,7 +87,7 @@ void tournament::loadFromFile()
 		cin.clear();
 		cin.ignore();
 		cin >> userInput;
-		userInput = appendTxt(userInput);
+		userInput = m_fileFunctions->appendTxt(userInput);
 		// try to open the given file
 		inFile.open(userInput.c_str());
 	}
@@ -117,7 +125,7 @@ void tournament::loadFromFile()
 		}
 		if (firstChar == "R")
 		{
-			m_inRoundNum = stoi(groupFour);
+			m_roundNum = stoi(groupFour);
 		}
 		if (groupTwo == "Hand: ")
 		{	
@@ -144,43 +152,23 @@ void tournament::loadFromFile()
 		}
 		if (firstChar != "L" && m_isBoard == true)
 		{
+			// these will be the tiles stored into the layout
 			m_layoutTiles = createVector(groupOne);
 			m_isBoard = false;
 		}
 		if (firstChar != "B" && m_isBoneYard == true)
 		{
+			// these will be the domino tiles that will be used for the boneYard
 			m_boneyardTiles = createVector(groupOne);
 			m_isBoneYard = false;
 		}
 		if (firstChar == "P")
 		{
-			if (groupFour.substr(0, 1) == "Y")
-			{
-				m_playerPassed = true;
-			}
-			else if (groupFour.substr(0, 1) == "N")
-			{
-				m_playerPassed = false;
-			}
-			else
-			{
-				m_playerPassed = NULL;
-			}
+			m_playerPassed = groupFour.substr(0, 1);
 		}
 		if (firstChar == "N")
 		{
-			if (groupFour.substr(0, 1) == "C")
-			{
-				m_nextPlayer = 0;
-			}
-			else if (groupFour.substr(0, 1) == " ")
-			{
-				m_nextPlayer = NULL;
-			}
-			else
-			{
-				m_nextPlayer = 1;
-			}
+			m_nextPlayer = groupFour.substr(0, 1);
 		}
 	}
 	inFile.close();
@@ -188,17 +176,19 @@ void tournament::loadFromFile()
 
 void tournament::newTournament()
 {
+	string userInput;
 	cout << "What is the score that you would like to play until? ";
-	cin >> m_tournScore;
+	cin >> userInput;
 
-	while (cin.fail())
+	while (m_validateInputs->validInputNumber(userInput) != true)
 	{
 		cout << endl;
 		cin.clear();
 		cin.ignore();
 		cout << "Please enter a valid number: ";
-		cin >> m_tournScore;
+		cin >> userInput;
 	}
+	m_tournScore = stoi(userInput);
 
 	cout << "What name would you like to use? ";
 	cin >> m_playerName;
@@ -211,81 +201,74 @@ void tournament::newTournament()
 		cin >> m_playerName;
 	}
 	cout << endl;
-
-	createPlayers();
-
-	int rndNum = 1;
-	// create a newRound 
-	gameRound newRound(rndNum, m_playerList, getTourScore());
-	// newRound.setPlayerVec(m_playerList);
-	// start a new gameRound
-	newRound.setUpRound();
 }
 
-void tournament::createPlayers()
+void tournament::createPlayers(bool a_isNewGame)
 {
-	// this will create a new computer object
-	player* comPlayer = new computer();
-
-	// this will be the human player
-	player* humanPlayer = new human(m_playerName);
-
-	// place the players in a vecor
-	m_playerList.push_back(comPlayer);
-	m_playerList.push_back(humanPlayer);
-}
-
-string tournament::getInputFile()
-{
-	string fileName;
-	cout << "Enter name of the file that you want to load from" << endl;
-	cout << "Filename: ";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> fileName;
-
-	while (m_validateInputs->validFileName(fileName) != true)
+	if (a_isNewGame == true)
 	{
-		cout << "Invalid Filename - Please enter a valid filename" << endl;
-		cout << "Filename: ";
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cin >> fileName;
-		cout << endl;
+		// this will create a new computer object
+		player* comPlayer = new computer();
+		// this will be the human player
+		player* humanPlayer = new human(m_playerName);
+
+		// place the players in a vecor
+		m_playerList.push_back(comPlayer);
+		m_playerList.push_back(humanPlayer);
 	}
-	/*----Get File Info----*/
-
-	/*----Check for '.txt' in filename----*/
-	fileName = appendTxt(fileName);
-	/*----Check for '.txt' in filename----*/
-
-	// return the fileName
-	return fileName;
-}
-
-string tournament::appendTxt(string a_inFileName)
-{
-	string outputFile = a_inFileName;
-	regex fileEnding("(.txt$)");
-	/*----Check for '.txt' in filename----*/
-	if (regex_match(outputFile, fileEnding) != true)
+	else
 	{
-		outputFile.append(".txt");
-	}
-	/*----Check for '.txt' in filename----*/
+		// create a new hand with the computer's tiles
+		playerHand* tempHand;
 
-	return outputFile;
+		tempHand = new playerHand(m_comHand);
+		// create a new player with the particular hand
+		player* loadComputer = new computer(*tempHand, m_computerScore);
+
+		delete tempHand;
+
+		// create a new hand with the player's tiles
+		tempHand = new playerHand(m_playerHand);
+		// create a new player with the particular hand
+		player* loadPlayer = new human(*tempHand, m_playerScore);
+
+		delete tempHand;
+
+		// place the computer player into the playerList vector
+		m_playerList.push_back(loadComputer);
+		// place the human player into the playerList vector
+		m_playerList.push_back(loadPlayer);
+	}
+
 }
+
+void tournament::playTournament(bool a_isNewRound)
+{
+	while (tournamentOver() != true)
+	{
+		if (a_isNewRound == true)
+		{
+			// increase the round number by 1
+			m_roundNum++;
+			// create a new round
+			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore);
+		}
+		else
+		{
+			// create a new round with the prepared values
+			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore, m_boneyardTiles, m_playerPassed, m_nextPlayer);
+		}
+		// set up the current round
+		newRound->setUpRound();
+		// reset the boolean for new round so that a new round can be created
+		a_isNewRound = true;
+	}
+}
+
 
 void tournament::printScore()
 {
 	cout << "Tournament Score: " << m_tournScore << "\n";
-}
-
-int tournament::getTourScore()
-{
-	return m_tournScore;
 }
 
 void tournament::setBooleans(string a_inElementOne)
@@ -328,3 +311,14 @@ vector<dominoTile> tournament::createVector(string a_inLine)
 	return outputVector;
 }
 
+bool tournament::tournamentOver()
+{
+	for (int count = 0; count < m_playerList.size(); count++)
+	{
+		if (m_playerList.at(count)->getScore() >= m_tournScore)
+		{
+			return true;
+		}
+	}
+	return false;
+}

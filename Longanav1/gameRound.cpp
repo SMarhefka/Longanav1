@@ -6,40 +6,81 @@ gameRound::gameRound()
 {
 }
 
-gameRound::gameRound(int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTouScore)
+gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore)
 {
-	newBoneYard = new boneYard();
-	m_roundNum = a_roundNumber;
+	m_isNewRound = a_isNewRound;
+	m_roundNumber = a_roundNumber;
 	m_gamePlayers = a_gamePlayers;
 	m_engineVal = getEngine();
-	m_inTourScore = a_inTouScore;
+	m_inTourScore = a_inTourScore;
 	m_playerIndex = 0;
+	m_newBoneYard = new boneYard();
+	// create a new validate object
+	m_newValidate = new validateInput();
+	m_fileFunctions = new fileFunctions();
+}
+
+gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYardTiles, string a_inPlayerPassed, string a_inNextPlayer)
+{
+	m_isNewRound = a_isNewRound;
+	m_roundNumber = a_roundNumber;
+	m_gamePlayers = a_gamePlayers;
+	m_engineVal = getEngine();
+	m_inTourScore = a_inTourScore;
+	m_newBoneYard = new boneYard(a_inBoneYardTiles);
+	string m_inPassed = a_inPlayerPassed;
+	if (m_inPassed != " ")
+	{
+		m_playerIndex = setNextPlayer(m_inNextPlayer);
+	}
+	string m_inNextPlayer = a_inNextPlayer;
+	if (m_inNextPlayer != " ")
+	{
+		m_playerIndex = setNextPlayer(m_inNextPlayer);
+	}
+	// create a new validate object
+	m_newValidate = new validateInput();
+	m_fileFunctions = new fileFunctions();
+}
+
+unsigned short gameRound::setNextPlayer(string a_inNextPlayer)
+{
+	unsigned short tempValue;
+	if (a_inNextPlayer == "C")
+	{
+		tempValue = 0;
+	}
+	else if (a_inNextPlayer != " ")
+	{
+		tempValue = 1;
+	}
+	return tempValue;
 }
 
 void gameRound::setUpRound()
 {
-	// set the engine for the corresponding round
-	getEngine();
-	// distribute 8 tiles to each tile
-	distributeTiles();
-	// ask the user if they would like to save their game
-	askToSave();
-	// if the user selects to save the file then we just want
-	// to print everything to the file
-	if (m_saveSelection == 'Y')
+	if (m_isNewRound == true)
 	{
-		// print everything to the file
-		printToFile(-1);
-		m_saveSelection = ' ';
-		cout << "Saved File Successfully!" << endl;
-		// wait for the system
-		system("pause");
-		// exit successfully
-		exit(0);
+		// set the engine for the corresponding round
+		// getEngine();
+		// distribute 8 tiles to each tile
+		distributeTiles();
+		// ask the user if they would like to save their game
+		askToSave();
+		// if the user selects to save the file then we just want
+		// to print everything to the file
+		if (m_saveSelection == 'Y')
+		{
+			executeSave(-1);
+		}
+		// figure out the first player
+		m_playerIndex = getFirstPlayer();
 	}
-
-	// figure out the first player
-	m_playerIndex = getFirstPlayer();
+	else if (m_isNewRound!= true && m_inNextPlayer == " ")
+	{
+		// figure out the first player
+		m_playerIndex = getFirstPlayer();
+	}
 	// play the round
 	playRound();
 }
@@ -49,7 +90,7 @@ int gameRound::getEngine()
 {
 	int a_count = 1;
 	int a_engineCount = 6;
-	while (a_count != m_roundNum)
+	while (a_count != m_roundNumber)
 	{
 		if (a_engineCount == 0)
 		{
@@ -75,7 +116,7 @@ void gameRound::distributeTiles()
 		for (int count = 0; count <= 7; count++)
 		{
 			// then you want to give each player 1 tiles
-			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTileToHand(newBoneYard->dealTile());
+			m_gamePlayers.at(nextPlayerIndex)->getHand()->addTileToHand(m_newBoneYard->dealTile());
 		}
 	}
 }
@@ -86,12 +127,12 @@ unsigned short gameRound::getFirstPlayer()
 		(m_gamePlayers.at(1)->getHand()->hasEngine(m_engineVal)) == false)
 	{
 		// a_testBool = newBoneYard.isEmpty();
-		if(!newBoneYard->isEmpty())
+		if (!m_newBoneYard->isEmpty())
 		// give the computer a tile
-		m_gamePlayers.at(0)->getHand()->addTileToHand(newBoneYard->dealTile());
+		m_gamePlayers.at(0)->getHand()->addTileToHand(m_newBoneYard->dealTile());
 		// m_gamePlayers.at(0)->getHand()->printHand();
 		// give the player a tile
-		m_gamePlayers.at(1)->getHand()->addTileToHand(newBoneYard->dealTile());
+		m_gamePlayers.at(1)->getHand()->addTileToHand(m_newBoneYard->dealTile());
 		// m_gamePlayers.at(1)->getHand()->printHand();
 	}
 
@@ -116,35 +157,29 @@ void gameRound::playRound()
 	while (!(roundOver() == true))
 	{
 		// print whos move it is
+		/*
 		cout << "Before Play" << endl;
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
 		cout << "Hand: " << endl;
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 		cout << endl;
 
-		int nextPlayer;
-		if (m_gamePlayers.at(m_playerIndex)->getName() == "Computer")
-		{
-			nextPlayer = m_playerIndex + 1;
-		}
-		else
-		{
-			nextPlayer = m_playerIndex - 1;
-		}
-
+		int nextPlayer = (m_playerIndex + 1) % int(m_gamePlayers.size());
+		
 		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
 		cout << "Hand: " << endl;
 		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
 		cout << endl;
+		*/
 
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 
 		if (m_gamePlayers.at(m_playerIndex)->getPassCount() == 1)
 		{
-			if (!newBoneYard->isEmpty())
+			if (!m_newBoneYard->isEmpty())
 			{
-				m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(newBoneYard->dealTile());
+				m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(m_newBoneYard->dealTile());
 				m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
 			}
 			else
@@ -176,14 +211,8 @@ void gameRound::playRound()
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 		cout << endl;
 
-		if (m_gamePlayers.at(m_playerIndex)->getName() == "Computer")
-		{
-			nextPlayer = m_playerIndex + 1;
-		}
-		else
-		{
-			nextPlayer = m_playerIndex - 1;
-		}
+		nextPlayer = (m_playerIndex + 1) % int(m_gamePlayers.size());
+
 		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
 		cout << "Hand: ";
 		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
@@ -199,19 +228,32 @@ void gameRound::playRound()
 		// to print everything to the file
 		if (m_saveSelection == 'Y')
 		{
-			// print everything to the file
-			printToFile(m_playerIndex);
-			m_saveSelection = ' ';
-			cout << "Saved to file successfully!" << endl;
-			// wait for the system
-			system("pause");
-			// exit successfully
-			exit(0);
+			executeSave(m_playerIndex);
 		}
 
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
 	}
+}
+
+void gameRound::executeSave(short a_inSaveOption)
+{
+	if (a_inSaveOption < 0)
+	{
+		// print everything to the file
+		printToFile(-1);
+	}
+	else
+	{
+		// print everything to the file
+		printToFile(a_inSaveOption);
+	}
+	m_saveSelection = ' ';
+	cout << "Saved to file successfully!" << endl;
+	// wait for the system
+	system("pause");
+	// exit successfully
+	exit(0);
 }
 
 bool gameRound::roundOver()
@@ -226,7 +268,7 @@ bool gameRound::roundOver()
 		cout << m_gamePlayers.at(1)->getName() << " wins!\n";
 		return true;
 	}
-	if (newBoneYard->getSize() == 0 && m_gamePlayers.at(0)->getPassed() == true && m_gamePlayers.at(0)->getPassed() == true)
+	if (m_newBoneYard->getSize() == 0 && m_gamePlayers.at(0)->getPassed() == true && m_gamePlayers.at(1)->getPassed() == true)
 	{
 		return true;
 	}
@@ -236,7 +278,7 @@ bool gameRound::roundOver()
 void gameRound::printRoundNum()
 {
 	// Print the round number
-	cout << "Round No.: " << m_roundNum;
+	cout << "Round No.: " << m_roundNumber;
 	// Print an empty space
 	cout << endl;
 }
@@ -250,7 +292,7 @@ void gameRound::askToSave()
 	cin >> m_saveSelection;
 
 	// while the input fails
-	while (validSaveInput(m_saveSelection) != true)
+	while (m_newValidate->validSaveInput(m_saveSelection) != true)
 	{
 		//clear the error state
 		cin.clear();
@@ -261,49 +303,10 @@ void gameRound::askToSave()
 	}
 }
 
-bool gameRound::validSaveInput(char a_inSave)
+void gameRound::printToFile(short a_inPlayerIndex)
 {
-	if (toupper(a_inSave) == 'Y' || toupper(a_inSave) == 'N')
-	{
-		return true;
-	}
-	return false;
-}
-
-string gameRound::getOutputFile()
-{
-	string fileName;
-	cout << "Enter name of the file that you want to save to: ";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> fileName;
-
-	while (cin.fail())
-	{
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Invalid Input - Please Enter a valid filename: ";
-		cin >> fileName;
-	}
-	/*----Get File Info----*/
-
-	/*----Check for '.txt' in filename----*/
-	int findPos = int(fileName.find(".txt"));
-	if (findPos < 0)
-	{
-		fileName.append(".txt");
-	}
-	/*----Check for '.txt' in filename----*/
-
-	// return the fileName
-	return fileName;
-}
-
-void gameRound::printToFile(int a_inPlayerIndex)
-{
-	int currentPlayer;
-	int nextPlayer;
+	short currentPlayer;
+	short nextPlayer;
 
 	if (a_inPlayerIndex == -1)
 	{
@@ -330,7 +333,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 
 	/*--------------------print everything out to the file------------------*/
 	/*----Get File Info----*/
-	string userFileName = getOutputFile();
+	string userFileName = m_fileFunctions->getOutputFile();
 	// test the name of the the outputFile
 	cout << userFileName << endl;
 
@@ -341,7 +344,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 		// Print out the tournament score
 		outputFile << "Tournament Score: " << m_inTourScore << "\n";
 		// Print out the current round number
-		outputFile << "Round No.: " << m_roundNum << endl;
+		outputFile << "Round No.: " << m_roundNumber << endl;
 		// Create a space
 		outputFile << endl;
 		// print computer hand and score to file
@@ -400,7 +403,7 @@ void gameRound::printToFile(int a_inPlayerIndex)
 		// print the boneyard to file
 		outputFile << "Boneyard: " << endl;
 		// print the boneyard
-		newBoneYard->printBoneYard(outputFile);
+		m_newBoneYard->printBoneYard(outputFile);
 		// Create a space
 		outputFile << endl << endl;
 		// print if the previous player passed
@@ -446,5 +449,6 @@ void gameRound::printToFile(int a_inPlayerIndex)
 
 gameRound::~gameRound()
 {
-	delete newBoneYard;
+	delete m_newBoneYard;
+	delete m_newValidate;
 }

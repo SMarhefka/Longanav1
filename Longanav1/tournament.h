@@ -1,5 +1,6 @@
 #pragma once
 #include "gameRound.h"
+#include "fileFunctions.h"
 // reading a text file
 #include <iostream>
 #include <fstream>
@@ -20,47 +21,45 @@ public:
 	void newTournament();
 
 	// function to create players
-	void createPlayers();
+	void createPlayers(bool a_isNewGame);
 
 	// loads in a previous tournament
 	void loadFromFile();
 
-	// get the file information needed
-	string getInputFile();
-
-	string appendTxt(string a_inFileName);
+	void playTournament(bool a_isNewGame);
 
 	// print the tournament score
 	void printScore();
-
-	// return the tournament score
-	int getTourScore();
 
 	void setBooleans(string a_inElementOne);
 
 	// This creates a vector
 	vector<dominoTile> createVector(string a_inLine);
 
-private:
-	validateInput* m_validateInputs;
+	bool tournamentOver();
 
+	//boneYard* createBoard(vector<dominoTile> a_inLayoutTiles);
+
+private:
+	gameRound * newRound;
+	gameBoard* m_loadGameBoard;
+	// creates a new validation class
+	validateInput* m_validateInputs;
+	fileFunctions* m_fileFunctions;
+	// creates a new vector of players
 	vector<player*> m_playerList;
-	
-	vector<player*> m_testList;
 
 	string m_playerName;
 
 	// This will keep track of the tournament score
 	int m_tournScore;
 	// This is going to be the variable for the round number
-	int m_inRoundNum;
+	int m_roundNum;
 
 	/*--------Variables that will be used when file is read in----------*/
-
 	// this boolean will be true if we are loading up the
 	// computer variables
 	bool m_isComputer;
-
 	// This is going to be the vector for the computerHand
 	vector<dominoTile> m_comHand;
 	// this will store the commputer score
@@ -84,9 +83,9 @@ private:
 	vector<dominoTile> m_boneyardTiles;
 
 	// this boolean sets the player passed variable
-	bool m_playerPassed;
+	string m_playerPassed;
 
 	// this variable sets the next player
-	int m_nextPlayer;
+	string m_nextPlayer;
 	/*--------Variables that will be used when file is read in----------*/
 };

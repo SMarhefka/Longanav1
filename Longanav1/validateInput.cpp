@@ -135,18 +135,39 @@ bool validateInput::validFileName(string a_inFileName)
 	return true;
 }
 
-bool validateInput::validUserInput(string a_userInput, int a_inMaxOptions)
+bool validateInput::validUserSelection(string a_userInput, int a_inMaxOptions)
 {
 	string testInput = a_userInput;
-	regex digitSearch("(^\\d)");
+	regex digitSearch("(^\\d+)");
 	smatch matchElement;
 
-	if (regex_search(testInput, matchElement, digitSearch))
+	if (regex_match(testInput, matchElement, digitSearch))
 	{
 		if (stoi(matchElement[1]) >= 1 || stoi(matchElement[1]) <= a_inMaxOptions)
 		{
 			return true;
 		}
+	}
+	return false;
+}
+
+bool validateInput::validInputNumber(string a_userInput)
+{
+	string testInput = a_userInput;
+	regex digitSearch("(^\\d+)");
+
+	if (regex_match(testInput, digitSearch))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool validateInput::validSaveInput(char a_inSave)
+{
+	if (toupper(a_inSave) == 'Y' || toupper(a_inSave) == 'N')
+	{
+		return true;
 	}
 	return false;
 }

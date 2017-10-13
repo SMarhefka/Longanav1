@@ -10,6 +10,11 @@ boneYard::boneYard()
 	shuffleBoneYard();
 }
 
+boneYard::boneYard(vector<dominoTile> &a_inBoneYard)
+{
+	unusedDominos = a_inBoneYard;
+}
+
 // default destructor
 boneYard::~boneYard()
 {
@@ -34,7 +39,7 @@ void boneYard::createBoneYard()
 			dominoTile* tempTile = new dominoTile(i, j);
 			// placed for testing purposes
 			// cout << "Domino: " << i << "-" << j << endl;
-			unusedDominos.push_back(tempTile);
+			unusedDominos.push_back(*tempTile);
 			// delete the temporary domino
 			delete tempTile;
 		}
@@ -61,11 +66,11 @@ bool boneYard::isEmpty()
 dominoTile boneYard::dealTile()
 {
 	// add a tile to the players hand.
-	dominoTile* dealTile = unusedDominos.back();
+	dominoTile dealTile = unusedDominos.back();
 	// removes the tile from the boneyard
 	removeTile();
 	// return tile
-	return *dealTile;
+	return dealTile;
 }
 
 // removes a tile from the boneYard
@@ -86,7 +91,7 @@ void boneYard::printBoneYard()
 	cout << "Boneyard:" << "\n";
 	for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
 	{
-		cout << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
+		cout << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
 	}
 }
 
@@ -95,7 +100,7 @@ void boneYard::printBoneYard(ofstream & a_inStream)
 {
 	for (auto item = unusedDominos.begin(); item != unusedDominos.end(); item++)
 	{
-		a_inStream << (*item)->getLeftSide() << "-" << (*item)->getRightSide() << " ";
+		a_inStream << (item)->getLeftSide() << "-" << (item)->getRightSide() << " ";
 	}
 }
 

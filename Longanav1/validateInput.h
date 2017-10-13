@@ -22,8 +22,13 @@ public:
 	bool validSideCheck(dominoTile &a_inTile, char & a_inSide, string & a_inpName, bool & a_inPassed);
 	// checks to make sure that the user placed the engine correctly
 	bool validEnginePlacement(dominoTile &a_inTile, int & a_inEngine);
+	
 	// check to see if the filename given is valid
 	bool validFileName(string a_inFileName);
-	// checks to see if the userSelected a validl option
-	bool validUserInput(string a_userInput, int a_inMaxOptions);
+	// checks to see if the userSelected a valid option
+	bool validUserSelection(string a_userInput, int a_inMaxOptions);
+	bool validInputNumber(string a_userInput);
+
+	// validates the user input on the save option
+	bool validSaveInput(char a_inSave);
 };

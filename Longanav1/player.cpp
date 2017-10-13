@@ -8,6 +8,7 @@
 player::player()
 {
 	m_checkInput = new validateInput;
+
 	m_passCount = 0;
 	m_playerScore = 0;
 	m_userChoice = 0;
@@ -22,9 +23,9 @@ player::player()
 	m_playerName = "Computer";
 }
 
-player::player(playerHand &a_inUserHand)
+player::player(playerHand a_inUserHand, int a_inScore)
 {
-	m_testHand = a_inUserHand;
+	m_currentHand = a_inUserHand;
 	m_playerName = "Computer";
 }
 
@@ -49,7 +50,7 @@ void player::playMove(gameBoard &a_inGameBoard)
 		}
 		setUserOptions(m_userSelection, m_whichSide);
 		m_passCount = 0;
-		setPassed(false);
+		m_ComputerPass = false;
 	}
 	// otherwise
 	else
@@ -118,7 +119,7 @@ void player::playMove(gameBoard &a_inGameBoard)
 			{
 				m_passCount = 0;
 				// then set the passed variable to true
-				setPassed(true);
+				m_ComputerPass = true;
 			}
 			m_userChoice = 0;
 			m_whichSide = ' ';
@@ -130,7 +131,7 @@ void player::playMove(gameBoard &a_inGameBoard)
 		if (m_validMove == true)
 		{
 			setUserOptions(m_userSelection, m_whichSide);
-			setPassed(false);
+			m_ComputerPass = true;
 			m_passCount = 0;
 		}
 	}
@@ -413,24 +414,6 @@ vector<dominoTile> player::tilePlayOrder()
 	//}
 
 	return playList;
-}
-
-playerHand* player::getTestHand()
-{
-	return &m_testHand;
-	//return playerHand();
-}
-
-void player::setPassed(bool a_playerPass)
-{
-	if (m_playerName == "Computer")
-	{
-		m_ComputerPass = a_playerPass;
-	}
-	else
-	{
-		m_HumanPass = a_playerPass;
-	}
 }
 
 void player::setUserOptions(dominoTile & a_userTile, char & a_incomingSide)

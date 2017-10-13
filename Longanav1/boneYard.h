@@ -21,6 +21,9 @@ class boneYard
 public:
 	// default constructor
 	boneYard();
+
+	boneYard(vector<dominoTile> &a_inBoneYard);
+
 	// default destructor
 	~boneYard();
 
@@ -52,5 +55,5 @@ private:
 	// need a shared pointer to avoid object slicing
 	// this shared pointer will also be useful when polymorphism
 	// needs to be implemented.
-	vector<dominoTile*> unusedDominos;
+	vector<dominoTile> unusedDominos;
 };

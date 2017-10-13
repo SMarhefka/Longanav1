@@ -15,7 +15,7 @@ public:
 	player();
 
 	// overloaded constructor
-	player(playerHand &a_inUserHand);
+	player(playerHand a_inUserHand, int a_inScore);
 
 	// default destuctor
 	~player();
@@ -50,25 +50,17 @@ public:
 
 	int getPassCount();
 
-	void setPassed(bool a_playerPass);
-
 	void setUserOptions(dominoTile & a_userTile, char & a_incomingSide);
 
 	int handTotal();
 
 	vector <dominoTile> tilePlayOrder();
 
-	virtual playerHand* getTestHand();
-
 protected:
 	// creates a new instance of validate class
 	validateInput* m_checkInput;
 	// creates a new player hand
 	playerHand m_currentHand;
-
-	//test hand
-	playerHand m_testHand;
-
 
 	// creates a new dominoTile
 	dominoTile m_userSelection;

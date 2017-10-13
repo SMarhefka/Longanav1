@@ -17,6 +17,11 @@ public:
 	// of a player name
 	human(string inName);
 
+	// creates a new human with the playerhand and the player score
+	human(playerHand &a_inUserHand, int &a_inScore) : player(a_inUserHand, a_inScore)
+	{
+	};
+
 	// default destructor
 	~human();
 
