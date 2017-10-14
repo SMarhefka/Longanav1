@@ -1,7 +1,11 @@
-#pragma once
-#include <iostream>
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
 
-using namespace std;
+#pragma once
 
 class dominoTile
 {
@@ -9,36 +13,29 @@ public:
 	// default constructor
 	dominoTile();
 
-	// default destructor
-	~dominoTile();
-
 	// create a new domino tile with specific pips
 	dominoTile(int a_leftSide, int a_rightSide);
 
-	// this will return the left-side of the tile
+	// this will return the left-side of the domino tile
 	int getLeftSide();
-	// this will return the right-side of the tile
+
+	// this will return the right-side of the domino tile
 	int getRightSide();
 
-	// this will return the actual tile
-	dominoTile getTile();
-
-	// this will return the actual tile
-	void setTile(int a_leftSide, int a_rightSide);
-
-	// this will return weather or not the tile is double
+	// checks to see if a domino tile is a double
 	bool isDouble();
 
 	// this will reverse the tile
 	dominoTile reverseTile();
 
-	// this will count the total of the tile
-	// this will be important when summing up the
-	// tiles at the end of a gameRound.
+	// this will count the total pips of the tile
 	int tileSum();
 
 	// this function will display the tile to the console
 	void printTile();
+
+	// default destructor
+	~dominoTile();
 
 private:
 	int m_leftSide;
