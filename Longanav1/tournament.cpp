@@ -100,6 +100,8 @@ void tournament::loadFromFile()
 	{
 		// prints out the current line that we are on
 		// cout << incomingLine << endl;
+		// going to change to: 
+		//((\w)\w+)+.*?[:]+(.*)|([\w\d-\d]+?.*)
 		regex searchCase("(((\\w)\\w+.*[:][^\\w]|[^\\s])(.*))");
 		smatch matchGroup;
 		// initialize the first element
@@ -115,6 +117,7 @@ void tournament::loadFromFile()
 		if (regex_search(incomingLine, matchGroup, searchCase) == true)
 		{
 			lineWithText++;
+
 			firstChar = matchGroup[3];
 			groupOne = matchGroup[1];
 			groupTwo = matchGroup[2];

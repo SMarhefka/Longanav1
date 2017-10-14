@@ -28,11 +28,7 @@ gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_g
 	m_engineVal = getEngine();
 	m_inTourScore = a_inTourScore;
 	m_newBoneYard = new boneYard(a_inBoneYardTiles);
-	m_inNextPlayer = a_inNextPlayer;
-	if (m_inNextPlayer != -1)
-	{
-		m_playerIndex = m_inNextPlayer;
-	}
+	m_playerIndex = a_inNextPlayer;
 	// create a new validate object
 	m_newValidate = new validateInput();
 	m_fileFunctions = new fileFunctions();
@@ -55,9 +51,9 @@ void gameRound::setUpRound()
 			executeSave(-1);
 		}
 		// figure out the first player
-		m_playerIndex = getFirstPlayer();
+		// m_playerIndex = getFirstPlayer();
 	}
-	else if (m_isNewRound!= true && m_inNextPlayer == -1)
+	else if (m_isNewRound = true || m_playerIndex == -1)
 	{
 		// figure out the first player
 		m_playerIndex = getFirstPlayer();
@@ -102,19 +98,46 @@ void gameRound::distributeTiles()
 	}
 }
 
+bool gameRound::engineInHands()
+{
+	int numHands = 0;
+
+	// go through each hand
+	for (int count = 0; count < m_gamePlayers.size(); count++)
+	{
+		// the player doesn't have the engine
+		if (m_gamePlayers.at(count)->getHand()->hasEngine(m_engineVal) == false)
+		{
+			// increase numHands by 1
+			numHands++;
+		}
+	}
+	// if the number of hands (without an engine) == the number of players
+	// then nobody has the engine
+	if (numHands == (m_gamePlayers.size() - 1))
+	{
+		return false;
+	}
+	return true;
+}
+
 unsigned short gameRound::getFirstPlayer()
 {
-	while ((m_gamePlayers.at(0)->getHand()->hasEngine(m_engineVal)) == false && 
-		(m_gamePlayers.at(1)->getHand()->hasEngine(m_engineVal)) == false)
+	/*
+	while ((m_gamePlayers.at(0)->getHand()->hasEngine(m_engineVal)) == false && (m_gamePlayers.at(1)->getHand()->hasEngine(m_engineVal)) == false)
+	*/
+	while (engineInHands() == false)
 	{
 		// a_testBool = newBoneYard.isEmpty();
 		if (!m_newBoneYard->isEmpty())
-		// give the computer a tile
-		m_gamePlayers.at(0)->getHand()->addTileToHand(m_newBoneYard->dealTile());
-		// m_gamePlayers.at(0)->getHand()->printHand();
-		// give the player a tile
-		m_gamePlayers.at(1)->getHand()->addTileToHand(m_newBoneYard->dealTile());
-		// m_gamePlayers.at(1)->getHand()->printHand();
+		{
+			// give the computer a tile
+			m_gamePlayers.at(0)->getHand()->addTileToHand(m_newBoneYard->dealTile());
+			// m_gamePlayers.at(0)->getHand()->printHand();
+			// give the player a tile
+			m_gamePlayers.at(1)->getHand()->addTileToHand(m_newBoneYard->dealTile());
+			// m_gamePlayers.at(1)->getHand()->printHand();
+		}
 	}
 
 	// if the computer has the engine then the 
@@ -286,146 +309,142 @@ void gameRound::askToSave()
 
 void gameRound::printToFile(short a_inPlayerIndex)
 {
-	short currentPlayer;
-	short nextPlayer;
+	short currPlayerIndex;
+	short nextPlayerIndex;
 
 	if (a_inPlayerIndex == -1)
 	{
-		currentPlayer = 0;
-		nextPlayer = (currentPlayer + 1) % int(m_gamePlayers.size());
+		currPlayerIndex = 0;
 	}
 	else
 	{
-		currentPlayer = a_inPlayerIndex;
-		nextPlayer = (a_inPlayerIndex + 1) % int(m_gamePlayers.size());
+		nextPlayerIndex = a_inPlayerIndex;
 	}
-	
-	/*----------figure out if the current player is the computer---------------*/
-	bool currPlyrCom;
-	if (m_gamePlayers.at(currentPlayer)->getName() == "Computer")
-	{
-		currPlyrCom = true;
-	}
-	else
-	{
-		currPlyrCom = false;
-	}
-	/*----------figure out if the current player is the computer---------------*/
 
+	nextPlayerIndex = (currPlayerIndex + 1) % int(m_gamePlayers.size());
 	/*--------------------print everything out to the file------------------*/
-	/*----Get File Info----*/
-	string userFileName = m_fileFunctions->getOutputFile();
-	// test the name of the the outputFile
-	cout << userFileName << endl;
 
+	/*-------------------Get File Info---------------------*/
+	string userFileName = m_fileFunctions->getOutputFile();
 	ofstream outputFile(userFileName.c_str());
 
-	if (!outputFile.fail())
+	// test the name of the the outputFile
+	// cout << userFileName << endl;
+
+	while (!outputFile.is_open())
 	{
-		// Print out the tournament score
-		outputFile << "Tournament Score: " << m_inTourScore << "\n";
-		// Print out the current round number
-		outputFile << "Round No.: " << m_roundNumber << endl;
-		// Create a space
-		outputFile << endl;
-		// print computer hand and score to file
-		outputFile << "Computer: " << endl;
-		outputFile << "    " << "Hand: ";
-		if (currPlyrCom == true)
-		{
-			m_gamePlayers.at(currentPlayer)->getHand()->printHandToFile(outputFile);
-		}
-		else
-		{
-			m_gamePlayers.at(nextPlayer)->getHand()->printHandToFile(outputFile);
-		}
-		outputFile << endl;
-		// print the scores
-		outputFile << "    " << "Score: ";
-		if (currPlyrCom == true)
-		{
-			outputFile << m_gamePlayers.at(currentPlayer)->getScore();
-		}
-		else
-		{
-			outputFile << m_gamePlayers.at(nextPlayer)->getScore();
-		}
-		// Create a space
-		outputFile << endl << endl;
-		// print human hand and score to file
-		outputFile << "Human: " << endl;
-		outputFile << "    " << "Hand: ";
-		if (currPlyrCom == true)
-		{
-			m_gamePlayers.at(nextPlayer)->getHand()->printHandToFile(outputFile);
-		}
-		else
-		{
-			m_gamePlayers.at(currentPlayer)->getHand()->printHandToFile(outputFile);
-		}
-		// Create a space
-		outputFile << endl;
-		outputFile << "    " << "Score: ";
-		if (currPlyrCom == true)
-		{
-			outputFile << m_gamePlayers.at(currentPlayer)->getScore();
-		}
-		else
-		{
-			outputFile << m_gamePlayers.at(nextPlayer)->getScore();
-		}
-		// Create a space
-		outputFile << endl << endl;
-		// print the layout to the file
-		outputFile << "Layout: " << endl;
-		newGameBoard.printBoardToFile(outputFile);
-		// Create a space
-		outputFile << endl << endl;
-		// print the boneyard to file
-		outputFile << "Boneyard: " << endl;
-		// print the boneyard
-		m_newBoneYard->printBoneYard(outputFile);
-		// Create a space
-		outputFile << endl << endl;
-		// print if the previous player passed
-		outputFile << "Previous Player Passed: ";
-		// if the current player is the computer then the previous
-		// player is the human.  With the way my get passed works
-		// it returns if the previous player has passed 
-		if (a_inPlayerIndex == -1)
-		{
-			outputFile << "";
-		}
-		else
-		{
-			if (m_gamePlayers.at(currentPlayer)->getPassed() == true)
-			{
-				outputFile << "Yes";
-			}
-			else
-			{
-				outputFile << "No";
-			}
-		}
-		// Create a space
-		outputFile << endl << endl;
-		// print the next player
-		outputFile << "Next Player: ";
-		if (a_inPlayerIndex == -1)
-		{
-			outputFile << "";
-		}
-		else
-		{
-			outputFile << m_gamePlayers.at(nextPlayer)->getName() << endl;
-		}
-		outputFile.close();
+		cout << endl;
+		cout << "Unable to open requested file. Please provide another file. " << endl;
+		cout << "Filename: ";
+		// clear the error
+		cin.clear();
+		cin.ignore();
+		cin >> userFileName;
+		userFileName = m_fileFunctions->appendTxt(userFileName);
+		// try to open the given file
+		outputFile.open(userFileName.c_str());
+	}
+	/*-------------------Get File Info---------------------*/
+
+	// Print out the tournament score
+	outputFile << "Tournament Score: " << m_inTourScore << "\n";
+	// Print out the current round number
+	outputFile << "Round No.: " << m_roundNumber << endl;
+	// Create a space
+	outputFile << endl;
+	// print computer hand and score to file
+	outputFile << "Computer: " << endl;
+	outputFile << "    " << "Hand: ";
+	if (currPlayerIndex == 0)
+	{
+		m_gamePlayers.at(currPlayerIndex)->getHand()->printHandToFile(outputFile);
 	}
 	else
 	{
-		cout << "Unable to open file\n";
+		m_gamePlayers.at(nextPlayerIndex)->getHand()->printHandToFile(outputFile);
 	}
-	/*----------print everything out to the file---------------*/
+	outputFile << endl;
+	// print the scores
+	outputFile << "    " << "Score: ";
+	if (currPlayerIndex == 0)
+	{
+		outputFile << m_gamePlayers.at(currPlayerIndex)->getScore();
+	}
+	else
+	{
+		outputFile << m_gamePlayers.at(nextPlayerIndex)->getScore();
+	}
+	// Create a space
+	outputFile << endl << endl;
+	// print human hand and score to file
+	outputFile << "Human: " << endl;
+	outputFile << "    " << "Hand: ";
+	if (currPlayerIndex == 0)
+	{
+		m_gamePlayers.at(nextPlayerIndex)->getHand()->printHandToFile(outputFile);
+	}
+	else
+	{
+		m_gamePlayers.at(currPlayerIndex)->getHand()->printHandToFile(outputFile);
+	}
+	// Create a space
+	outputFile << endl;
+	outputFile << "    " << "Score: ";
+	if (currPlayerIndex == 0)
+	{
+		outputFile << m_gamePlayers.at(nextPlayerIndex)->getScore();
+	}
+	else
+	{
+		outputFile << m_gamePlayers.at(currPlayerIndex)->getScore();
+	}
+	// Create a space
+	outputFile << endl << endl;
+	// print the layout to the file
+	outputFile << "Layout: " << endl;
+	newGameBoard.printBoardToFile(outputFile);
+	// Create a space
+	outputFile << endl << endl;
+	// print the boneyard to file
+	outputFile << "Boneyard: " << endl;
+	// print the boneyard
+	m_newBoneYard->printBoneYard(outputFile);
+	// Create a space
+	outputFile << endl << endl;
+	// print if the previous player passed
+	outputFile << "Previous Player Passed: ";
+	// if the current player is the computer then the previous
+	// player is the human.  With the way my get passed works
+	// it returns if the previous player has passed 
+	if (a_inPlayerIndex == -1)
+	{
+		outputFile << " ";
+	}
+	else
+	{
+		if (m_gamePlayers.at(currPlayerIndex)->getPassed() == true)
+		{
+			outputFile << "Yes";
+		}
+		else
+		{
+			outputFile << "No";
+		}
+	}
+	// Create a space
+	outputFile << endl << endl;
+	// print the next player
+	outputFile << "Next Player: ";
+	if (a_inPlayerIndex == -1)
+	{
+		outputFile << " ";
+	}
+	else
+	{
+		outputFile << m_gamePlayers.at(nextPlayerIndex)->getName() << endl;
+	}
+	outputFile.close();
+	/*---------------print everything out to the file----------------*/
 }
 
 gameRound::~gameRound()

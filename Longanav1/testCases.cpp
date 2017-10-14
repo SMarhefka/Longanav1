@@ -21,7 +21,6 @@ void testCases::testDomino()
 	//cout << "get tile " << newDomino.getTile() << "\n";
 	newDomino.printTile();
 	system("pause");
-	newDomino.setTile(6, 2);
 	cout << "left-side " << newDomino.getLeftSide() << "\n";
 	cout << "right-side " << newDomino.getRightSide() << "\n";
 	newDomino.printTile();

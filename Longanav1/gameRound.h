@@ -43,7 +43,9 @@ public:
 	void printToFile(short a_inPlayerIndex);
 	/*-----------------------Save to file functions----------------------*/
 
-	unsigned short setNextPlayer(string a_inNextPlayer);
+	//unsigned short setNextPlayer(string a_inNextPlayer);
+
+	bool engineInHands();
 
 private:
 	// creates a new boneYard
@@ -60,7 +62,7 @@ private:
 	bool m_isNewRound;
 
 	string m_inPassed;
-	short m_inNextPlayer;
+	// short m_inNextPlayer;
 
 	// this variable keeps track of the engine for 
 	// the current round
