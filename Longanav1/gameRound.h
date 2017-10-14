@@ -4,10 +4,6 @@
 #include "boneYard.h"
 #include "gameBoard.h"
 #include "fileFunctions.h"
-#include <string>
-#include <ostream>
-//fstream: Stream class to both read and write from/to files.
-#include <fstream>
 
 class gameRound
 {

@@ -1,8 +1,5 @@
 #pragma once
 #include "player.h"
-#include <iostream>
-#include <iomanip>
-#include <fstream>
 
 // human is the derived class
 // this means that this class will inherits all 
@@ -18,9 +15,14 @@ public:
 	human(string a_inName);
 
 	// creates a new human with the playerhand and the player score
-	human(playerHand a_inUserHand, int a_inScore, bool a_inPassed) : player(a_inUserHand, a_inScore)
+	human(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed, string a_inPlayerName) : player(a_inUserHand, a_inScore, a_inComPassed, a_inPlyerPassed)
 	{
-		m_HumanPass = a_inPassed;
+	
+		m_playerName = setName(a_inPlayerName);
+		m_tempUserChoice = 0;
+		m_enginePosition = 0;
+		m_tileChoice = 0;
+		m_exeSucc = 0;
 	};
 
 	// default destructor

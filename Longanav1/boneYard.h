@@ -1,21 +1,6 @@
 #pragma once
 #include "dominoTile.h"
-#include <vector>
-#include <memory>
-//this library contains a function called random_shuffle
-#include <algorithm>
-//this library provides use with the time function needed
-#include <time.h>
-#include <fstream>
 
-using namespace std;
-
-// This is the boneyard or stock for the dominos game
-// This class is responsible for:
-// - creating a new boneyard (at first 28 domino tiles)
-// - shuffling the domino tiles 
-// - handing out tiles until it is empty
-// - printing the dominos left in the boneyard onto the screen
 class boneYard
 {
 public:

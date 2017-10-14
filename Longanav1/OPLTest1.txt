@@ -15,6 +15,6 @@ Layout:
 Boneyard: 
 0-6 3-6 4-4 1-1 2-2 5-5 1-4 0-2 1-6 0-0 3-3 1-5 
 
-Previous Player Passed: No
+Previous Player Passed: Yes
 
 Next Player: Computer

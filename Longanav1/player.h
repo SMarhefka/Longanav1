@@ -1,10 +1,9 @@
 #pragma once
-#include <iostream>
 #include "playerHand.h"
 #include "boneyard.h"
 #include "gameBoard.h"
 #include "validateInput.h"
-#include <fstream>
+
 
 using namespace std;
 
@@ -15,7 +14,7 @@ public:
 	player();
 
 	// overloaded constructor
-	player(playerHand a_inUserHand, int a_inScore);
+	player(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed);
 
 	// default destuctor
 	~player();
@@ -55,6 +54,10 @@ public:
 	int handTotal();
 
 	vector <dominoTile> tilePlayOrder();
+
+	void player::setHumanPass(bool &a_humanPassed);
+
+	string setName(string a_inName);
 
 protected:
 	// creates a new instance of validate class

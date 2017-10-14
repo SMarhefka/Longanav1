@@ -1,13 +1,6 @@
 #pragma once
 #include "gameRound.h"
 #include "fileFunctions.h"
-// reading a text file
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <regex>
-#include <string>
-#include <cstring>
 
 class tournament
 {
@@ -40,13 +33,11 @@ public:
 
 	bool getPassed(short a_inPlyrIndex, string m_playerPassed, short a_currIndex);
 
-	//boneYard* createBoard(vector<dominoTile> a_inLayoutTiles);
-
 private:
 	gameRound * newRound;
 	gameBoard* m_loadGameBoard;
 	// creates a new validation class
-	validateInput* m_validateInputs;
+	validateInput* m_validateInputs; 
 	fileFunctions* m_fileFunctions;
 	// creates a new vector of players
 	vector<player*> m_playerList;

@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "player.h"
 
-//for testing only
-#include <string>
-
 // this is the base class
 player::player()
 {
@@ -22,10 +19,12 @@ player::player()
 	m_playerName = "Computer";
 }
 
-player::player(playerHand a_inUserHand, int a_inScore)
+player::player(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed)
 {
 	m_currentHand = a_inUserHand;
 	m_playerScore = a_inScore;
+	m_ComputerPass = a_inComPassed;
+	m_HumanPass = a_inPlyerPassed;
 }
 
 player::~player()
@@ -202,6 +201,14 @@ bool player::checkTileSelection(gameBoard &a_inGameBoard, dominoTile &a_inUserTi
 	return false;
 }
 
+string player::setName(string a_inName)
+{
+	if (a_inName == "")
+	{
+		return string("Human");
+	}
+	return string(a_inName);
+}
 string player::getName()
 {
 	return string(m_playerName);
@@ -419,4 +426,9 @@ void player::setUserOptions(dominoTile & a_userTile, char & a_incomingSide)
 {
 	m_userSelection = a_userTile;
 	m_whichSide = a_incomingSide;
+}
+
+void player::setHumanPass(bool &a_humanPassed)
+{
+	m_HumanPass = a_humanPassed;
 }

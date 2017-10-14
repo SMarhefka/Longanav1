@@ -7,9 +7,9 @@ public:
 	// default constructor
 	computer();
 
-	computer(playerHand a_inUserHand, int a_inScore, bool a_inPassed) : player(a_inUserHand, a_inScore)
+	computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed) : player(a_inUserHand, a_inScore, a_inComPassed, a_inPlyerPassed)
 	{
-		m_ComputerPass = a_inPassed;
+		m_playerName = "Computer";
 	};
 	// default destructor
 	~computer(); 

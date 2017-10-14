@@ -5,7 +5,7 @@
 human::human()
 {
 	//cout << "I'm creating a human\n";
-	m_playerName = "Human";
+	m_playerName = setName("");
 	m_playerScore = 0;
 	m_tempUserChoice = 0;
 	m_enginePosition = 0;
@@ -16,7 +16,7 @@ human::human()
 human::human(string a_inName)
 {
 	// cout << "I'm creating a human with a name: " << playerType << "\n";
-	m_playerName = a_inName;
+	m_playerName = setName(a_inName);
 	m_playerScore = 0;
 	m_tempUserChoice = 0;
 	m_enginePosition = 0;
@@ -395,4 +395,10 @@ playerHand* human::getHand()
 {
 	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
 	return & m_currentHand;
+}
+
+bool human::getHumanPass()
+{
+	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
+	return m_HumanPass;
 }
