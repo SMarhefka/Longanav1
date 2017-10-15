@@ -15,10 +15,15 @@ public:
 	computer();
 
 	// Overloaded constructor
+	/*
 	computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed) : player(a_inUserHand, a_inScore, a_inComPassed, a_inPlyerPassed)
 	{
 		m_playerName = "Computer";
 	};
+	*/
+
+	// Overloaded constructor
+	computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed);
 
 	// Default destructor
 	~computer(); 
