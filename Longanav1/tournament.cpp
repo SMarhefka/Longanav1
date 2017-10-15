@@ -77,7 +77,8 @@ void tournament::loadFromFile()
 {
 	// initialize the incoming line
 	string incomingLine;
-	string userInput = m_fileFunctions->getInputFile();
+	string outputMessage = "Enter name of the file that you want to load from";
+	string userInput = m_fileFunctions->getFile(outputMessage);
 	ifstream inFile(userInput.c_str());
 	int lineWithText = 0;
 

@@ -325,7 +325,8 @@ void gameRound::printToFile(short a_inPlayerIndex)
 	/*--------------------print everything out to the file------------------*/
 
 	/*-------------------Get File Info---------------------*/
-	string userFileName = m_fileFunctions->getOutputFile();
+	string userMessage = "Enter name of the file that you want to save to: ";
+	string userFileName = m_fileFunctions->getFileFromUser(userMessage);
 	ofstream outputFile(userFileName.c_str());
 
 	// test the name of the the outputFile

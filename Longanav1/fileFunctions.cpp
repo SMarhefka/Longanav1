@@ -1,21 +1,85 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
+
 #include "stdafx.h"
 #include "fileFunctions.h"
 
+/************************************************************************
+Function Name: fileFunctions()
+Purpose: Default constructor
 
+Parameters: None
+Return Value: Constructor
+Local Variables: None
+Algorithm:
+1. Set the private variable m_fileName to an empty string
+Assistance Received: None
+************************************************************************/
 fileFunctions::fileFunctions()
 {
-	m_tempValid = new validateInput;
+	m_fileName = "";
 }
 
-string fileFunctions::getInputFile()
+/************************************************************************
+Function Name: getFile(string a_inMessage)
+Purpose: Return a valid filename that the user requested in the correct
+		 format ready for reading or writing
+
+Parameters:
+string a_inMessage --> the message to be diplayed to the user
+
+Return Value: string
+Local Variables: None
+Algorithm:
+1. Call the askForFile(a_inMessage) function which will ask the user
+   for a fileName.
+2. Once given a valid fileName call appendTxt() to see if a .txt
+   extension needs to be added onto the fileName
+3. Return the updated fileName to the caller function
+
+Assistance Received: None
+************************************************************************/
+string fileFunctions::getFile(string a_inMessage)
 {
-	string fileName;
-	cout << "Enter name of the file that you want to load from" << endl;
+	askForFile(a_inMessage);
+	appendTxt();
+	return m_fileName;
+}
+
+/************************************************************************
+Function Name: askForFile(string a_inMessage)
+Purpose: Function to ask the user for input
+Parameters:
+string a_inMessage --> the message to be diplayed to the user
+
+Return Value: None
+Local Variables:
+string fileName --> stores the name of the file given to us by the user
+
+Algorithm:
+1. Print out the message stored in a_inMessage for the user
+2. Clear the input buffer and wait for user input
+3. Once user provides an input check to see if it is valid by calling
+   the validFileName(fileName) function.  If the user input is not valid
+   display an error message and wait for new input
+4. Once a valid filename is given then set it to the private 
+   variable m_fileName
+
+Assistance Received: None
+************************************************************************/
+void fileFunctions::askForFile(string a_inMessage)
+{
+	string fileName = "";
+	cout << a_inMessage << endl;
 	cout << "Filename: ";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> fileName;
 
-	while (m_tempValid->validFileName(fileName) != true)
+	while (validFileName(fileName) != true)
 	{
 		cout << "Invalid Filename - Please enter a valid filename" << endl;
 		cout << "Filename: ";
@@ -26,58 +90,67 @@ string fileFunctions::getInputFile()
 		cin >> fileName;
 		cout << endl;
 	}
-	/*----Get File Info----*/
 
-	/*----Check for '.txt' in filename----*/
-	fileName = appendTxt(fileName);
-	/*----Check for '.txt' in filename----*/
-
-	// return the fileName
-	return fileName;
+	m_fileName = fileName;
 }
 
-string fileFunctions::appendTxt(string a_inFileName)
+/************************************************************************
+Function Name: validFileName(string a_inFileName)
+Purpose: Checks to see if the entered filename is valid
+Parameters:
+string a_inFileName --> the fileName that needs to be checked
+
+Return Value: bool
+Local Variables: None
+Algorithm:
+1. Set the invalidPattern to check against the file. An invalid file
+   is any string that has a symbol before any alphabetical values
+2. If regex_match returns true then the filename given is invalid.
+   Otherwise it is safe to assume that the filename given is valid.
+
+Assistance Received: None
+************************************************************************/
+bool fileFunctions::validFileName(string a_inFileName)
 {
-	string outputFile = a_inFileName;
+	regex invalidPatten("(([^\\w]+)(.*))");
+	if (regex_match(a_inFileName, invalidPatten))
+	{
+		return false;
+	}
+	return true;
+}
+
+/************************************************************************
+Function Name: appendTxt()
+Purpose: Function to append .txt to the end of a given filename
+Parameters: None
+Return Value: None
+Local Variables: None
+Algorithm:
+1. Set the search pattern to .txt at the end of a string
+2. If regex_match returns false then .txt has to be added to the end of
+   the filename string. Otherwise nothing needs to be done.
+
+Assistance Received: None
+************************************************************************/
+void fileFunctions::appendTxt()
+{
 	regex fileEnding("(.txt$)");
-	/*----Check for '.txt' in filename----*/
-	if (regex_match(outputFile, fileEnding) != true)
+	if (regex_match(m_fileName, fileEnding) != true)
 	{
-		outputFile.append(".txt");
+		m_fileName.append(".txt");
 	}
-	/*----Check for '.txt' in filename----*/
-
-	return outputFile;
 }
 
-string fileFunctions::getOutputFile()
-{
-	string fileName;
-	cout << "Enter name of the file that you want to save to: ";
-	cout << "Filename: ";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> fileName;
-
-	while (m_tempValid->validFileName(fileName) != true)
-	{
-		cout << "Invalid Filename - Please enter a valid filename" << endl;
-		cout << "Filename: ";
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cin >> fileName;
-		cout << endl;
-	}
-
-	/*----Check for '.txt' in filename----*/
-	fileName = appendTxt(fileName);
-	/*----Check for '.txt' in filename----*/
-
-	// return the fileName
-	return fileName;
-}
-
+/************************************************************************
+Function Name: ~fileFunctions()
+Purpose: Default Destructor
+Parameters: None
+Return Value: Constructor
+Local Variables: None
+Algorithm: None
+Assistance Received: None
+************************************************************************/
 fileFunctions::~fileFunctions()
 {
 }

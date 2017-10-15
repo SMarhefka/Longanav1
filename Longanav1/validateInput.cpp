@@ -124,17 +124,6 @@ bool validateInput::validEnginePlacement(dominoTile & a_inTile, int & a_inEngine
 	return false;
 }
 
-bool validateInput::validFileName(string a_inFileName)
-{
-	string testString = a_inFileName;
-	regex invalidPatten("(([^\\w]+)(.*))");
-	if (regex_match(testString, invalidPatten))
-	{
-		return false;
-	}
-	return true;
-}
-
 bool validateInput::validUserSelection(string a_userInput, int a_inMaxOptions)
 {
 	string testInput = a_userInput;

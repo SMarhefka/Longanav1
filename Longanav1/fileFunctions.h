@@ -1,28 +1,36 @@
-#pragma once
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <regex>
-#include <string>
-#include <cstring>
-#include "validateInput.h"
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
 
-using namespace std;
+#pragma once
+#include "validateInput.h"
 
 class fileFunctions
 {
 public:
+	// Default constructor
 	fileFunctions();
+
+	// Function to ask the user for input
+	void askForFile(string a_inMessage);
+
+	// Checks to see if the entered filename is valid
+	bool validFileName(string a_inFileName);
+
+	// Function to append .txt to the end of a given filename
+	void appendTxt();
+
+	// This function will return a valid filename that the user
+	// requested in the correct format ready for reading or writing
+	string getFile(string a_inMessage);
+
+	// Default destructor
 	~fileFunctions();
 
-	// gets the input file from the user
-	string getInputFile();
-	// gets the output file from the user
-	string getOutputFile();
-	// function to append .txt to the end of a given filename
-	string appendTxt(string a_inFileName);
-
 private:
-	validateInput* m_tempValid;
+	string m_fileName;
 };
 
