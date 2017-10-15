@@ -47,6 +47,33 @@ dominoTile::dominoTile(int a_leftSide, int a_rightSide)
 }
 
 /************************************************************************
+Function Name: reverseTile()
+Purpose: Flips the left and right hand values of the domino tile
+Parameters:None
+Return Value: Constructor
+Local Variables:
+int m_tempPip --> temporarily stores the left hand value of the tile
+
+Algorithm:
+1. Store the left side value of the domino tile into m_tempPip
+2. Set the left side value of the tile to the right side value
+3. Set the right side value to the previously stored left side value
+4. Return a domino tile that the new values
+
+Assistance Received: None
+************************************************************************/
+dominoTile dominoTile::reverseTile()
+{
+	// create a temporary variable and set it to the left-hand side
+	int m_tempPip = m_leftSide;
+	// then set the left-hand side = to the right-hand side
+	m_leftSide = m_rightSide;
+	// finally set the right-hand side to the temporary variable
+	m_rightSide = m_tempPip;
+	return dominoTile(m_leftSide, m_rightSide);
+}
+
+/************************************************************************
 Function Name: getLeftSide()
 Purpose: This function will return the left-hand value of a domino tile
 Parameters:None
@@ -76,6 +103,28 @@ Assistance Received: None
 int dominoTile::getRightSide()
 {
 	return m_rightSide;
+}
+
+/************************************************************************
+Function Name: tileSum()
+Purpose: Calculates the total of the tile
+Parameters:None
+Return Value: int
+Local Variables:
+int m_sumPips --> Stores the summation of the left side value plus the
+right side value
+
+Algorithm:
+1. Add m_leftSide and m_rightSide together
+2. Set the total to the local varaible m_sumPips
+3. Return the local variable
+
+Assistance Received: None
+************************************************************************/
+int dominoTile::tileSum()
+{
+	int m_sumPips = m_leftSide + m_rightSide;
+	return m_sumPips;
 }
 
 /************************************************************************
@@ -113,58 +162,7 @@ void dominoTile::printTile()
 }
 
 /************************************************************************
-Function Name: reverseTile()
-Purpose: Flips the left and right hand values of the domino tile
-Parameters:None
-Return Value: A dominoTile object
-
-Local Variables:
-int m_tempPip --> temporarily stores the left hand value of the tile
-
-Algorithm:
-1. Store the left side value of the domino tile into m_tempPip
-2. Set the left side value of the tile to the right side value
-3. Set the right side value to the previously stored left side value
-4. Return a domino tile that the new values
-
-Assistance Received: None
-************************************************************************/
-// this function will reverse the tile
-dominoTile dominoTile::reverseTile()
-{
-	// create a temporary variable and set it to the left-hand side
-	int m_tempPip = m_leftSide;
-	// then set the left-hand side = to the right-hand side
-	m_leftSide = m_rightSide;
-	// finally set the right-hand side to the temporary variable
-	m_rightSide = m_tempPip;
-	return dominoTile(m_leftSide, m_rightSide);
-}
-
-/************************************************************************
-Function Name: tileSum()
-Purpose: Calculates the total of the tile
-Parameters:None
-Return Value: int
-Local Variables:
-int m_sumPips --> Stores the summation of the left side value plus the
-right side value
-
-Algorithm:
-1. Add m_leftSide and m_rightSide together
-2. Set the total to the local varaible m_sumPips
-3. Return the local variable
-
-Assistance Received: None
-************************************************************************/
-int dominoTile::tileSum()
-{
-	int m_sumPips = m_leftSide + m_rightSide;
-	return m_sumPips;
-}
-
-/************************************************************************
-Function Name: dominoTile::~dominoTile()
+Function Name: ~dominoTile()
 Purpose: Default destructor
 
 Parameters: None

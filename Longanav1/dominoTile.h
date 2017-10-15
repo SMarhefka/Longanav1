@@ -10,31 +10,32 @@
 class dominoTile
 {
 public:
-	// default constructor
+	// Default constructor
 	dominoTile();
 
-	// create a new domino tile with specific pips
+	// Create a new domino tile with specific pips on
+	// each side
 	dominoTile(int a_leftSide, int a_rightSide);
 
-	// this will return the left-side of the domino tile
+	// This will reverse the tile
+	dominoTile reverseTile();
+
+	// This will return the left-side of the domino tile
 	int getLeftSide();
 
-	// this will return the right-side of the domino tile
+	// This will return the right-side of the domino tile
 	int getRightSide();
-
-	// checks to see if a domino tile is a double
-	bool isDouble();
-
-	// this will reverse the tile
-	dominoTile reverseTile();
 
 	// this will count the total pips of the tile
 	int tileSum();
 
-	// this function will display the tile to the console
+	// Checks to see if a domino tile is a double
+	bool isDouble();
+
+	// This function will display the tile to the console
 	void printTile();
 
-	// default destructor
+	// Default destructor
 	~dominoTile();
 
 private:

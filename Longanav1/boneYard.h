@@ -1,44 +1,49 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
+
 #pragma once
 #include "dominoTile.h"
 
 class boneYard
 {
 public:
-	// default constructor
+	// Default constructor
 	boneYard();
 
+	// Overload constructor
 	boneYard(vector<dominoTile> &a_inBoneYard);
 
-	// default destructor
-	~boneYard();
-
-	// create the boneYard
+	// Creates the boneYard that will be used during gameplay
 	void createBoneYard();
 
-	// shuffle the boneYard 
-	// (this function may not actually need to be used)
+	// Shuffles the 28 tiles that are created initally in the boneyard
 	void shuffleBoneYard();
 
-	// checks to see if the boneYard is empty
-	bool isEmpty();
-
-	// deals tiles to the player hand
+	// Deals a to the player
 	dominoTile dealTile();
 
-	// remove a tile
+	// Removes a tile from the boneYard
 	void removeTile();
 	
-	// print bonyard to the screen
-	void printBoneYard();
-
-	void printBoneYard(ofstream & a_inStream);
+	// Checks to see if the boneYard is empty
+	bool isEmpty();
 
 	// get the size of the boneYard
 	int getSize();
 
+	// Prints the values stored in the boneYard to the console
+	void printBoneYard();
+
+	// Prints the values stored in the boneYard to a specific file
+	void printBoneYard(ofstream & a_inStream);
+
+	// default destructor
+	~boneYard();
+
 private:
-	// need a shared pointer to avoid object slicing
-	// this shared pointer will also be useful when polymorphism
-	// needs to be implemented.
 	vector<dominoTile> unusedDominos;
 };
