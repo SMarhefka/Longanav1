@@ -24,7 +24,7 @@ public:
 	// print the tournament score
 	void printScore();
 
-	void setBooleans(string a_inElementOne);
+	void setBooleans(string a_inGroupOne);
 
 	// This creates a vector
 	vector<dominoTile> createVector(string a_inLine);

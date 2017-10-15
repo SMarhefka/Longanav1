@@ -101,50 +101,51 @@ void tournament::loadFromFile()
 		// prints out the current line that we are on
 		// cout << incomingLine << endl;
 		// going to change to: 
-		//((\w)\w+)+.*?[:]+(.*)|([\w\d-\d]+?.*)
-		regex searchCase("(((\\w)\\w+.*[:][^\\w]|[^\\s])(.*))");
+		regex searchCase("((\\w)\\w+) ?(.*)[.:]+ ?(([A-Z])?.*)|([\\w\\d-\\d]+?.*)");
 		smatch matchGroup;
-		// initialize the first element
-		string firstChar = " ";
-		// initialize the first group
+		// initialize the first group which is: ((\w)\w+)
 		string groupOne = " ";
-		// initialize the variable that will 
+		// initialize the second group which is: (\\w)
 		string groupTwo = " ";
-		// initialize the last group
+		// initialize the third group which is: (.*)
+		string groupThree = " ";
+		// initialize the fourth group which is: (([A-Z])?.*)
 		string groupFour = " ";
+		// initialize the fifth group which is: ([A-Z])
+		string groupFive = " ";
+		// initialize the last group which is: ([\w\d-\d]+?.*)
+		string groupSix = " ";
 		
 		// if the search pattern could be found
 		if (regex_search(incomingLine, matchGroup, searchCase) == true)
 		{
 			lineWithText++;
 
-			firstChar = matchGroup[3];
 			groupOne = matchGroup[1];
 			groupTwo = matchGroup[2];
+			groupThree = matchGroup[3];
 			groupFour = matchGroup[4];
+			groupFive = matchGroup[5];
+			groupSix = matchGroup[6];
 			
-			cout << "Line: " << lineWithText << " " << incomingLine << endl;
+			// Placed for testing purposes
+			cout << "Line " << lineWithText << ": " << incomingLine << endl;
 
-			setBooleans(firstChar);
+			setBooleans(groupOne);
 
-			if (lineWithText == 6)
-			{
-				regex searchCase("(\\w+)|[:]");
-				smatch newMatchGroup;
-				if (regex_search(incomingLine, newMatchGroup, searchCase) == true)
-				{
-					m_playerName = newMatchGroup[1];
-				}
-			}
-			if (firstChar == "T")
+			if (groupTwo == "T" && groupThree == "Score")
 			{
 				m_tournScore = stoi(groupFour);
 			}
-			if (firstChar == "R")
+			if (groupTwo == "R" && groupThree == "No.")
 			{
 				m_roundNum = stoi(groupFour);
 			}
-			if (groupTwo == "Hand: ")
+			if (lineWithText == 6)
+			{
+				m_playerName = groupOne;
+			}
+			if (groupOne == "Hand")
 			{	
 				if(m_isComputer == true)
 				{
@@ -155,7 +156,7 @@ void tournament::loadFromFile()
 					m_playerHand = createVector(groupFour);
 				}
 			}
-			if (firstChar == "S")
+			if (groupOne == "Score")
 			{
 				if (m_isComputer == true)
 				{
@@ -170,26 +171,26 @@ void tournament::loadFromFile()
 			if (lineWithText == 10 && m_isBoard == true)
 			{
 				// these will be the tiles stored into the layout
-				m_layoutTiles = createVector(groupOne);
+				m_layoutTiles = createVector(groupSix);
 				m_isBoard = false;
 			}
 			if (lineWithText == 12 && m_isBoneYard == true)
 			{
 				// these will be the domino tiles that will be used for the boneYard
-				m_boneyardTiles = createVector(groupOne);
+				m_boneyardTiles = createVector(groupSix);
 				m_isBoneYard = false;
 			}
-			if (firstChar == "P")
+			if (groupTwo == "P" && groupOne == "Previous")
 			{
-				m_playerPassed = groupFour.substr(0, 1);
+				m_playerPassed = groupFive;
 			}
-			if (firstChar == "N")
+			if (groupTwo == "N" && groupOne == "Next")
 			{
-				if (groupFour.substr(0, 1) == " ")
+				if (groupFive == " ")
 				{
 					m_nextPlayer = -1;
 				}
-				else if (groupFour.substr(0, 1) == "C")
+				else if (groupFive == "C")
 				{
 					m_nextPlayer = 0;
 				}
@@ -248,16 +249,16 @@ void tournament::createPlayers(bool a_isNewGame)
 	else
 	{
 
-		// create a new hand with the computer's tiles
+		// creates a pointer to a new hand
 		playerHand* tempHand;
 		bool tempPassed = false;
 		tempPassed = getPassed(m_nextPlayer, m_playerPassed, 0);
-
+		// create a new hand with the computer tiles
 		tempHand = new playerHand(m_comHand);
-
-		delete tempHand;
 		// create a new player with the particular hand
 		player* loadComputer = new computer(*tempHand, m_computerScore, tempPassed, !tempPassed);
+		// delete the temporary hand
+		delete tempHand;
 
 		// create a new hand with the player's tiles
 		tempHand = new playerHand(m_playerHand);
@@ -270,9 +271,6 @@ void tournament::createPlayers(bool a_isNewGame)
 		m_playerList.push_back(loadComputer);
 		// place the human player into the playerList vector
 		m_playerList.push_back(loadPlayer);
-
-		cout << "Human pass?    " << m_playerList.at(0)->getPassed() << endl;
-		//cout << "Human pass?    " << m_playerList.at(1) << endl;
 	}
 
 }
@@ -320,17 +318,17 @@ void tournament::printScore()
 	cout << "Tournament Score: " << m_tournScore << "\n";
 }
 
-void tournament::setBooleans(string a_inElementOne)
+void tournament::setBooleans(string a_inGroupOne)
 {
-	if (a_inElementOne == "C")
+	if (a_inGroupOne == "Computer")
 	{
 		m_isComputer = true;
 	}
-	else if (a_inElementOne == "L")
+	else if (a_inGroupOne == "Layout")
 	{
 		m_isBoard = true;
 	}
-	else if (a_inElementOne == "B")
+	else if (a_inGroupOne == "Boneyard")
 	{
 		m_isBoneYard = true;
 	}
