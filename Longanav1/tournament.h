@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
+
 #pragma once
 #include "gameRound.h"
 #include "fileFunctions.h"
@@ -5,18 +12,22 @@
 class tournament
 {
 public:
+	// Default constructor
 	tournament();
+
+	// Default destructor
 	~tournament();
 
+	// This function displays the user options
 	void loadUserOptions();
 
-	// create a new tournament
+	// Creates a new tournament
 	void newTournament();
 
-	// function to create players
+	// Function to create players
 	void createPlayers(bool a_isNewGame);
 
-	// loads in a previous tournament
+	// Loads in a previous tournament
 	void loadFromFile();
 
 	void playTournament(bool a_isNewGame);

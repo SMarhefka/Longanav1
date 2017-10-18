@@ -9,22 +9,26 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
 #include <iomanip>
+
+// Libraries for file manipulation
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <ostream>
 
+// Libraries for strings manipulation
 #include <regex>
-#include <string>
 #include <cstring>
+#include <string>
 
+// Libraries for storage
 #include <vector>
+#include <queue>
 #include <memory>
-//this library contains a function called random_shuffle
+
+// Libraries used for random_shuffle
 #include <algorithm>
-//this library provides use with the time function needed
 #include <time.h>
 
 using namespace std;

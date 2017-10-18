@@ -14,7 +14,7 @@ public:
 	player();
 
 	// overloaded constructor
-	player(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed);
+	player(playerHand a_inUserHand, int a_inScore, bool a_inPassed);
 
 	// default destuctor
 	~player();
@@ -23,19 +23,23 @@ public:
 	// I am not passing this by reference because I
 	// don't plan on modifying the game board in the
 	// player class
-	virtual void playMove(gameBoard &a_inGameBoard);
+	virtual void playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
-	virtual bool checkTileSelection(gameBoard &a_inGameBoard, dominoTile &a_inUserTile);
+	virtual bool checkTileSelection(int a_boardLeftVal, int a_boardRightVal, 
+									dominoTile &a_inUserTile);
 
 	// check for valid moves
-	virtual bool checkMove(gameBoard &a_inGameBoard);
+	virtual bool checkMove();
 
-	void setEngineFromRound(int & a_inEngine);
+	//virtual void setPrevPassed(bool & a_inPrevPass);
+
+	void setEngine(int & a_inEngine);
 
 	dominoTile getSelectedTile();
 
 	virtual playerHand* getHand();
 
+	string setName(string a_inName);
 	// This will return the name of the current player
 	string getName();
 
@@ -51,13 +55,16 @@ public:
 
 	void setUserOptions(dominoTile & a_userTile, char & a_incomingSide);
 
-	int handTotal();
+	vector <dominoTile> getTileOptions();
 
-	vector <dominoTile> tilePlayOrder();
+	void printPlacement(bool a_hadEngine);
 
-	void player::setHumanPass(bool &a_humanPassed);
+	void getHelp(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
-	string setName(string a_inName);
+	bool amIGettingHelp()
+	{
+		return m_gettingHelp;
+	}
 
 protected:
 	// creates a new instance of validate class
@@ -66,22 +73,27 @@ protected:
 	playerHand m_currentHand;
 	// creates a new dominoTile
 	dominoTile m_userSelection;
-
-	// new string variable that stores the
-	// player hand
+	// new string variable that stores the player name
 	string m_playerName;
 
 	vector <dominoTile> m_playOrder;
 
 	char m_whichSide;
-	bool m_HumanPass;
-	bool m_ComputerPass;
+
+	bool m_prevPass;
+	bool m_passTurn;
 	bool m_validMove;
 
 	int m_engineValue;
+
 	int m_playerScore;
 	int m_userChoice;
+
 	int m_passCount;
 	int m_totalPips;
 
+	int m_boardLeft;
+	int m_boardRight;
+
+	bool m_gettingHelp;
 };

@@ -46,7 +46,7 @@ Assistance Received: None
 string fileFunctions::getFile(string a_inMessage)
 {
 	askForFile(a_inMessage);
-	appendTxt();
+	appendTxt(m_fileName);
 	return m_fileName;
 }
 
@@ -76,18 +76,19 @@ void fileFunctions::askForFile(string a_inMessage)
 	string fileName = "";
 	cout << a_inMessage << endl;
 	cout << "Filename: ";
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> fileName;
 
-	while (validFileName(fileName) != true)
+	//getline(cin, fileName).clear();
+	getline(cin, fileName);
+
+	while (validFileName(fileName) != true || fileName.length() == 0)
 	{
-		cout << "Invalid Filename - Please enter a valid filename" << endl;
-		cout << "Filename: ";
 		//clear the error state
 		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cin >> fileName;
+		cout << endl;
+		cout << "Invalid Filename - Please enter a valid filename" << endl;
+		cout << "Filename: ";
+
+		getline(cin, fileName);
 		cout << endl;
 	}
 
@@ -121,25 +122,31 @@ bool fileFunctions::validFileName(string a_inFileName)
 }
 
 /************************************************************************
-Function Name: appendTxt()
+Function Name: appendTxt(string a_inMessage)
 Purpose: Function to append .txt to the end of a given filename
-Parameters: None
-Return Value: None
+Parameters:
+string a_inFileName --> the fileName that needs to be checked
+
+Return Value: String
 Local Variables: None
 Algorithm:
 1. Set the search pattern to .txt at the end of a string
-2. If regex_match returns false then .txt has to be added to the end of
+2. Set m_fileName to a_inMessage
+3. If regex_match returns false then .txt has to be added to the end of
    the filename string. Otherwise nothing needs to be done.
-
+4. Return the m_fileName.  This is used when the append function is being
+   called from the gameRound or tournament class.
 Assistance Received: None
 ************************************************************************/
-void fileFunctions::appendTxt()
+string fileFunctions::appendTxt(string a_inMessage)
 {
 	regex fileEnding("(.txt$)");
+	m_fileName = a_inMessage;
 	if (regex_match(m_fileName, fileEnding) != true)
 	{
 		m_fileName.append(".txt");
 	}
+	return m_fileName;
 }
 
 /************************************************************************

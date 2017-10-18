@@ -3,11 +3,11 @@
 
 gameBoard::gameBoard()
 {
-	//tournament.printScore();
 }
 
-gameBoard::~gameBoard()
+gameBoard::gameBoard(vector<dominoTile> a_inGameBoard)
 {
+	m_boardVector = a_inGameBoard;
 }
 
 void gameBoard::addToLeft(dominoTile a_tileToAdd)
@@ -30,29 +30,23 @@ void gameBoard::addToRight(dominoTile a_tileToAdd)
 }
 
 // this gets the right most tile to be compared
-dominoTile gameBoard::getRightMostTile()
+int gameBoard::boardRightValue()
 {
 	// create a new temporary dominoTile
-	dominoTile tempTile;
 	if (!isBoardEmpty())
 	{
-		tempTile = m_boardVector.at(m_boardVector.size() - 1);
+		return m_boardVector.at(m_boardVector.size() - 1).getRightSide();
 	}
-	return tempTile;
 }
 
-dominoTile gameBoard::getLeftMostTile()
+int gameBoard::boardLeftValue()
 {
-	// create a new temporary dominoTile
-	dominoTile tempTile;
 	// if the board is not empty
 	if (!isBoardEmpty())
 	{
-		// set the temporary tile
-		tempTile = m_boardVector.at(0);
+		// return the 
+		return m_boardVector.at(0).getLeftSide();
 	}
-	// return the tile
-	return tempTile;
 }
 
 bool gameBoard::isBoardEmpty()
@@ -68,4 +62,8 @@ void gameBoard::printToScreen()
 void gameBoard::printBoardToFile(ofstream & a_inStream)
 {
 	m_boardView.printBrdToFile(a_inStream, m_boardVector);
+}
+
+gameBoard::~gameBoard()
+{
 }

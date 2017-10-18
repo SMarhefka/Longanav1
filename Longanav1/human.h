@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+************************************************************************/
+
 #pragma once
 #include "player.h"
 
@@ -15,43 +22,36 @@ public:
 	human(string a_inName);
 
 	// creates a new human with the playerhand and the player score
-	human(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed, string a_inPlayerName) : player(a_inUserHand, a_inScore, a_inComPassed, a_inPlyerPassed)
-	{
-	
-		m_playerName = setName(a_inPlayerName);
-		m_tempUserChoice = 0;
-		m_enginePosition = 0;
-		m_tileChoice = 0;
-		m_exeSucc = 0;
-	};
+	human(playerHand a_inUserHand, int a_inScore, bool a_inPassed, string a_inPlayerName);
 
 	// default destructor
 	~human();
 
 	// this is the overridden function from the player class
-	void playMove(gameBoard &a_inGameBoard);
+	void playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
 	void printFirstOptions();
 
 	void printLeftRight();
 
 	// this function is specific to the human class
-	void displayOptions1(gameBoard &a_inGameBoard);
+	void displayOptions1();
 
 	void displayTiles();
 
-	void executeOptions(gameBoard &a_inGameBoard);
+	void executeOptions();
 
-	void displayOptions2(gameBoard &a_inGameBoard);
+	void displayOptions2();
 
 	void findEnginePosition();
 
-	bool getHumanPass();
+	bool getPassed();
 
 	// this is a getter function
 	playerHand* getHand();
 
 private:
+	gameBoard* m_playerGameBoard;
 	int m_tempUserChoice;
 	int m_enginePosition;
 	int m_tileChoice;

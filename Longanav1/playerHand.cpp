@@ -79,6 +79,17 @@ int playerHand::getHandSize()
 	return int(m_playerTiles.size());
 }
 
+int playerHand::handTotal()
+{
+	int m_totalPips = 0;
+	for (auto tileItem = m_playerTiles.begin(); tileItem != m_playerTiles.end(); tileItem++)
+	{
+		m_totalPips += (tileItem)->tileSum();
+	}
+
+	return m_totalPips;
+}
+
 void playerHand::printHand()
 {
 	for (auto item = m_playerTiles.begin(); item != m_playerTiles.end(); item++)

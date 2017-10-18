@@ -1,50 +1,52 @@
 #include "stdafx.h"
 #include "validateInput.h"
 
-// this checks the right hand side of the board
+// this checks the left side value of the board against the right side of
+// the users tile
 // a_inTile: this is the user tile
-// a_btileLeft: this is the left most tile of the board
-bool validateInput::leftSideOnly(dominoTile a_btileLeft, dominoTile a_inTile)
+// a_boardLeftVal: this is the left value of the board
+bool validateInput::leftSide1(int a_boardLeftVal, dominoTile a_inUserTile)
 {
-	if ((a_btileLeft.getLeftSide() == a_inTile.getLeftSide()))
+	// if the board left side value is the same 
+	// as the left side value of the user tile
+	if ((a_boardLeftVal == a_inUserTile.getLeftSide()))
 	{
+		// if this returns true then the tile would need 
+		// to be reversed
 		return true;
 	}
 	return false;
 }
 
-// this checks the left hand side of the board
+// this checks the left side value of the board against the left side of
+// the users tile
 // a_inTile: this is the user tile
-// a_btileLeft: this is the left most tile of the board
-bool validateInput::checkLeftSide(dominoTile a_btileLeft, dominoTile a_inTile)
+// a_boardLeftVal: this is the left value of the board
+bool validateInput::leftSide2(int a_boardLeftVal, dominoTile a_inUserTile)
 {
-	// if the left side of the tile on the board 
-	// is the same as the left side of the user tile 
-	// then the selection is valid
-	 if ((a_btileLeft.getLeftSide() == a_inTile.getLeftSide()))
+	// if the board left side value is the same 
+	// as the right side value of the user tile
+	if ((a_boardLeftVal == a_inUserTile.getRightSide()))
 	{
-		return true;
-	}
-
-	// if the left side of the tile on the board 
-	// is the same as the right side of the user tile 
-	// then the selection is valid
-	if ((a_btileLeft.getLeftSide() == a_inTile.getRightSide()))
-	{
+		// then the selection is valid 
+		// but we will need to reverse the tile
 		return true;
 	}
 	return false;
-
-
 }
 
-// this checks the right hand side of the board
+// this checks the right side value of the board against the left side of
+// the users tile
 // a_inTile: this is the user tile
-// a_btileLeft: this is the left most tile of the board
-bool validateInput::rightSideOnly(dominoTile a_btileRight, dominoTile a_inTile)
+// a_boardLeftVal: this is the left value of the board
+bool validateInput::rightSide1(int a_boardRightVal, dominoTile a_inUserTile)
 {
-	if ((a_btileRight.getRightSide() == a_inTile.getRightSide()))
+	// if the board right side value is the same 
+	// as the left side value of the user tile
+	if ((a_boardRightVal == a_inUserTile.getLeftSide()))
 	{
+		// if this returns true then the tile would not 
+		// need to be reversed
 		return true;
 	}
 	return false;
@@ -53,20 +55,14 @@ bool validateInput::rightSideOnly(dominoTile a_btileRight, dominoTile a_inTile)
 // this checks the right hand side of the board
 // a_inTile: this is the user tile
 // a_btileLeft: this is the left most tile of the board
-bool validateInput::checkRightSide(dominoTile a_btileRight, dominoTile a_inTile)
+bool validateInput::rightSide2(int a_boardRightVal, dominoTile a_inUserTile)
 {
-	// if the right side of the tile on the board 
-	// is the same as the left side of the user tile 
-	// then the selection is valid
-	if ((a_btileRight.getRightSide() == a_inTile.getLeftSide()))
+	// if the board right side value is the same 
+	// as the right side value of the user tile
+	if ((a_boardRightVal == a_inUserTile.getRightSide()))
 	{
-		return true;
-	}
-	// if the right side of the tile on the board 
-	// is the same as the right side of the user tile 
-	// then the selection is valid
-	if ((a_btileRight.getRightSide() == a_inTile.getRightSide()))
-	{
+		// if this returns true
+		// however the tile would need to be reversed
 		return true;
 	}
 	return false;
@@ -81,43 +77,43 @@ bool validateInput::validSideInput(char a_inSide)
 	return false;
 }
 
-bool validateInput::validSideCheck(dominoTile &a_inTile, char & a_inSide, string & a_inpName, bool & a_inPassed)
+bool validateInput::validSideCheck(dominoTile a_inUserTile, char a_inSide, string a_inName, bool a_inPassed)
 {
-	bool valid = NULL;
-	if (a_inpName == "Computer")
+	if (a_inName == "Computer")
 	{
-		if (a_inSide == 'L' && (a_inTile.isDouble() == true ||
-			a_inPassed == true))
+		if (a_inUserTile.isDouble() == true || a_inPassed == true)
 		{
-			valid = true;
+			if (a_inSide == 'L')
+			{
+				return true;
+			}
 		}
 		else if (a_inSide == 'R')
 		{
-			valid = true;
+			return true;
 		}
 	}
-	else if (a_inpName != "Computer")
+	else if (a_inName != "Computer")
 	{
-		if (a_inSide == 'R' && (a_inTile.isDouble() == true ||
-			a_inPassed == true))
+		if (a_inUserTile.isDouble() == true || a_inPassed == true)
 		{
-			valid = true;
+			if (a_inSide == 'R')
+			{
+			
+					return true;
+			}
 		}
 		else if (a_inSide == 'L')
 		{
-			valid = true;
+			return true;
 		}
 	}
-	else
-	{
-		valid = false;
-	}
-	return valid;
+	return false;
 }
 
-bool validateInput::validEnginePlacement(dominoTile & a_inTile, int & a_inEngine)
+bool validateInput::validEnginePlacement(dominoTile & a_inUserTile, int & a_inEngine)
 {
-	if (a_inTile.isDouble() == true && a_inTile.getLeftSide() == a_inEngine)
+	if (a_inUserTile.isDouble() == true && a_inUserTile.getLeftSide() == a_inEngine)
 	{
 		return true;
 	}
@@ -132,7 +128,7 @@ bool validateInput::validUserSelection(string a_userInput, int a_inMaxOptions)
 
 	if (regex_match(testInput, matchElement, digitSearch))
 	{
-		if (stoi(matchElement[1]) >= 1 || stoi(matchElement[1]) <= a_inMaxOptions)
+		if (stoi(matchElement[1]) >= 1 && stoi(matchElement[1]) <= a_inMaxOptions)
 		{
 			return true;
 		}

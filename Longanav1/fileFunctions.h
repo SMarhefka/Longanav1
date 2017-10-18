@@ -6,7 +6,6 @@
 *************************************************************************/
 
 #pragma once
-#include "validateInput.h"
 
 class fileFunctions
 {
@@ -21,7 +20,7 @@ public:
 	bool validFileName(string a_inFileName);
 
 	// Function to append .txt to the end of a given filename
-	void appendTxt();
+	string appendTxt(string a_inFileName);
 
 	// This function will return a valid filename that the user
 	// requested in the correct format ready for reading or writing

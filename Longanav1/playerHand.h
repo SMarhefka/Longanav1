@@ -36,15 +36,16 @@ public:
 	// returns the size of the hand
 	int getHandSize();
 
+	// returns the total of the hand
+	int handTotal();
+
 	// print hand
 	void printHand();
 
+	// print the current hand to a specified file
 	void printHandToFile(ofstream &a_inStream);
 
 private:
-	// need a shared point to avoid object slicing
-	// this shared pointer will also be useful when polymorphism
-	// needs to be implemented.
 	vector<dominoTile> m_playerTiles;
 };
 

@@ -11,9 +11,11 @@ public:
 	// default constructor
 	gameRound();
 
-	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore);
+	// overloaded constructor
+	gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, vector<player*> &a_gamePlayers);
 
-	gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYard, short a_inNextPlayer);
+	// another overloaded constructor
+	gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, short a_inNextPlayer, vector<player*> &a_gamePlayers, vector<dominoTile> &a_inBoneYardTiles, vector<dominoTile> &a_inGameTiles);
 
 	// default destructor
 	~gameRound();
@@ -29,7 +31,7 @@ public:
 	void playRound();
 
 	// find out who the first player in the round will be
-	unsigned short getFirstPlayer();
+	short getFirstPlayer();
 
 	bool roundOver();
 
@@ -43,10 +45,28 @@ public:
 	void printToFile(short a_inPlayerIndex);
 	/*-----------------------Save to file functions----------------------*/
 
-	//unsigned short setNextPlayer(string a_inNextPlayer);
-
 	bool engineInHands();
 
+	void finisUpRound();
+
+	short getWinner();
+
+	void findWhoPassed();
+
+	bool getPrevPass()
+	{
+		// get the previous player
+		int prevPlayer = (m_playerIndex + 1) % int(m_gamePlayers.size());
+		if (m_playerIndex == 0)
+		{
+			return m_gamePlayers.at(prevPlayer)->getPassed();
+		}
+		else
+		{
+			return m_gamePlayers.at(prevPlayer)->getPassed();
+		}
+	}
+	
 private:
 	// creates a new boneYard
 	boneYard* m_newBoneYard;
@@ -55,18 +75,17 @@ private:
 	// creates a new file functions object
 	fileFunctions* m_fileFunctions;
 	// creates a new gameBoard;
-	gameBoard newGameBoard;
+	gameBoard* m_newGameBoard;
 
 	vector<player*> m_gamePlayers;
 
 	bool m_isNewRound;
 
 	string m_inPassed;
-	// short m_inNextPlayer;
 
 	// this variable keeps track of the engine for 
 	// the current round
-	unsigned short m_playerIndex;
+	short m_playerIndex;
 	// this is the engine variable
 	int m_engineVal;
 	// this is read in from the tournament class
@@ -75,4 +94,7 @@ private:
 	int m_inTourScore;
 	// variable to keep track of save
 	char m_saveSelection;
+
+	bool m_testPass;
+	//bool m_comPass;
 };

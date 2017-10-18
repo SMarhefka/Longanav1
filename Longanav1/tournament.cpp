@@ -1,9 +1,13 @@
-
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
 
 #include "stdafx.h"
 #include "tournament.h"
 
-// NOTE: THIS IS A WORKING VERSION BUT IT WILL BE CHANGED
 tournament::tournament()
 {
 	m_validateInputs = new validateInput;
@@ -18,6 +22,8 @@ tournament::tournament()
 
 tournament::~tournament()
 {
+	delete m_fileFunctions;
+	delete m_validateInputs;
 	m_playerList.clear();
 }
 
@@ -34,26 +40,21 @@ void tournament::loadUserOptions()
 	cout << "1. Start New Game" << endl;
 	cout << "2. Load Previous Game" << endl;
 	cout << "User Selection: ";
-	cin >> userChoice;
-
-	userChoice = userChoice.substr(0, 1);
-	
+	getline(cin, userChoice);
 	// validate the input
-	while (m_validateInputs->validUserSelection(userChoice, 2) != true)
+	while (m_validateInputs->validUserSelection(userChoice, 2) != true || userChoice.length() == 0)
 	{
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore();
 		cout << endl;
 		cout << "Invalid Input - Please select one of the following:" << endl;
 		cout << "1. Start New Game" << endl;
 		cout << "2. Load Previous Game" << endl;
 		cout << "User Selection: ";
-		cin >> userChoice;	
+		getline(cin, userChoice);
 		// Get just the firt value
 		userChoice = userChoice.substr(0, 1);
 	}
+
+	userChoice = userChoice.substr(0, 1);
 	cout << endl;
 
 	if (stoi(userChoice) == 1)
@@ -89,13 +90,13 @@ void tournament::loadFromFile()
 		cout << "Filename: ";
 		// clear the error
 		cin.clear();
-		cin.ignore();
-		cin >> userInput;
+		getline(cin, userInput);
 		userInput = m_fileFunctions->appendTxt(userInput);
 		// try to open the given file
 		inFile.open(userInput.c_str());
 	}
 
+	cout << "--------------Information loaded from the file-------------" << endl;
 	// get every new line
 	while (getline(inFile, incomingLine, '\n'))
 	{
@@ -187,7 +188,7 @@ void tournament::loadFromFile()
 			}
 			if (groupTwo == "N" && groupOne == "Next")
 			{
-				if (groupFive == " ")
+				if (groupFive == "")
 				{
 					m_nextPlayer = -1;
 				}
@@ -203,33 +204,32 @@ void tournament::loadFromFile()
 		}
 	}
 	inFile.close();
+	cout << "--------------Information loaded from the file-------------" << endl;
 }
 
 void tournament::newTournament()
 {
 	string userInput;
 	cout << "What is the score that you would like to play until? ";
-	cin >> userInput;
-
-	while (m_validateInputs->validInputNumber(userInput) != true)
+	getline(cin,userInput);
+	cout << endl;
+	while (m_validateInputs->validInputNumber(userInput) != true || userInput.length() == 0)
 	{
-		cout << endl;
 		cin.clear();
-		cin.ignore();
 		cout << "Please enter a valid number: ";
-		cin >> userInput;
+		getline(cin, userInput);
+		cout << endl;
 	}
 	m_tournScore = stoi(userInput);
 
 	cout << "What name would you like to use? ";
-	cin >> m_playerName;
+	getline(cin, m_playerName);
 	while (cin.fail())
 	{
 		cout << endl;
 		cin.clear();
-		cin.ignore();
 		cout << "Please enter a valid string: ";
-		cin >> m_playerName;
+		getline(cin, m_playerName);
 	}
 	cout << endl;
 }
@@ -252,20 +252,22 @@ void tournament::createPlayers(bool a_isNewGame)
 
 		// creates a pointer to a new hand
 		playerHand* tempHand;
-		bool tempPassed = false;
-		tempPassed = getPassed(m_nextPlayer, m_playerPassed, 0);
+		bool playerPassed = false;
+		playerPassed = getPassed(m_nextPlayer, m_playerPassed, 0);
+		
 		// create a new hand with the computer tiles
 		tempHand = new playerHand(m_comHand);
 		// create a new player with the particular hand
-		player* loadComputer = new computer(*tempHand, m_computerScore, tempPassed, !tempPassed);
+		player* loadComputer = new computer(*tempHand, m_computerScore, playerPassed);
 		// delete the temporary hand
 		delete tempHand;
 
 		// create a new hand with the player's tiles
 		tempHand = new playerHand(m_playerHand);
 
+		playerPassed = getPassed(m_nextPlayer, m_playerPassed, 1);
 		// create a new player with the particular hand
-		player* loadPlayer = new human(*tempHand, m_playerScore, tempPassed, !tempPassed, m_playerName);
+		player* loadPlayer = new human(*tempHand, m_playerScore, playerPassed, m_playerName);
 		delete tempHand;
 
 		// place the computer player into the playerList vector
@@ -299,12 +301,12 @@ void tournament::playTournament(bool a_isNewRound)
 			// increase the round number by 1
 			m_roundNum++;
 			// create a new round
-			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore);
+			newRound = new gameRound(a_isNewRound, m_tournScore, m_roundNum, m_playerList);
 		}
 		else
 		{
 			// create a new round with the prepared values
-			newRound = new gameRound(a_isNewRound, m_roundNum, m_playerList, m_tournScore, m_boneyardTiles, m_nextPlayer);
+			newRound = new gameRound(a_isNewRound, m_tournScore, m_roundNum, m_nextPlayer, m_playerList, m_boneyardTiles, m_layoutTiles);
 		}
 		// set up the current round
 		newRound->setUpRound();

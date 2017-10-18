@@ -1,7 +1,21 @@
 #include "stdafx.h"
 #include "human.h"
 
-// this is the default constructor
+// this is the 
+/************************************************************************
+Function Name: human()
+Purpose: Default constructor
+Parameters:
+string a_inPlayerName --> the name of the human player
+
+Return Value: Constructor
+Local Variables: None
+
+Algorithm:
+1. set m_playerName to the result of the user input
+
+Assistance Received: None
+************************************************************************/
 human::human()
 {
 	//cout << "I'm creating a human\n";
@@ -13,6 +27,21 @@ human::human()
 	m_exeSucc = false;
 }
 
+/************************************************************************
+Function Name: human(string a_inName)
+Purpose: Overload the human constructor.  This will create a new
+player object with a specific name.
+Parameters:
+string a_inPlayerName --> the name of the human player
+
+Return Value: Constructor
+Local Variables: None
+
+Algorithm:
+1. set m_playerName to the result of the user input
+
+Assistance Received: None
+************************************************************************/
 human::human(string a_inName)
 {
 	// cout << "I'm creating a human with a name: " << playerType << "\n";
@@ -22,41 +51,93 @@ human::human(string a_inName)
 	m_enginePosition = 0;
 	m_tileChoice = 0;
 	m_exeSucc = false;
+
 }
 
+/************************************************************************
+Function Name: human(playerHand a_inUserHand, int a_inScore,
+						bool a_inComPassed, bool a_inPlyerPassed, 
+						string a_inPlayerName) :
+						player(a_inUserHand, a_inScore, a_inComPassed,
+						a_inPlyerPassed)
+
+Purpose: Overload the human constructor.  This will create a new
+player object with a specific hand, score and information on any passed 
+moves. This function is called when a file is loaded to start the gameplay
+
+Parameters:
+playerHand a_inUserHand --> the hand of the human player
+int a_inScore --> the score of the player
+bool a_inComPassed --> if the computer player has passed their turn
+bool a_inPlyerPassed --> if the human player has passed their turn
+string a_inPlayerName --> the name of the human player
+
+Return Value: Constructor
+Local Variables: None
+
+Algorithm:
+1. set m_playerName to the name from the file
+
+Assistance Received: None
+************************************************************************/
+human::human(playerHand a_inUserHand, int a_inScore, bool a_inPassed, string a_inPlayerName) : player(a_inUserHand, a_inScore, a_inPassed)
+{
+	m_playerName = setName(a_inPlayerName);
+	m_tempUserChoice = 0;
+	m_enginePosition = 0;
+	m_tileChoice = 0;
+	m_exeSucc = 0;
+	m_gettingHelp = false;
+}
+
+/************************************************************************
+Function Name: human()
+Purpose: Default destructor
+Parameters: None
+Return Value: Constructor
+Local Variables: None
+Algorithm: None
+Assistance Received: None
+************************************************************************/
 human::~human()
 {
 }
 
-void human::playMove(gameBoard &a_inGameBoard)
+void human::playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed)
 {
-	gameBoard thisGameBoard = a_inGameBoard;
+	m_playerGameBoard = a_inGameBoard;
+	bool hasEngine = m_currentHand.hasEngine(m_engineValue);
+	m_whichSide = ' ';
+	m_validMove = false;
+	m_boardLeft = 0;
+	m_boardRight = 0;
+
 	// if the hand has the engine
-	if (m_currentHand.hasEngine(m_engineValue) == true)
+	if (hasEngine == true)
 	{
 		findEnginePosition();
 		m_validMove = true;
 	}
 	// check for a valid move
-	else if (checkMove(thisGameBoard) == true)
-	{
-		m_validMove = true;
-	}
-	// Otherwise there is no valid move
 	else
 	{
-		m_validMove = false;
+		m_boardLeft = m_playerGameBoard->boardLeftValue();
+		m_boardRight = m_playerGameBoard->boardRightValue();
+		m_prevPass = a_nextPlayerPassed;
+		m_validMove = checkMove();
 	}
 	// display the first set of user options
-	displayOptions1(thisGameBoard);
+	displayOptions1();
 	// execute the possible options
-	executeOptions(thisGameBoard);
+	executeOptions();
 	// while the execution is false
-	while (m_exeSucc == false)
+	while (m_exeSucc == false || m_gettingHelp == true)
 	{
-		displayOptions1(thisGameBoard);
-		executeOptions(thisGameBoard);
+		m_gettingHelp = false;
+		displayOptions1();
+		executeOptions();
 	}
+
 	// if there was a valid move
 	if (m_validMove == true)
 	{
@@ -66,9 +147,23 @@ void human::playMove(gameBoard &a_inGameBoard)
 		setUserOptions(m_userSelection, m_whichSide);
 		// because the execution was successful I can also set
 		// the passed variable to false
-		m_HumanPass = false;
+		m_passTurn = false;
 		// I also want to reset the pass count
 		m_passCount = 0;
+	}
+}
+
+void human::findEnginePosition()
+{
+	int numCount;
+	int handsize = m_currentHand.getHandSize();
+	for (numCount = 0; numCount < handsize; numCount++)
+	{
+		if (m_currentHand.getTilesAt(numCount).isDouble() == true &&
+			m_currentHand.getTilesAt(numCount).getLeftSide() == m_engineValue)
+		{
+			m_enginePosition = numCount;
+		}
 	}
 }
 
@@ -82,47 +177,30 @@ void human::printFirstOptions()
 	cout << m_tempUserChoice << " - Get Help\n";
 	// take in the userInput
 	cout << "User Selection: ";
+	cin.clear();
+	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void human::printLeftRight()
-{
-	cout << "\nNOTE: Press B To Go To The Previous Menu \n";
-	cout << "Which Side - Left/Right: ";
-	//ignore all characters left in the buffer
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	cin >> m_whichSide;
-
-	// while the input fails
-	while (m_checkInput->validSideInput(m_whichSide) != true)
-	{
-		//clear the error state
-		cin.clear();
-		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "\nNOTE: Press B To Go To The Previous Menu \n";
-		cout << "Please Enter - Left or Right: ";
-		cin >> m_whichSide;
-	}
-	// set the side that the user selected to uppercase
-	m_whichSide = toupper(m_whichSide);
-}
-
-void human::displayOptions1(gameBoard &a_inGameBoard)
+void human::displayOptions1()
 {
 	int userChoice;
-	gameBoard thisGameBoard = a_inGameBoard;
 
+	cout << endl;
+	cout << "------------------It is the " << getName();
+	cout << "'s turn----------------" << endl;
+	cout << endl;
+	cout << "Current Board: " << endl;
 	// print the board to the screen
-	thisGameBoard.printToScreen();
+	m_playerGameBoard->printToScreen();
 	// print the user hand
 	displayTiles();
 
 	cout << "\nPlease Select an Option:\n";
 	printFirstOptions();
-
+	// cin.clear();
 	//ignore all characters left in the buffer
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
- 	cin >> userChoice;
+	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin >> userChoice;
 
 	// validate the input
 	while (userChoice < 1 || userChoice > m_tempUserChoice)
@@ -139,15 +217,14 @@ void human::displayOptions1(gameBoard &a_inGameBoard)
 	m_tempUserChoice = userChoice;
 }
 
-void human::executeOptions(gameBoard &a_inGameBoard)
+void human::executeOptions()
 {
-	gameBoard thisGameBoard = a_inGameBoard;
 	switch (m_tempUserChoice)
 	{
 	case 1:
 		// call function to allow the user to pick a tile
 		// that will be placed on the board
-		displayOptions2(thisGameBoard);
+		displayOptions2();
 		// if the user selects 0 
 		if (m_tileChoice == 0)
 		{
@@ -163,18 +240,13 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			dominoTile tempTile;
 			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
 
-			while (m_checkInput->validEnginePlacement(tempTile, m_engineValue) != true || m_whichSide != 'L')
+			while (m_checkInput->validEnginePlacement(tempTile, m_engineValue) != true)
 			{
-				if (m_whichSide != 'L')
-				{
-					cout << endl << "Invalid Side Selected\n";
-				}
-				else
 				{
 					cout << endl << "Engine not Selected\n";
 				}
 
-				displayOptions2(thisGameBoard);
+				displayOptions2();
 				// this will go back to the main set of options
 				if (m_tileChoice > 0)
 				{
@@ -187,15 +259,14 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 				}
 			}
 		}
-		else if(m_currentHand.hasEngine(m_engineValue) != true)
+		else if (m_currentHand.hasEngine(m_engineValue) != true)
 		{
 			dominoTile tempTile;
 			tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
-			
-			while (checkTileSelection(thisGameBoard, tempTile) != true
-				|| m_checkInput->validSideCheck(tempTile, m_whichSide, m_playerName, m_ComputerPass) != true)
+
+			while ((checkTileSelection(m_boardLeft, m_boardRight, tempTile) != true)|| (m_checkInput->validSideCheck(tempTile, m_whichSide, m_playerName, m_prevPass) != true))
 			{
-				if (checkTileSelection(thisGameBoard, tempTile) != true)
+				if (checkTileSelection(m_boardLeft, m_boardRight, tempTile) != true)
 				{
 					cout << "The tile you chose was invalid, please choose another tile\n";
 				}
@@ -204,7 +275,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 					cout << endl << "The side you chose was invalid\n";
 				}
 				// re-display the tiles that the user can choose from
-				displayOptions2(thisGameBoard);
+				displayOptions2();
 				if (m_tileChoice > 0)
 				{
 					tempTile = m_currentHand.getTilesAt(m_tileChoice - 1);
@@ -232,33 +303,28 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			// if the selected side is left
 			if (m_whichSide == 'L')
 			{
+				dominoTile testTile = m_currentHand.getTilesAt(m_tileChoice);
 				// if the left pips of the user tile match the left pips of the board
-				if (m_checkInput->leftSideOnly(thisGameBoard.getLeftMostTile(),
-					m_currentHand.getTilesAt(m_tileChoice)) == true)
+				if (m_checkInput->leftSide1(m_boardLeft, testTile) == true)
 				{
-					// then we want to add the user tile to the board but
-					// the tile has to be reversed
-					m_userSelection = m_currentHand.getTilesAt(m_tileChoice).reverseTile();
+					m_userSelection = testTile.reverseTile();
 				}
 				else
 				{
-					m_userSelection = m_currentHand.getTilesAt(m_tileChoice);
+					m_userSelection = m_userSelection;
 				}
 			}
 			// if the selected side is right
 			else if (m_whichSide == 'R')
 			{
-				// if the right pips of the user tile match the left pips of the board
-				if (m_checkInput->rightSideOnly(thisGameBoard.getRightMostTile(),
-					m_currentHand.getTilesAt(m_tileChoice)) == true)
+				dominoTile testTile = m_currentHand.getTilesAt(m_tileChoice);
+				if (m_checkInput->rightSide1(m_boardRight, testTile) == true)
 				{
-					// then we want to add the user tile to the board but
-					// the tile has to be reversed
-					m_userSelection = m_currentHand.getTilesAt(m_tileChoice).reverseTile();
+					m_userSelection = testTile;
 				}
 				else
 				{
-					m_userSelection = m_currentHand.getTilesAt(m_tileChoice);
+					m_userSelection = testTile.reverseTile();
 				}
 			}
 		}
@@ -266,14 +332,14 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 		{
 			m_userSelection = m_currentHand.getTilesAt(m_tileChoice);
 		}
-		
+
 		// set the execution variable to successful
 		m_exeSucc = true;
 		break;
 	case 2:
 		// if this function is called we need to check and
 		// make sure that the user cannot actually make a move
-		if(m_validMove == false)
+		if (m_validMove == false)
 		{
 			// increase the pass count by 1
 			m_passCount++;
@@ -283,7 +349,7 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 			{
 				m_passCount = 0;
 				// then set the passed variable to true
-				m_HumanPass = true;
+				m_passTurn = true;
 			}
 			m_userChoice = 0;
 			m_whichSide = ' ';
@@ -298,20 +364,47 @@ void human::executeOptions(gameBoard &a_inGameBoard)
 		m_exeSucc = false;
 		break;
 	case 3:
+		m_gettingHelp = false;
 		// This simply calls the help function from the player class
 		// the help function will need the players hand in order to 
 		// work
-		// getHelp()
+		getHelp(m_playerGameBoard, m_prevPass);
+		m_gettingHelp = true;
+		m_exeSucc = true;
+		m_passCount = 0;
+		break;
 	default:
 		break;
 	}
 }
 
+void human::printLeftRight()
+{
+	cout << "\nNOTE: Press B To Go To The Previous Menu \n";
+	cout << "Which Side - Left/Right: ";
+	//ignore all characters left in the buffer
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cin >> m_whichSide;
+
+	// while the input fails
+	while (m_checkInput->validSideInput(m_whichSide) != true)
+	{
+		//clear the error state
+		cin.clear();
+		//ignore all characters left in the buffer
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "\nNOTE: Press B To Go To The Previous Menu \n";
+		cout << "Please Enter - Left or Right: ";
+		cin >> m_whichSide;
+	}
+	// set the side that the user selected to uppercase
+	m_whichSide = toupper(m_whichSide);
+}
+
 // displays the second set of options
-void human::displayOptions2(gameBoard &a_inGameBoard)
+void human::displayOptions2()
 {
 	int userChoice;
-	gameBoard thisGameBoard = a_inGameBoard;
 
 	displayTiles();
 
@@ -333,7 +426,7 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 		// print an error message
 		cout << endl << "Inccorect input - Please enter a value between 1 and " << m_currentHand.getHandSize() << endl;
 
-		a_inGameBoard.printToScreen();
+		m_playerGameBoard->printToScreen(); ;
 		cout << endl;
 		displayTiles();
 
@@ -341,6 +434,7 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 		cout << "Press 0 to go back to the previous menu \n";
 		// take in the userInput
 		cout << "User Selection: ";
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cin >> userChoice;
 	}
 	// once we get a valid input we will store it 
@@ -354,7 +448,7 @@ void human::displayOptions2(gameBoard &a_inGameBoard)
 		printLeftRight();
 		if (m_whichSide == 'B')
 		{
-			displayOptions2(thisGameBoard);
+			displayOptions2();
 		}
 	}
 }
@@ -377,28 +471,16 @@ void human::displayTiles()
 	cout << endl << endl;
 }
 
-void human::findEnginePosition()
-{
-	int numCount;
-	int handsize = m_currentHand.getHandSize();
-	for (numCount = 0; numCount < handsize; numCount++)
-	{
-		if (m_currentHand.getTilesAt(numCount).isDouble() == true && 
-			m_currentHand.getTilesAt(numCount).getLeftSide() == m_engineValue)
-		{
-			m_enginePosition = numCount;
-		}
-	}
-}
+
 
 playerHand* human::getHand()
 {
 	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
-	return & m_currentHand;
+	return &m_currentHand;
 }
 
-bool human::getHumanPass()
+bool human::getPassed()
 {
 	// cout << "Playing as: " << playerType << " and I am in the human::getHand()\n";
-	return m_HumanPass;
+	return m_passTurn;
 }

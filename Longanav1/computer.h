@@ -23,7 +23,7 @@ public:
 	*/
 
 	// Overloaded constructor
-	computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed);
+	computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed);
 
 	// Default destructor
 	~computer(); 

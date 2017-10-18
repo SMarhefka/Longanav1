@@ -1,39 +1,36 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
+
 #pragma once
 #include "dominoTile.h"
-#include <queue>
-#include <iostream>
-#include <string>
-#include <iomanip>
-#include <fstream>
 
-using namespace std;
-
-// The purpose of this class will be to print the following to the console:
-// - the tournament score
-// - the computer's hand
-// - the player's hand
-// - the board itself
-// - if the current player passed their turn
-// - the tiles remaining in the boneyard
 class gameBoardView
 {
 public:
-	// takes in the gameBoard and prints the gameBoard to the screen
+	// Default constructor
 	gameBoardView();
-	~gameBoardView();
 
-	// one thing that should happen is that the gameBoard should be printed to the screen
+	// Retrieves all pertanant information needed to
+	// display the gameBoard
 	void getBoard(vector<dominoTile> &a_inBoard);
 	
+	// Deletes or refreshes the containers use to hold the gameboard
 	void deleteLines();
 
-	// vector<dominoTile> combineSides(vector<dominoTile> &a_leftSide, vector<dominoTile> &a_rightSide);
-	
+	// Prints the gameBoard to the screen
 	void printBrdToScreen(vector<dominoTile> &a_inBoard);
 
+	// Prints the gameBoard to a specified file
 	void printBrdToFile(ofstream & a_inStream, vector<dominoTile> &a_inBoard);
 
+	// Default constructor
+	~gameBoardView();
 private:
+	
 	queue<string> m_firstLine;
 	vector<string> m_secondLine;
 	queue<string> m_thirdLine;

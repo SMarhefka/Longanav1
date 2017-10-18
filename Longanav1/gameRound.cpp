@@ -6,28 +6,35 @@ gameRound::gameRound()
 {
 }
 
-gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore)
+gameRound::gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, vector<player*> &a_gamePlayers)
 {
+	m_newBoneYard = new boneYard();
+	// create a newGameBoard object
+	m_newGameBoard = new gameBoard();
+	// create a new validate object
+	m_newValidate = new validateInput;
+	m_fileFunctions = new fileFunctions;
+	
 	m_isNewRound = a_isNewRound;
+	m_inTourScore = a_inTourScore;
 	m_roundNumber = a_roundNumber;
 	m_gamePlayers = a_gamePlayers;
-	m_engineVal = getEngine();
-	m_inTourScore = a_inTourScore;
+
 	m_playerIndex = 0;
-	m_newBoneYard = new boneYard();
-	// create a new validate object
-	m_newValidate = new validateInput();
-	m_fileFunctions = new fileFunctions();
+	m_engineVal = getEngine();
 }
 
-gameRound::gameRound(bool a_isNewRound, int &a_roundNumber, vector<player*> &a_gamePlayers, int a_inTourScore, vector<dominoTile> &a_inBoneYardTiles, short a_inNextPlayer)
+gameRound::gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, short a_inNextPlayer, vector<player*> &a_gamePlayers, vector<dominoTile> &a_inBoneYardTiles, vector<dominoTile> &a_inGameTiles)
 {
 	m_isNewRound = a_isNewRound;
+	m_inTourScore = a_inTourScore;
 	m_roundNumber = a_roundNumber;
 	m_gamePlayers = a_gamePlayers;
 	m_engineVal = getEngine();
-	m_inTourScore = a_inTourScore;
+
 	m_newBoneYard = new boneYard(a_inBoneYardTiles);
+	// create a newGameBoard object
+	m_newGameBoard = new gameBoard(a_inGameTiles);
 	m_playerIndex = a_inNextPlayer;
 	// create a new validate object
 	m_newValidate = new validateInput();
@@ -53,13 +60,15 @@ void gameRound::setUpRound()
 		// figure out the first player
 		// m_playerIndex = getFirstPlayer();
 	}
-	else if (m_isNewRound = true || m_playerIndex == -1)
+	if (m_isNewRound == true || m_playerIndex == -1)
 	{
 		// figure out the first player
 		m_playerIndex = getFirstPlayer();
 	}
 	// play the round
 	playRound();
+
+	//cout << m_gamePlayers.at(0)->getScore() << endl;
 }
 
 // 9/19 10:30 implemented setEngine
@@ -114,18 +123,15 @@ bool gameRound::engineInHands()
 	}
 	// if the number of hands (without an engine) == the number of players
 	// then nobody has the engine
-	if (numHands == (m_gamePlayers.size() - 1))
+	if (numHands == m_gamePlayers.size())
 	{
 		return false;
 	}
 	return true;
 }
 
-unsigned short gameRound::getFirstPlayer()
+short gameRound::getFirstPlayer()
 {
-	/*
-	while ((m_gamePlayers.at(0)->getHand()->hasEngine(m_engineVal)) == false && (m_gamePlayers.at(1)->getHand()->hasEngine(m_engineVal)) == false)
-	*/
 	while (engineInHands() == false)
 	{
 		// a_testBool = newBoneYard.isEmpty();
@@ -154,37 +160,44 @@ unsigned short gameRound::getFirstPlayer()
 void gameRound::playRound()
 {
 	// set the engine for the computer
-	m_gamePlayers.at(0)->setEngineFromRound(m_engineVal);
+	m_gamePlayers.at(0)->setEngine(m_engineVal);
 	// set the engine for the first player
-	m_gamePlayers.at(1)->setEngineFromRound(m_engineVal);
+	m_gamePlayers.at(1)->setEngine(m_engineVal);
 
 	while (!(roundOver() == true))
 	{
+		cout << endl;
 		// print whos move it is
-		/*
-		cout << "Before Play" << endl;
 		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-		cout << "Hand: " << endl;
+		cout << "Hand: ";
 		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
-		cout << endl;
 
-		int nextPlayer = (m_playerIndex + 1) % int(m_gamePlayers.size());
+		cout << "Current Board: " << endl;
+		m_newGameBoard->printToScreen();
 		
-		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
-		cout << "Hand: " << endl;
-		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
+		m_newBoneYard->printBoneYard();
 		cout << endl;
-		*/
-
+		cout << "Boneyard size: " << m_newBoneYard->getSize();
+		
+		cout << endl;
+		cout << endl;
+	
+		bool tempPass = getPrevPass();
 		// play the move of the current player
-		m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+		m_gamePlayers.at(m_playerIndex)->playMove(m_newGameBoard, tempPass);
 
 		if (m_gamePlayers.at(m_playerIndex)->getPassCount() == 1)
 		{
 			if (!m_newBoneYard->isEmpty())
 			{
 				m_gamePlayers.at(m_playerIndex)->getHand()->addTileToHand(m_newBoneYard->dealTile());
-				m_gamePlayers.at(m_playerIndex)->playMove(newGameBoard);
+
+				cout << endl;
+				cout << "New Hand: ";
+				m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+				cout << endl;
+
+				m_gamePlayers.at(m_playerIndex)->playMove(m_newGameBoard, tempPass);
 			}
 			else
 			{
@@ -195,7 +208,7 @@ void gameRound::playRound()
 		{
 			// create a new tile and set it to the user selection
 			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
-			newGameBoard.addToLeft(playerTile);
+			m_newGameBoard->addToLeft(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 			// m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
 			cout << endl;
@@ -204,27 +217,15 @@ void gameRound::playRound()
 		{
 			// create a new tile and set it to the user selection
 			dominoTile playerTile = m_gamePlayers.at(m_playerIndex)->getSelectedTile();
-			newGameBoard.addToRight(playerTile);
+			m_newGameBoard->addToRight(playerTile);
 			m_gamePlayers.at(m_playerIndex)->getHand()->removeTile(playerTile);
 			cout << endl;
 		}
-		/*
-		cout << "After Play" << endl;
-		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-		cout << "Hand: ";
-		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
-		cout << endl;
-
-		nextPlayer = (m_playerIndex + 1) % int(m_gamePlayers.size());
-
-		cout << "Next Player: " << m_gamePlayers.at(nextPlayer)->getName() << endl;
-		cout << "Hand: ";
-		m_gamePlayers.at(nextPlayer)->getHand()->printHand();
-		cout << endl;
-		*/
+		
 		// print the board
 		cout << "Current Board:" << endl;
-		newGameBoard.printToScreen();
+		m_newGameBoard->printToScreen();
+		cout << endl;
 
 		// ask the user if they would like to save their game
 		askToSave();
@@ -234,9 +235,47 @@ void gameRound::playRound()
 		{
 			executeSave(m_playerIndex);
 		}
-
+		cout << endl;
 		// get the next player
 		m_playerIndex = (m_playerIndex + 1) % int(m_gamePlayers.size());
+	}
+
+	finisUpRound();
+}
+
+void gameRound::finisUpRound()
+{
+	short roundWinner = 0;
+	short nextIndex = 0;
+	int handTotal = 0;
+
+	// find the winner
+	roundWinner = getWinner();
+
+	switch(roundWinner)
+	{
+		case -1:
+			// print the draw message
+			printRoundNum();
+			cout << "ended in a draw ";
+			cout << endl;
+			break;
+		default:
+			// print winner message
+			cout << "Winner of "; printRoundNum();
+			cout << " is: " << m_gamePlayers.at(roundWinner)->getName();
+			cout << endl;
+
+			// get the next player index
+			nextIndex = (roundWinner + 1) % int(m_gamePlayers.size());
+			// get the total hand of the next player
+			handTotal = m_gamePlayers.at(nextIndex)->getHand()->handTotal();
+
+			cout << "Hand Total: " << handTotal << endl << endl;
+			// set the score of the winner
+			m_gamePlayers.at(roundWinner)->addScore(handTotal);
+			cout << "The score for " << m_gamePlayers.at(roundWinner)->getName();
+			cout << " is " << m_gamePlayers.at(roundWinner)->getScore() << endl;
 	}
 }
 
@@ -262,46 +301,108 @@ void gameRound::executeSave(short a_inSaveOption)
 
 bool gameRound::roundOver()
 {
-	if (m_gamePlayers.at(0)->getHand()->getHandSize() == 0)
+	short currIndex = 0;
+	short nextIndex = (currIndex + 1) % int(m_gamePlayers.size());
+	// if the computer's hand is empty
+	if (m_gamePlayers.at(currIndex)->getHand()->isEmpty() == true)
 	{
-		cout << "The computer wins!\n";
+		// then the round can be considered over
 		return true;
 	}
-	if (m_gamePlayers.at(1)->getHand()->getHandSize() == 0)
+	// if the player's hand is empty
+	if (m_gamePlayers.at(nextIndex)->getHand()->isEmpty() == true)
 	{
-		cout << m_gamePlayers.at(1)->getName() << " wins!\n";
+		// then the round can be considered over
 		return true;
 	}
-	if (m_newBoneYard->getSize() == 0 && m_gamePlayers.at(0)->getPassed() == true && m_gamePlayers.at(1)->getPassed() == true)
+	// If statements are broken up for visual/readability purposes
+	if (m_newBoneYard->isEmpty() == true)
 	{
-		return true;
+		// if both players have passed their turns
+		if (m_gamePlayers.at(currIndex)->getPassed() == true && m_gamePlayers.at(nextIndex)->getPassed() == true)
+		{
+			// then the round can be considered over
+			return true;
+		}
 	}
+	// otherwise the round is not over
 	return false;
+}
+
+short gameRound::getWinner()
+{
+	short localWinner = 0;
+	short currIndex = 0;
+	short nextIndex = (currIndex + 1) % int(m_gamePlayers.size());
+
+	// if the computer's hand is empty
+	if (m_gamePlayers.at(currIndex)->getHand()->isEmpty() == true)
+	{
+		// then the winner is the computer
+		localWinner = currIndex;
+	}
+	// if the player's hand is empty
+	if (m_gamePlayers.at(nextIndex)->getHand()->isEmpty() == true)
+	{
+		// then the winner is the player
+		localWinner = nextIndex;
+	}
+	// If statements are broken up for visual/readability purposes
+	// If the boneyard is empty
+	if (m_newBoneYard->isEmpty() == true)
+	{
+		// if both players have passed their turns
+		if (m_gamePlayers.at(currIndex)->getPassed() == true && m_gamePlayers.at(nextIndex)->getPassed() 
+			== true)
+		{
+			// First check if it is a draw by checking the hand totals of each player
+			if (m_gamePlayers.at(currIndex)->getHand()->handTotal() ==
+				m_gamePlayers.at(nextIndex)->getHand()->handTotal())
+			{
+				// if it is a draw return -1
+				localWinner = -1;
+			}
+			// If the computer total is less then the player
+			else if (m_gamePlayers.at(currIndex)->getHand()->handTotal() <
+				m_gamePlayers.at(nextIndex)->getHand()->handTotal())
+			{
+				// then set the computer as the winner
+				localWinner = currIndex;
+			}
+			else
+			{
+				localWinner = nextIndex;
+			}
+		}
+	}
+	// otherwise the round is not over
+	return localWinner;
 }
 
 void gameRound::printRoundNum()
 {
 	// Print the round number
 	cout << "Round No.: " << m_roundNumber;
-	// Print an empty space
-	cout << endl;
 }
 
 void gameRound::askToSave()
 {
+	m_saveSelection = NULL;
+	//ignore all characters left in the buffer
+	cin.ignore(numeric_limits<streamsize>::min(), '\n');
 	// save everything up until this point
 	cout << "Would you like to save? (Y/N) ";
-	//ignore all characters left in the buffer
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> m_saveSelection;
+	//cin >> m_saveSelection;
 
 	// while the input fails
-	while (m_newValidate->validSaveInput(m_saveSelection) != true)
+	while (m_newValidate->validSaveInput(m_saveSelection) != true || m_saveSelection == NULL)
 	{
 		//clear the error state
 		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::min(), '\n');
 		//ignore all characters left in the buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		//cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "Invalid Input - Please Enter Y/N: ";
 		cin >> m_saveSelection;
 	}
@@ -309,8 +410,8 @@ void gameRound::askToSave()
 
 void gameRound::printToFile(short a_inPlayerIndex)
 {
-	short currPlayerIndex;
-	short nextPlayerIndex;
+	short currPlayerIndex = 0;
+	short nextPlayerIndex = 0;
 
 	if (a_inPlayerIndex == -1)
 	{
@@ -318,7 +419,7 @@ void gameRound::printToFile(short a_inPlayerIndex)
 	}
 	else
 	{
-		nextPlayerIndex = a_inPlayerIndex;
+		currPlayerIndex = a_inPlayerIndex;
 	}
 
 	nextPlayerIndex = (currPlayerIndex + 1) % int(m_gamePlayers.size());
@@ -326,11 +427,8 @@ void gameRound::printToFile(short a_inPlayerIndex)
 
 	/*-------------------Get File Info---------------------*/
 	string userMessage = "Enter name of the file that you want to save to: ";
-	string userFileName = m_fileFunctions->getFileFromUser(userMessage);
+	string userFileName = m_fileFunctions->getFile(userMessage);
 	ofstream outputFile(userFileName.c_str());
-
-	// test the name of the the outputFile
-	// cout << userFileName << endl;
 
 	while (!outputFile.is_open())
 	{
@@ -403,7 +501,7 @@ void gameRound::printToFile(short a_inPlayerIndex)
 	outputFile << endl << endl;
 	// print the layout to the file
 	outputFile << "Layout: " << endl;
-	newGameBoard.printBoardToFile(outputFile);
+	m_newGameBoard->printBoardToFile(outputFile);
 	// Create a space
 	outputFile << endl << endl;
 	// print the boneyard to file
@@ -451,5 +549,9 @@ void gameRound::printToFile(short a_inPlayerIndex)
 gameRound::~gameRound()
 {
 	delete m_newBoneYard;
+	delete m_newGameBoard;
 	delete m_newValidate;
+	delete m_fileFunctions;
+	// IMPORTANT FIX: was never clearing the vector of players!
+	m_gamePlayers.clear();
 }

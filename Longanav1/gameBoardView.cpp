@@ -3,15 +3,39 @@
 
 gameBoardView::gameBoardView()
 {
-	// this is where all of the information will be placed
-	// this function will contain all of the cout statements
-	// that the users will see on the screen at they play the game
 }
 
 gameBoardView::~gameBoardView()
 {
 }
 
+/************************************************************************
+Function Name: computer(playerHand a_inUserHand, int a_inScore,
+bool a_inComPassed, bool a_inPlyerPassed) :
+player(a_inUserHand, a_inScore, a_inComPassed,
+a_inPlyerPassed)
+
+Purpose: Overload the computer constructor.  This will create a new
+Computer player object with a specific hand, score and information
+on any passed moves.  This function is called when a file is loaded
+to start the gameplay
+Parameters:
+playerHand a_inUserHand --> the hand of the computer player
+int a_inScore --> the score of the computer player
+bool a_inComPassed --> if the computer player has passed their turn
+bool a_inPlyerPassed --> if the human player has passed their turn
+
+Return Value: Constructor
+Local Variables: None
+
+Algorithm:
+1. set m_playerName to Computer
+
+Assistance Received: Elliot Barinber, Joshua Long
+- Was initially trying to create the board view using all vectors and
+  both helped explain how a queues worked. It helped me determine that
+  a queue would work better than vectors
+************************************************************************/
 void gameBoardView::getBoard(vector<dominoTile> &a_inBoard)
 {
 	deleteLines();
@@ -111,5 +135,3 @@ void gameBoardView::deleteLines()
 		m_thirdLine.pop();
 	}
 }
-
-

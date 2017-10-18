@@ -9,15 +9,18 @@ public:
 	// this is the game board itself
 	gameBoard();
 
+	gameBoard(vector<dominoTile> a_inGameBoard);
+
 	// this function will add a tile to the begining of the vector
 	void addToLeft(dominoTile a_tileToAdd);
 	// this function will add a tile to the end of the vector
 	void addToRight(dominoTile a_tileToAdd);
 
-	// this function will retrieve the right most tile
-	dominoTile getRightMostTile();
-	// this function will retrieve the left most tile
-	dominoTile getLeftMostTile();
+	// this function will retrieve the right most value
+	int boardRightValue();
+	// this function will retrieve the left most value
+	int boardLeftValue();
+
 	// this function will check to see if the board is empty
 	bool isBoardEmpty();
 	// this function will print the curent board to the screen
@@ -32,6 +35,6 @@ private:
 	gameBoardView m_boardView;
 	vector<dominoTile>::iterator insertAt;
 	vector<dominoTile> m_boardVector;	
-	dominoTile m_leftMostTile;
-	dominoTile m_rightMostTile;
+	// int m_leftMostTile;
+	// int m_rightMostTile;
 };

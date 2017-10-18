@@ -46,7 +46,7 @@ Algorithm:
 
 Assistance Received: None
 ************************************************************************/
-computer::computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed, bool a_inPlyerPassed) : player(a_inUserHand, a_inScore, a_inComPassed, a_inPlyerPassed)
+computer::computer(playerHand a_inUserHand, int a_inScore, bool a_inComPassed) : player(a_inUserHand, a_inScore, a_inComPassed)
 {
 	m_playerName = "Computer";
 };
