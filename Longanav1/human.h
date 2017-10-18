@@ -30,25 +30,33 @@ public:
 	// this is the overridden function from the player class
 	void playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
+	// displays the first set of options that the human has
 	void printFirstOptions();
 
+	// displays the left right options
 	void printLeftRight();
 
-	// this function is specific to the human class
+	// displays the first set of options
 	void displayOptions1();
 
+	// displays the tiles that the user has
 	void displayTiles();
 
+	// executes based on the user choice
 	void executeOptions();
 
+	// diplay
 	void displayOptions2();
 
+	// find the posistion of the engine if the user
+	// has a hand
 	void findEnginePosition();
 
+	// returns whether or not the user passed their turn
 	bool getPassed();
 
-	// this is a getter function
-	playerHand* getHand();
+	// returns the player hand
+	playerHand* getHand() const;
 
 private:
 	gameBoard* m_playerGameBoard;

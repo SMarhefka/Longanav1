@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+*************************************************************************/
+
 #pragma once
 #include "human.h"
 #include "computer.h"
@@ -15,10 +22,9 @@ public:
 	gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, vector<player*> &a_gamePlayers);
 
 	// another overloaded constructor
-	gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, short a_inNextPlayer, vector<player*> &a_gamePlayers, vector<dominoTile> &a_inBoneYardTiles, vector<dominoTile> &a_inGameTiles);
-
-	// default destructor
-	~gameRound();
+	gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, short a_inNextPlayer, 
+			  vector<player*> &a_gamePlayers, vector<dominoTile> &a_inBoneYardTiles, 
+			  vector<dominoTile> &a_inGameTiles);
 
 	void setUpRound();
 
@@ -67,6 +73,9 @@ public:
 		}
 	}
 	
+	// default destructor
+	~gameRound();
+
 private:
 	// creates a new boneYard
 	boneYard* m_newBoneYard;
@@ -76,9 +85,9 @@ private:
 	fileFunctions* m_fileFunctions;
 	// creates a new gameBoard;
 	gameBoard* m_newGameBoard;
-
+	// new vector of players
 	vector<player*> m_gamePlayers;
-
+	// checks for a new round
 	bool m_isNewRound;
 
 	string m_inPassed;
@@ -96,5 +105,4 @@ private:
 	char m_saveSelection;
 
 	bool m_testPass;
-	//bool m_comPass;
 };
