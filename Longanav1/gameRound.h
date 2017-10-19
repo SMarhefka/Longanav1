@@ -39,8 +39,10 @@ public:
 	// find out who the first player in the round will be
 	short getFirstPlayer();
 
+	// checks to see if the round is over
 	bool roundOver();
 
+	// Prints the round Number
 	void printRoundNum();
 	
 	/*-----------------------Save to file functions----------------------*/

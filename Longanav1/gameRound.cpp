@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+************************************************************************/
+
 #include "stdafx.h"
 #include "gameRound.h"
 #include "tournament.h"
@@ -26,52 +33,29 @@ gameRound::gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, v
 
 gameRound::gameRound(bool a_isNewRound, int a_inTourScore, int &a_roundNumber, short a_inNextPlayer, vector<player*> &a_gamePlayers, vector<dominoTile> &a_inBoneYardTiles, vector<dominoTile> &a_inGameTiles)
 {
-	m_isNewRound = a_isNewRound;
-	m_inTourScore = a_inTourScore;
-	m_roundNumber = a_roundNumber;
-	m_gamePlayers = a_gamePlayers;
-	m_engineVal = getEngine();
-
+	// create a new boneyard object
 	m_newBoneYard = new boneYard(a_inBoneYardTiles);
 	// create a newGameBoard object
 	m_newGameBoard = new gameBoard(a_inGameTiles);
 	m_playerIndex = a_inNextPlayer;
 	// create a new validate object
-	m_newValidate = new validateInput();
-	m_fileFunctions = new fileFunctions();
+	m_newValidate = new validateInput;
+	// create a new file functions object
+	m_fileFunctions = new fileFunctions;
+	// set whether or not it is a new round
+	m_isNewRound = a_isNewRound;
+	// set the tournament score to the parameter given
+	m_inTourScore = a_inTourScore;
+	// set the new round to the parameter given
+	m_roundNumber = a_roundNumber;
+	// set the players to the parameter given
+	m_gamePlayers = a_gamePlayers;
+	// set the enine value
+	m_engineVal = getEngine();
 }
 
-void gameRound::setUpRound()
-{
-	if (m_isNewRound == true)
-	{
-		// set the engine for the corresponding round
-		// getEngine();
-		// distribute 8 tiles to each tile
-		distributeTiles();
-		// ask the user if they would like to save their game
-		askToSave();
-		// if the user selects to save the file then we just want
-		// to print everything to the file
-		if (m_saveSelection == 'Y')
-		{
-			executeSave(-1);
-		}
-		// figure out the first player
-		// m_playerIndex = getFirstPlayer();
-	}
-	if (m_isNewRound == true || m_playerIndex == -1)
-	{
-		// figure out the first player
-		m_playerIndex = getFirstPlayer();
-	}
-	// play the round
-	playRound();
-
-	//cout << m_gamePlayers.at(0)->getScore() << endl;
-}
-
-// 9/19 10:30 implemented setEngine
+// Function figures out what the engine shoud be compared
+// to each round
 int gameRound::getEngine()
 {
 	int a_count = 1;
@@ -88,12 +72,44 @@ int gameRound::getEngine()
 			// reduce engine count by 1
 			a_engineCount--;
 		}
-
+		// increment the count by 1
 		a_count++;
 	}
 	return a_engineCount;
 }
 
+// Sets up the round for gameplay
+void gameRound::setUpRound()
+{
+	if (m_isNewRound == true)
+	{
+		// set the engine for the corresponding round
+		// getEngine();
+		// distribute 8 tiles to each tile
+		distributeTiles();
+		// ask the user if they would like to save their game
+		askToSave();
+		// if the user selects to save the file then we just want
+		// to print everything to the file
+		if (m_saveSelection == 'Y')
+		{
+			// executes the save without a next player or 
+			// player passed
+			executeSave(-1);
+		}
+	}
+
+	// If it is a new round or the playerIndex is empty
+	if (m_isNewRound == true || m_playerIndex == -1)
+	{
+		// figure out who the first player should be
+		m_playerIndex = getFirstPlayer();
+	}
+	// play the round
+	playRound();
+}
+
+// Goes through each person and gives the person 8 tiles to start out with
 void gameRound::distributeTiles()
 {
 	// distribute 8 tiles to each player
@@ -107,6 +123,7 @@ void gameRound::distributeTiles()
 	}
 }
 
+// Function determines wheather there is an engine in the player's hands
 bool gameRound::engineInHands()
 {
 	int numHands = 0;
@@ -125,11 +142,37 @@ bool gameRound::engineInHands()
 	// then nobody has the engine
 	if (numHands == m_gamePlayers.size())
 	{
+		// returns false
 		return false;
 	}
 	return true;
 }
 
+// function that gives the user save options
+void gameRound::askToSave()
+{
+	m_saveSelection = NULL;
+	//ignore all characters left in the buffer
+	cin.ignore(numeric_limits<streamsize>::min(), '\n');
+	// save everything up until this point
+	cout << "Would you like to save? (Y/N) ";
+	cin >> m_saveSelection;
+	//cin >> m_saveSelection;
+
+	// while the input fails
+	while (m_newValidate->validSaveInput(m_saveSelection) != true || m_saveSelection == NULL)
+	{
+		//clear the error state
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::min(), '\n');
+		//ignore all characters left in the buffer
+		//cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Invalid Input - Please Enter Y/N: ";
+		cin >> m_saveSelection;
+	}
+}
+
+// Finds who the first player should be
 short gameRound::getFirstPlayer()
 {
 	while (engineInHands() == false)
@@ -167,20 +210,21 @@ void gameRound::playRound()
 	while (!(roundOver() == true))
 	{
 		cout << endl;
-		// print whos move it is
-		cout << "Current Player: " << m_gamePlayers.at(m_playerIndex)->getName() << endl;
-		cout << "Hand: ";
-		m_gamePlayers.at(m_playerIndex)->getHand()->printHand();
+		cout << "------------------It is " << m_gamePlayers.at(m_playerIndex)->getName();
+		cout << "'s turn----------------" << endl;
 
-		cout << "Current Board: " << endl;
-		m_newGameBoard->printToScreen();
-		
+		// Prints the round number
+		printRoundNum();
+		cout << endl;
+
+		m_gamePlayers.at(m_playerIndex)->displayInfo(m_newGameBoard);
+
 		m_newBoneYard->printBoneYard();
-		cout << endl;
+		cout << endl << endl;
 		cout << "Boneyard size: " << m_newBoneYard->getSize();
+		cout << endl;
 		
-		cout << endl;
-		cout << endl;
+		cout << "---------------------------------------------------" << endl;
 	
 		bool tempPass = getPrevPass();
 		// play the move of the current player
@@ -223,7 +267,7 @@ void gameRound::playRound()
 		}
 		
 		// print the board
-		cout << "Current Board:" << endl;
+		cout << "Updated Board:" << endl;
 		m_newGameBoard->printToScreen();
 		cout << endl;
 
@@ -385,28 +429,7 @@ void gameRound::printRoundNum()
 	cout << "Round No.: " << m_roundNumber;
 }
 
-void gameRound::askToSave()
-{
-	m_saveSelection = NULL;
-	//ignore all characters left in the buffer
-	cin.ignore(numeric_limits<streamsize>::min(), '\n');
-	// save everything up until this point
-	cout << "Would you like to save? (Y/N) ";
-	cin >> m_saveSelection;
-	//cin >> m_saveSelection;
 
-	// while the input fails
-	while (m_newValidate->validSaveInput(m_saveSelection) != true || m_saveSelection == NULL)
-	{
-		//clear the error state
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::min(), '\n');
-		//ignore all characters left in the buffer
-		//cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Invalid Input - Please Enter Y/N: ";
-		cin >> m_saveSelection;
-	}
-}
 
 void gameRound::printToFile(short a_inPlayerIndex)
 {

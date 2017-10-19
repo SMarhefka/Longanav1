@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+************************************************************************/
+
 #pragma once
 #include "playerHand.h"
 #include "boneyard.h"
@@ -25,13 +32,17 @@ public:
 	// player class
 	virtual void playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
+
+	void player::resetAll();
+
+	virtual void player::displayInfo(gameBoard* &a_inGameBoard);
+
+
 	virtual bool checkTileSelection(int a_boardLeftVal, int a_boardRightVal, 
 									dominoTile &a_inUserTile);
 
 	// check for valid moves
 	virtual bool checkMove();
-
-	//virtual void setPrevPassed(bool & a_inPrevPass);
 
 	void setEngine(int & a_inEngine);
 
@@ -61,6 +72,7 @@ public:
 
 	void getHelp(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
+	// get the private variable m_gettingHelp
 	bool amIGettingHelp()
 	{
 		return m_gettingHelp;

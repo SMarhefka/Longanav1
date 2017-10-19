@@ -27,6 +27,8 @@ public:
 	// default destructor
 	~human();
 
+	void human::displayInfo(gameBoard* &a_inGameBoard);
+
 	// this is the overridden function from the player class
 	void playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed);
 
@@ -56,13 +58,18 @@ public:
 	bool getPassed();
 
 	// returns the player hand
-	playerHand* getHand() const;
+	playerHand* getHand();
 
 private:
+	// pointer to a gameboard object
 	gameBoard* m_playerGameBoard;
+	// temporary user choice
 	int m_tempUserChoice;
+	// the position of the engine
 	int m_enginePosition;
+	// valid tile choice
 	int m_tileChoice;
+	// determines wheather or not the execution was successful
 	bool m_exeSucc;
 };
 

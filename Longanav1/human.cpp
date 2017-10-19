@@ -1,3 +1,10 @@
+/************************************************************************
+* Name:	Svetlana Marhefka												*
+* Project : Project 1 - Longana											*
+* Class : CMPS 366 Organization of Programming Languages (OPL)			*
+* Date : 10/14/2017														*
+************************************************************************/
+
 #include "stdafx.h"
 #include "human.h"
 
@@ -167,6 +174,18 @@ void human::findEnginePosition()
 	}
 }
 
+void human::displayInfo(gameBoard* &a_inGameBoard)
+{
+	cout << endl;
+	cout << "Current Board: " << endl;
+	// print the board to the screen
+	a_inGameBoard->printToScreen();
+	cout << endl;
+	cout << "Current Hand:" << endl;
+	// print the user hand
+	m_currentHand.printHand();
+}
+
 void human::printFirstOptions()
 {
 	m_tempUserChoice = 1;
@@ -185,16 +204,6 @@ void human::displayOptions1()
 {
 	int userChoice;
 
-	cout << endl;
-	cout << "------------------It is the " << getName();
-	cout << "'s turn----------------" << endl;
-	cout << endl;
-	cout << "Current Board: " << endl;
-	// print the board to the screen
-	m_playerGameBoard->printToScreen();
-	// print the user hand
-	displayTiles();
-
 	cout << "\nPlease Select an Option:\n";
 	printFirstOptions();
 	// cin.clear();
@@ -202,6 +211,7 @@ void human::displayOptions1()
 	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cin >> userChoice;
 
+	cout << endl;
 	// validate the input
 	while (userChoice < 1 || userChoice > m_tempUserChoice)
 	{
@@ -222,6 +232,7 @@ void human::executeOptions()
 	switch (m_tempUserChoice)
 	{
 	case 1:
+		m_playerGameBoard->printToScreen();
 		// call function to allow the user to pick a tile
 		// that will be placed on the board
 		displayOptions2();
@@ -470,8 +481,6 @@ void human::displayTiles()
 	}
 	cout << endl << endl;
 }
-
-
 
 playerHand* human::getHand()
 {
