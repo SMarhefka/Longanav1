@@ -207,8 +207,10 @@ void gameRound::playRound()
 	// set the engine for the first player
 	m_gamePlayers.at(1)->setEngine(m_engineVal);
 
+	// if the round isn't over
 	while (!(roundOver() == true))
 	{
+		// then provide the info corresponding to the correct player
 		cout << endl;
 		cout << "------------------It is " << m_gamePlayers.at(m_playerIndex)->getName();
 		cout << "'s turn----------------" << endl;
@@ -217,18 +219,22 @@ void gameRound::playRound()
 		printRoundNum();
 		cout << endl;
 
+		// print out the info regarding the correct player
 		m_gamePlayers.at(m_playerIndex)->displayInfo(m_newGameBoard);
 
+		// print the boneyard information
 		m_newBoneYard->printBoneYard();
 		cout << endl << endl;
 		cout << "Boneyard size: " << m_newBoneYard->getSize();
 		cout << endl;
 		
 		cout << "---------------------------------------------------" << endl;
-	
+		
+		//get wether or not the previous player passed
 		bool tempPass = getPrevPass();
 		// play the move of the current player
 		m_gamePlayers.at(m_playerIndex)->playMove(m_newGameBoard, tempPass);
+
 
 		if (m_gamePlayers.at(m_playerIndex)->getPassCount() == 1)
 		{
@@ -287,8 +293,10 @@ void gameRound::playRound()
 	finisUpRound();
 }
 
+// this function is in charge of finding the winner and adding up their score
 void gameRound::finisUpRound()
 {
+	// set/reset all local variables
 	short roundWinner = 0;
 	short nextIndex = 0;
 	int handTotal = 0;
@@ -296,6 +304,8 @@ void gameRound::finisUpRound()
 	// find the winner
 	roundWinner = getWinner();
 
+	// switch based on if there is a winner or not
+	// used switch statements are faster then if-else
 	switch(roundWinner)
 	{
 		case -1:
@@ -323,18 +333,24 @@ void gameRound::finisUpRound()
 	}
 }
 
+// function related to everything dealing with a save situation
 void gameRound::executeSave(short a_inSaveOption)
 {
+	// if the incomig save option is less then 0 it 
+	// means that no nest player or player index will be reported
 	if (a_inSaveOption < 0)
 	{
 		// print everything to the file
 		printToFile(-1);
 	}
+	// otherwise it will print all of the information
 	else
 	{
 		// print everything to the file
 		printToFile(a_inSaveOption);
 	}
+
+	// reset the save selection
 	m_saveSelection = ' ';
 	cout << "Saved to file successfully!" << endl;
 	// wait for the system
@@ -345,7 +361,9 @@ void gameRound::executeSave(short a_inSaveOption)
 
 bool gameRound::roundOver()
 {
+	// set/reset the current index
 	short currIndex = 0;
+	// get the next player
 	short nextIndex = (currIndex + 1) % int(m_gamePlayers.size());
 	// if the computer's hand is empty
 	if (m_gamePlayers.at(currIndex)->getHand()->isEmpty() == true)
@@ -375,6 +393,7 @@ bool gameRound::roundOver()
 
 short gameRound::getWinner()
 {
+	//set/reset variables
 	short localWinner = 0;
 	short currIndex = 0;
 	short nextIndex = (currIndex + 1) % int(m_gamePlayers.size());
@@ -430,7 +449,8 @@ void gameRound::printRoundNum()
 }
 
 
-
+// this fuction is responsible for printing everything to a 
+// file.  
 void gameRound::printToFile(short a_inPlayerIndex)
 {
 	short currPlayerIndex = 0;

@@ -178,34 +178,47 @@ void player::playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed)
 				}
 			}
 
+			// set the side value to L for left hand side
 			char sideValue = 'L';
+			// check to see if the tile can be placed on the left hand side
 			bool sideValid = m_checkInput->validSideCheck(m_userSelection, sideValue, m_playerName, m_prevPass);
+			// if it can then...
 			if (sideValid == true)
 			{
+				// set the side that it can be placed
 				m_whichSide = sideValue;
+				// check the first left side to see if teh tile needs to be 
 				if (m_checkInput->leftSide1(m_boardLeft, m_userSelection) == true)
 				{
+					// if the first left side works then the tile has to be reversed
 					m_userSelection = m_userSelection.reverseTile();
 					
 				}
 				else
 				{
+					// otherwise the tile it okay as it is
 					m_userSelection = m_userSelection;
 				}
 			}
 			else
 			{
+				// if the left hand side doesn't work then check against the right hand side
 				sideValue = 'R';
 				sideValid = m_checkInput->validSideCheck(m_userSelection, sideValue, m_playerName, m_prevPass);
+				// if the right hand side is a valid side then...
 				if (sideValid == true)
 				{
+					// select the side
 					m_whichSide = sideValue;
+					// check to see if the side is valid
 					if (m_checkInput->rightSide1(m_boardRight, m_userSelection) == true)
 					{
+						// if it is then we do not need to reverse the tile
 						m_userSelection = m_userSelection;
 					}
 					else
 					{
+						// otherwise we do
 						m_userSelection = m_userSelection.reverseTile();
 					}
 				}
@@ -214,16 +227,17 @@ void player::playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed)
 		// if there is no valid move
 		if (m_validMove == false)
 		{
-			m_validMove = false;
 			// increase the pass count by 1
 			m_passCount++;
 			// if the pass count is > 1
 			// so if the move has been passed twice
 			if (m_passCount > 1)
 			{
+				// set the passCount to 0
 				m_passCount = 0;
 				// then set the passed variable to true
 				m_passTurn = true;
+				// explain the strategy
 				cout << "COMPUTER STRATEGY:" << endl;
 				cout << endl;
 				cout << "Computer is not going to place a tile on the board";
@@ -232,18 +246,23 @@ void player::playMove(gameBoard* &a_inGameBoard, bool a_nextPlayerPassed)
 				cout << endl << endl;
 				cout << "---------------------------------------------------" << endl;
 			}
+			// reset the user count
 			m_userChoice = 0;
+			// reset the side
 			m_whichSide = ' ';
+			// set the user options
 			setUserOptions(m_userSelection, m_whichSide);
 		}
-		// run checkPass
-		//m_userSelection = m_currentHand.getTilesAt(0);
-		//m_whichSide = 'R';
+		// If the move is valid
 		if (m_validMove == true)
 		{
+			// set the tile and side that the user selected
 			setUserOptions(m_userSelection, m_whichSide);
+			// set the pass turn to false
 			m_passTurn = false;
+			// reset the passCount back to 0
 			m_passCount = 0;
+			// print the computer strategy whne it isn't the engin
 			printPlacement(false);
 		}
 	}
